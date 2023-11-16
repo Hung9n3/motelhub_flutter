@@ -5,6 +5,8 @@ import 'package:motelhub_flutter/features/daily_news/presentation/bloc/article/r
 import 'package:motelhub_flutter/features/daily_news/presentation/bloc/article/remote/remote_article_event.dart';
 import 'package:motelhub_flutter/features/daily_news/presentation/pages/home/daily_news.dart';
 import 'package:motelhub_flutter/injection_container.dart';
+import 'package:motelhub_flutter/presentation/blocs/login/login_bloc.dart';
+import 'package:motelhub_flutter/presentation/pages/login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,12 +20,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<RemoteArticlesBloc>(
-      create: (context) => sl()..add(const GetArticlesEvent()),
+    return BlocProvider<LoginBloc>(
+      create: (context) => LoginBloc(),
       child: MaterialApp(
       title: 'Flutter Demo',
-      theme: theme(),
-      home: const DailyNews()),
+      theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+      home: const LoginPage()),
     );
   }
 }
