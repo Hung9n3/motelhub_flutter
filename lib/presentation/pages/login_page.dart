@@ -11,57 +11,138 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          const Text("Welcome back!", style: TextStyle(fontSize: 24)),
-          TextField(
-            onChanged: (value) {
-              context.read<LoginBloc>().add(UsernameChangeEvent(value));
-            },
-            decoration: const InputDecoration(label: Text("Username")),
-          ),
-          TextField(
-            onChanged: (value) {
-              context.read<LoginBloc>().add(PasswordChangeEvent(value));
-            },
-            obscureText: true,
-            decoration: const InputDecoration(label: Text("Password")),
-          ),
-          TextButton(
-              onPressed: () {
-                context.read<LoginBloc>().add(LoginButtonEvent());
-              },
-              child: const Text("Login"))
-        ],
+      body: BlocConsumer<LoginBloc, LoginState>(
+        listener: (context, state) {
+          if (state is LoginError) {
+            _loginForm(context);
+          } else if (state is LoginSuccessState) {
+            const Center(child: Text('login thnah cong r'),);
+          }
+        },
+        builder: (context, state) {
+          if (state is LoginLoadingState) {
+            return const CupertinoActivityIndicator();
+          } else if (state is LoginSuccessState){
+            const Center(child: Text('login thanh cong'),);
+          } else if (state is LoginError) {
+            return _loginForm(context);
+          }
+          else {
+            return _loginForm(context);
+          }
+          return const SizedBox();
+        },
       ),
     );
   }
 
-  _buildBody() {
-    return BlocBuilder<LoginBloc, LoginState>(builder: (context, state) {
-      return Column(
-        children: [
-          const Text("Welcome back!", style: TextStyle(fontSize: 24)),
-          TextField(
-            onChanged: (value) {
-              context.read<LoginBloc>().add(UsernameChangeEvent(value));
-            },
-            decoration: const InputDecoration(label: Text("Username")),
+Widget _loginForm(BuildContext context){
+  return SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 40),
+          child: Column(
+            children: [
+              AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Image.asset('assets/images/login_logo.png')),
+              const Text("Welcome back!", style: TextStyle(fontSize: 50)),
+              const SizedBox(height: 50),
+              TextField(
+                onChanged: (value) {
+                  context.read<LoginBloc>().add(UsernameChangeEvent(value));
+                },
+                decoration: InputDecoration(
+                  label: const Text("Username"),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                onChanged: (value) {
+                  context.read<LoginBloc>().add(PasswordChangeEvent(value));
+                },
+                obscureText: true,
+                
+                decoration: InputDecoration(
+                  label: const Text("Password"),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                ),
+              ),
+              TextButton(
+                  onPressed: () {
+                    context.read<LoginBloc>().add(LoginButtonEvent());
+                  },
+                  child: const Text("Login")),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 20.0),
+                child: const Row(
+                  children: [
+                    Expanded(
+                      child: Divider(
+                        color: Colors.grey,
+                        height: 1.0,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Text(
+                        'or',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Divider(
+                        color: Colors.grey,
+                        height: 1.0,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 60),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _squareIconButton(const Image(
+                          image: AssetImage(
+                              'assets/images/google_icon.png'), // Replace with the desired Google icon
+                        )),
+                    _squareIconButton(const Image(
+                          image: AssetImage(
+                              'assets/images/facebook_icon.png'), // Replace with the desired Google icon
+                        )),
+                    _squareIconButton(const Icon(Icons.phone))
+                  ],
+                ),
+              )
+            ],
           ),
-          TextField(
-            onChanged: (value) {
-              context.read<LoginBloc>().add(PasswordChangeEvent(value));
-            },
-            obscureText: true,
-            decoration: const InputDecoration(label: Text("Password")),
-          ),
-          TextButton(
-              onPressed: () {
-                context.read<LoginBloc>().add(LoginButtonEvent());
-              },
-              child: const Text("Login"))
-        ],
+        ),
       );
-    });
+}
+  _squareIconButton(Widget icon) {
+    return Container(
+        width: 48.0, // Adjust the width and height as needed
+        height: 48.0,
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          shape: BoxShape.rectangle,
+          border: Border.all(color: Colors.black, width: 2),
+          borderRadius:
+              BorderRadius.circular(8.0), // Adjust the border radius as needed
+        ),
+        child: InkWell(
+          onTap: () {
+            // Handle button tap
+          },
+          child: icon,
+        ));
   }
 }

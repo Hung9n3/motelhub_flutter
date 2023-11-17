@@ -2,22 +2,25 @@ import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 
 class LoginState extends Equatable{
-  final String? textFieldValue;
   final DioError? error;
-  const LoginState({this.textFieldValue, this.error});
+  const LoginState({this.error});
   
   @override
-  List<Object?> get props => [textFieldValue, error];
+  List<Object?> get props => [error];
 }
 
 class LoginInitialState extends LoginState {
-  const LoginInitialState() : super(textFieldValue: "");
+  const LoginInitialState() : super();
 }
 
 class LoginErrorState extends LoginState {
   const LoginErrorState(DioError error):super(error: error);
 }
 
-class LoginTextFieldState extends LoginState {
-  const LoginTextFieldState(String textFieldValue) : super(textFieldValue: textFieldValue);
+class LoginSuccessState extends LoginState {
+  const LoginSuccessState();
+}
+
+class LoginLoadingState extends LoginState {
+  const LoginLoadingState();
 }

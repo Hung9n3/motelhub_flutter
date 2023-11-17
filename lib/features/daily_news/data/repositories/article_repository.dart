@@ -26,6 +26,7 @@ class ArticleRepositoryImpl implements IArticleRepository {
     if (httpResponse.response.statusCode == HttpStatus.ok) {
       return DataSuccess(httpResponse.data);
     } else {
+      
       return DataFailed(
         DioError(
           error: httpResponse.response.statusMessage,
