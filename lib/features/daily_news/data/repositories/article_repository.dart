@@ -42,36 +42,18 @@ class ArticleRepositoryImpl implements IArticleRepository {
   }
   
   @override
-  Future<List<ArticleEntity>> getSavedArticles() {
-    // TODO: implement getSavedArticles
-    throw UnimplementedError();
+  Future<List<ArticleModel>> getSavedArticles() async {
+    return _appDatabase.articleDAO.getArticles();
   }
-  
+
   @override
   Future<void> removeArticle(ArticleEntity article) {
-    // TODO: implement removeArticle
-    throw UnimplementedError();
+    return _appDatabase.articleDAO.deleteArticle(ArticleModel.fromEntity(article));
   }
-  
+
   @override
   Future<void> saveArticle(ArticleEntity article) {
-    // TODO: implement saveArticle
-    throw UnimplementedError();
+    return _appDatabase.articleDAO.insertArticle(ArticleModel.fromEntity(article));
   }
-
-  // @override
-  // Future<List<ArticleModel>> getSavedArticles() async {
-  //   return _appDatabase.articleDAO.getArticles();
-  // }
-
-  // @override
-  // Future<void> removeArticle(ArticleEntity article) {
-  //   return _appDatabase.articleDAO.deleteArticle(ArticleModel.fromEntity(article));
-  // }
-
-  // @override
-  // Future<void> saveArticle(ArticleEntity article) {
-  //   return _appDatabase.articleDAO.insertArticle(ArticleModel.fromEntity(article));
-  // }
   
 }
