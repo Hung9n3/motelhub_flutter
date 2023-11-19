@@ -1,8 +1,11 @@
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
+import 'package:motelhub_flutter/core/token/token_handler.dart';
 import 'package:motelhub_flutter/features/daily_news/data/data_sources/remote/news_api_service.dart';
 import 'package:motelhub_flutter/features/daily_news/data/repositories/article_repository.dart';
 import 'package:motelhub_flutter/features/daily_news/domain/repositories/article_repository_interface';
+import 'package:motelhub_flutter/features/daily_news/domain/token/token_handler_interface.dart';
 import 'package:motelhub_flutter/features/daily_news/domain/usecases/get_article.dart';
 import 'package:motelhub_flutter/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
 import 'features/daily_news/data/data_sources/local/app_database.dart';
@@ -51,6 +54,14 @@ Future<void> initializeDependencies() async {
     ()=> RemoteArticlesBloc(sl())
   );
 
+  //token
+  sl.registerFactory<FlutterSecureStorage>(
+    () => const FlutterSecureStorage()
+  );
+
+  sl.registerFactory<ITokenHandler>(
+    () => TokenHandler(sl())
+  );
   // sl.registerFactory<LocalArticleBloc>(
   //   ()=> LocalArticleBloc(sl(),sl(),sl())
   // );
