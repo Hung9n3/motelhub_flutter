@@ -35,100 +35,105 @@ class LoginPage extends StatelessWidget {
 
   Widget _loginForm(BuildContext context) {
     return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 40),
-        child: Column(
-          children: [
-            AspectRatio(
-                aspectRatio: 16 / 9,
-                child: Image.asset('assets/images/login_logo.png')),
-            const Text("Welcome back!", style: TextStyle(fontSize: 50)),
-            const SizedBox(height: 50),
-            TextField(
-              onChanged: (value) {
-                context.read<LoginBloc>().add(UsernameChangeEvent(value));
-              },
-              decoration: InputDecoration(
-                label: const Text("Username"),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
-              ),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              onChanged: (value) {
-                context.read<LoginBloc>().add(PasswordChangeEvent(value));
-              },
-              obscureText: true,
-              decoration: InputDecoration(
-                label: const Text("Password"),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
-              ),
-            ),
-            const SizedBox(height: 20),
-            TextButton(
-                onPressed: () {
-                  context.read<LoginBloc>().add(LoginButtonEvent());
+      child: Center(
+        child: Container(
+          constraints: const BoxConstraints(
+            maxWidth: 600
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 40),
+          child: Column(
+            children: [
+              AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Image.asset('assets/images/login_logo.png')),
+              const Text("Welcome back!", style: TextStyle(fontSize: 50)),
+              const SizedBox(height: 50),
+              TextField(
+                onChanged: (value) {
+                  context.read<LoginBloc>().add(UsernameChangeEvent(value));
                 },
-                child: const Text("Login")),
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 20.0),
-              child: const Row(
-                children: [
-                  Expanded(
-                    child: Divider(
-                      color: Colors.grey,
-                      height: 1.0,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Text(
-                      'or',
-                      style: TextStyle(
+                decoration: InputDecoration(
+                  label: const Text("Username"),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                onChanged: (value) {
+                  context.read<LoginBloc>().add(PasswordChangeEvent(value));
+                },
+                obscureText: true,
+                decoration: InputDecoration(
+                  label: const Text("Password"),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextButton(
+                  onPressed: () {
+                    context.read<LoginBloc>().add(LoginButtonEvent());
+                  },
+                  child: const Text("Login")),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 20.0),
+                child: const Row(
+                  children: [
+                    Expanded(
+                      child: Divider(
                         color: Colors.grey,
-                        fontWeight: FontWeight.bold,
+                        height: 1.0,
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: Divider(
-                      color: Colors.grey,
-                      height: 1.0,
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Text(
+                        'or',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: Divider(
+                        color: Colors.grey,
+                        height: 1.0,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 60),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _squareIconButton(const Image(
-                    image: AssetImage(
-                        'assets/images/google_icon.png'), // Replace with the desired Google icon
-                  )),
-                  _squareIconButton(const Image(
-                    image: AssetImage(
-                        'assets/images/facebook_icon.png'), // Replace with the desired Google icon
-                  )),
-                  _squareIconButton(const Icon(Icons.phone))
-                ],
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 60),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _squareIconButton(const Image(
+                      image: AssetImage(
+                          'assets/images/google_icon.png'), // Replace with the desired Google icon
+                    )),
+                    _squareIconButton(const Image(
+                      image: AssetImage(
+                          'assets/images/facebook_icon.png'), // Replace with the desired Google icon
+                    )),
+                    _squareIconButton(const Icon(Icons.phone))
+                  ],
+                ),
               ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Don't have account?"),
-                  TextButton(onPressed: ()=>{}, child: const Text('Register now'))
-                ],
-              ),
-            )
-          ],
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Don't have account?"),
+                    TextButton(onPressed: ()=>{}, child: const Text('Register now'))
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

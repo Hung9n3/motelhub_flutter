@@ -4,4 +4,5 @@ abstract class ITokenHandler{
   Future<void> update(String key, String value);
   Future<void> delete(String key);
   Future<String> getByKey(String key);
+  Map<String,dynamic> decodeToken(String token);
 }

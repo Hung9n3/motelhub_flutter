@@ -2,6 +2,11 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 import 'package:motelhub_flutter/core/token/token_handler.dart';
+import 'package:motelhub_flutter/data/repositories/auth_repository.dart';
+import 'package:motelhub_flutter/data/repositories/boarding_house_area_repository.dart';
+import 'package:motelhub_flutter/domain/entities/boarding_house_area.dart';
+import 'package:motelhub_flutter/domain/repositories/auth_repository_interface.dart';
+import 'package:motelhub_flutter/domain/repositories/boarding_house_area_repository_interface.dart';
 import 'package:motelhub_flutter/features/daily_news/data/data_sources/remote/news_api_service.dart';
 import 'package:motelhub_flutter/features/daily_news/data/repositories/article_repository.dart';
 import 'package:motelhub_flutter/features/daily_news/domain/repositories/article_repository_interface';
@@ -27,9 +32,22 @@ Future<void> initializeDependencies() async {
   // Dependencies
   sl.registerSingleton<NewsApiService>(NewsApiService(sl()));
 
+  //token
+  sl.registerFactory<FlutterSecureStorage>(
+    () => const FlutterSecureStorage()
+  );
+
+  sl.registerFactory<ITokenHandler>(
+    () => TokenHandler(sl())
+  );
+  
+  //repository
   sl.registerSingleton<IArticleRepository>(
     ArticleRepositoryImpl(sl(),sl())
   );
+
+  sl.registerFactory<IAuthRepository>(() => AuthRepository());
+  sl.registerFactory<IBoardingHouseAreaRepository>(() => BoardingHouseAreaRepository());
   
   //UseCases
   sl.registerSingleton<GetArticleUseCase>(
@@ -52,15 +70,6 @@ Future<void> initializeDependencies() async {
   //Blocs
   sl.registerFactory<RemoteArticlesBloc>(
     ()=> RemoteArticlesBloc(sl())
-  );
-
-  //token
-  sl.registerFactory<FlutterSecureStorage>(
-    () => const FlutterSecureStorage()
-  );
-
-  sl.registerFactory<ITokenHandler>(
-    () => TokenHandler(sl())
   );
   // sl.registerFactory<LocalArticleBloc>(
   //   ()=> LocalArticleBloc(sl(),sl(),sl())
