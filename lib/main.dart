@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motelhub_flutter/injection_container.dart';
 import 'package:motelhub_flutter/presentation/blocs/login/login_bloc.dart';
 import 'package:motelhub_flutter/presentation/components/my_boarding_house_component.dart';
+import 'package:motelhub_flutter/presentation/pages/area_detail.dart';
 import 'package:motelhub_flutter/presentation/pages/home_page.dart';
 import 'package:motelhub_flutter/presentation/pages/login_page.dart';
 
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
           ),
           home: const LoginPage(),
           routes: {
-            '/home':(context) => const HomePage()
+            '/home':(context) => const HomePage(),
+            '/area-detail':(context) => const AreaDetailPage(),
           },),
     );
   }

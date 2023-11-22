@@ -25,9 +25,9 @@ class LoginPage extends StatelessWidget {
       },
       builder: (context, state) {
         if (state is LoginLoadingState) {
-          return const Center(child:  CupertinoActivityIndicator());
+          return const Center(child: CupertinoActivityIndicator());
         }
-        
+
         return _loginForm(context);
       },
     );
@@ -37,9 +37,7 @@ class LoginPage extends StatelessWidget {
     return SingleChildScrollView(
       child: Center(
         child: Container(
-          constraints: const BoxConstraints(
-            maxWidth: 600
-          ),
+          constraints: const BoxConstraints(maxWidth: 600),
           padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 40),
           child: Column(
             children: [
@@ -73,7 +71,7 @@ class LoginPage extends StatelessWidget {
               const SizedBox(height: 20),
               TextButton(
                   onPressed: () {
-                    context.read<LoginBloc>().add(LoginButtonEvent());
+                    context.read<LoginBloc>().add(const LoginButtonEvent());
                   },
                   child: const Text("Login")),
               Container(
@@ -106,7 +104,8 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 60),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 60),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -128,7 +127,8 @@ class LoginPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text("Don't have account?"),
-                    TextButton(onPressed: ()=>{}, child: const Text('Register now'))
+                    TextButton(
+                        onPressed: () => {}, child: const Text('Register now'))
                   ],
                 ),
               )
@@ -159,7 +159,7 @@ class LoginPage extends StatelessWidget {
   }
 }
 
-  showAlertDialog(BuildContext context, String message) {
+showAlertDialog(BuildContext context, String message) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -167,7 +167,7 @@ class LoginPage extends StatelessWidget {
         content: Text(message),
         actions: [
           TextButton(
-            child: Text('Close'),
+            child: const Text('Close'),
             onPressed: () {
               Navigator.of(context).pop();
             },

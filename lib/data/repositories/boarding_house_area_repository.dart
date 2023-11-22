@@ -10,5 +10,13 @@ class BoardingHouseAreaRepository extends IBoardingHouseAreaRepository{
     var data = listData.where((element) => element.owner == username).toList();
     return DataSuccess(data);
   }
+  
+  @override
+  Future<DataState<BoardingHouseAreaEntity>> getById(int id) async {
+    // TODO: implement getById
+    var listData = BoardingHouseAreaEntity.getFakeData();
+    var data = listData.where((element) => element.id == id).firstOrNull;
+    return DataSuccess(data!);
+  }
 
 }
