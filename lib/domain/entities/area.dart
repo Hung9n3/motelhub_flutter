@@ -1,26 +1,27 @@
 import 'package:equatable/equatable.dart';
+import 'package:motelhub_flutter/domain/entities/room.dart';
 import 'package:motelhub_flutter/domain/entities/user.dart';
 
-class BoardingHouseAreaEntity extends Equatable {
+class AreaEntity extends Equatable {
   final int? id;
   final String? name;
   final String? address;
   final String? owner;
-
-  const BoardingHouseAreaEntity({this.id, this.address, this.name, this.owner});
+  List<RoomEntity> rooms;
+  AreaEntity({this.id, this.address, this.name, this.owner, this.rooms = const []});
 
   @override
-  List<Object?> get props => [id, name, address, owner];
+  List<Object?> get props => [id, name, address, owner, rooms];
 
-  static List<BoardingHouseAreaEntity> getFakeData() {
-    List<BoardingHouseAreaEntity> boardingHouseAreas = [
-      const BoardingHouseAreaEntity(
+  static List<AreaEntity> getFakeData() {
+    List<AreaEntity> boardingHouseAreas = [
+      AreaEntity(
         id: 1,
         name: 'Boarding House A',
         address: '123 Main Street',
         owner: 'hung'
       ),
-      const BoardingHouseAreaEntity(
+      AreaEntity(
         id: 2,
         name: 'Boarding House B',
         address: '456 Elm Street',
@@ -30,7 +31,7 @@ class BoardingHouseAreaEntity extends Equatable {
 
     for (int i = 3; i <= 12; i++) {
       boardingHouseAreas.add(
-        BoardingHouseAreaEntity(
+        AreaEntity(
           id: i,
           name: 'Boarding House $i',
           address: 'Address $i',

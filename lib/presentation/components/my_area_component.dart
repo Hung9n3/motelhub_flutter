@@ -2,24 +2,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motelhub_flutter/injection_container.dart';
-import 'package:motelhub_flutter/presentation/blocs/my_boarding_house_area/my_boarding_house_area_bloc.dart';
-import 'package:motelhub_flutter/presentation/blocs/my_boarding_house_area/my_boarding_house_area_event.dart';
-import 'package:motelhub_flutter/presentation/blocs/my_boarding_house_area/my_boarding_house_area_state.dart';
+import 'package:motelhub_flutter/presentation/blocs/my_area/my_area_bloc.dart';
+import 'package:motelhub_flutter/presentation/blocs/my_area/my_area_event.dart';
+import 'package:motelhub_flutter/presentation/blocs/my_area/my_area_state.dart';
 
-class MyBoadingHouseAreaComponent extends StatelessWidget {
-  const MyBoadingHouseAreaComponent({super.key});
+class MyAreaComponent extends StatelessWidget {
+  const MyAreaComponent({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<MyBoadingHouseAreaBloc>(
-      create: (context) => sl()..add(const GetMyBoardingHouseAreaEvent()),
+    return BlocProvider<MyAreaBloc>(
+      create: (context) => sl()..add(const GetMyAreaEvent()),
       child: Scaffold(
-        body: BlocBuilder<MyBoadingHouseAreaBloc, MyBoardingHouseAreaState>(
+        body: BlocBuilder<MyAreaBloc, MyAreaState>(
           builder: (context, state) {
-            if(state is MyBoardingHouseAreaLoadingState){
+            if(state is MyAreaLoadingState){
               return const Center(child: CupertinoActivityIndicator());
             }
-            if(state is MyBoardingHouseAreaDoneState){
+            if(state is MyAreaDoneState){
               return ListView.builder(
                 
                 itemCount: state.data!.length,
@@ -27,7 +27,7 @@ class MyBoadingHouseAreaComponent extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30),
                     child: InkWell(
-                      onTap: () => Navigator.pushNamed(context, '/area-detail'),
+                      onTap: () => Navigator.pushNamed(context, '/area-detail', arguments: {'areaId':state.data![index].id}),
                       child: Card(
                         child: Column(
                           children: [

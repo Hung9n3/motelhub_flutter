@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motelhub_flutter/injection_container.dart';
 import 'package:motelhub_flutter/presentation/blocs/home/home_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/home/home_event.dart';
-import 'package:motelhub_flutter/presentation/components/my_boarding_house_area_component.dart';
+import 'package:motelhub_flutter/presentation/components/my_area_component.dart';
 import 'package:motelhub_flutter/presentation/components/profile_component.dart';
 import 'package:motelhub_flutter/presentation/components/statistic_component.dart';
 
@@ -52,7 +52,7 @@ class HomePage extends StatelessWidget {
       case NavigationTab.statistic:
         return const StatisticComponent();
       default:
-        return const MyBoadingHouseAreaComponent();
+        return const MyAreaComponent();
     }
   }
 }

@@ -3,17 +3,21 @@ import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 import 'package:motelhub_flutter/core/token/token_handler.dart';
 import 'package:motelhub_flutter/data/repositories/auth_repository.dart';
-import 'package:motelhub_flutter/data/repositories/boarding_house_area_repository.dart';
-import 'package:motelhub_flutter/domain/entities/boarding_house_area.dart';
+import 'package:motelhub_flutter/data/repositories/area_repository.dart';
+import 'package:motelhub_flutter/data/repositories/room_repository.dart';
+import 'package:motelhub_flutter/domain/entities/area.dart';
 import 'package:motelhub_flutter/domain/repositories/auth_repository_interface.dart';
-import 'package:motelhub_flutter/domain/repositories/boarding_house_area_repository_interface.dart';
+import 'package:motelhub_flutter/domain/repositories/area_repository_interface.dart';
+import 'package:motelhub_flutter/domain/repositories/room_repository_interface.dart';
+import 'package:motelhub_flutter/domain/usecases/area_detail/get_area_detail_usecases.dart';
 import 'package:motelhub_flutter/features/daily_news/data/data_sources/remote/news_api_service.dart';
 import 'package:motelhub_flutter/features/daily_news/data/repositories/article_repository.dart';
 import 'package:motelhub_flutter/features/daily_news/domain/repositories/article_repository_interface';
 import 'package:motelhub_flutter/features/daily_news/domain/token/token_handler_interface.dart';
 import 'package:motelhub_flutter/features/daily_news/domain/usecases/get_article.dart';
 import 'package:motelhub_flutter/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
-import 'package:motelhub_flutter/presentation/blocs/my_boarding_house_area/my_boarding_house_area_bloc.dart';
+import 'package:motelhub_flutter/presentation/blocs/area_detail/area_detail_bloc.dart';
+import 'package:motelhub_flutter/presentation/blocs/my_area/my_area_bloc.dart';
 import 'features/daily_news/data/data_sources/local/app_database.dart';
 import 'features/daily_news/domain/usecases/get_saved_article.dart';
 import 'features/daily_news/domain/usecases/remove_article.dart';
@@ -48,8 +52,9 @@ Future<void> initializeDependencies() async {
   );
 
   sl.registerFactory<IAuthRepository>(() => AuthRepository());
-  sl.registerFactory<IBoardingHouseAreaRepository>(() => BoardingHouseAreaRepository());
-  
+  sl.registerFactory<IAreaRepository>(() => AreaRepository());
+  sl.registerFactory<IRoomRepository>(() => RoomRepository());
+
   //UseCases
   sl.registerSingleton<GetArticleUseCase>(
     GetArticleUseCase(sl())
@@ -67,13 +72,17 @@ Future<void> initializeDependencies() async {
     RemoveArticleUseCase(sl())
   );
 
+  sl.registerFactory<GetAreaDetailUseCase>(() => GetAreaDetailUseCase(sl(), sl()));
 
   //Blocs
   sl.registerFactory<RemoteArticlesBloc>(
     ()=> RemoteArticlesBloc(sl())
   );
-  sl.registerFactory<MyBoadingHouseAreaBloc>(
-    () => MyBoadingHouseAreaBloc(sl(), sl()) 
+  sl.registerFactory<MyAreaBloc>(
+    () => MyAreaBloc(sl(), sl()) 
+  );
+  sl.registerFactory<AreaDetailBloc>(
+    () => AreaDetailBloc(sl()) 
   );
   // sl.registerFactory<LocalArticleBloc>(
   //   ()=> LocalArticleBloc(sl(),sl(),sl())
