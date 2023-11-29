@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:motelhub_flutter/domain/entities/room.dart';
-import 'package:motelhub_flutter/domain/entities/user.dart';
 
+// ignore: must_be_immutable
 class AreaEntity extends Equatable {
   final int? id;
   final String? name;

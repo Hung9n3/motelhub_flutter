@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:motelhub_flutter/injection_container.dart';
 import 'package:motelhub_flutter/presentation/blocs/home/home_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/home/home_event.dart';
 import 'package:motelhub_flutter/presentation/components/my_area_component.dart';

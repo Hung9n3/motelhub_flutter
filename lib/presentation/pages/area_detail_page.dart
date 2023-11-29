@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:motelhub_flutter/core/enums/option_sets.dart';
 import 'package:motelhub_flutter/domain/entities/area.dart';
 import 'package:motelhub_flutter/domain/entities/room.dart';
 import 'package:motelhub_flutter/injection_container.dart';
@@ -34,7 +35,12 @@ class AreaDetailPage extends StatelessWidget {
               }
               return const SizedBox();
             },
-          )),
+          ),
+          floatingActionButton: IconButton(icon: const Icon(Icons.add),
+          onPressed: () {
+            Navigator.pushNamed(context, '/add-room', arguments: {'mode':FormMode.add});
+          },),
+          ),
     );
   }
 

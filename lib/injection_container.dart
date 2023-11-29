@@ -16,7 +16,9 @@ import 'package:motelhub_flutter/features/daily_news/domain/repositories/article
 import 'package:motelhub_flutter/features/daily_news/domain/token/token_handler_interface.dart';
 import 'package:motelhub_flutter/features/daily_news/domain/usecases/get_article.dart';
 import 'package:motelhub_flutter/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
+import 'package:motelhub_flutter/presentation/blocs/add_room/add_room_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/area_detail/area_detail_bloc.dart';
+import 'package:motelhub_flutter/presentation/blocs/login/login_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/my_area/my_area_bloc.dart';
 import 'features/daily_news/data/data_sources/local/app_database.dart';
 import 'features/daily_news/domain/usecases/get_saved_article.dart';
@@ -27,10 +29,10 @@ import 'features/daily_news/domain/usecases/save_article.dart';
 final sl = GetIt.instance;
 
 Future<void> initializeDependencies() async {
-
-  final database = await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+  final database =
+      await $FloorAppDatabase.databaseBuilder('app_database.db').build();
   sl.registerSingleton<AppDatabase>(database);
-  
+
   // Dio
   sl.registerSingleton<Dio>(Dio());
 
@@ -38,55 +40,36 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<NewsApiService>(NewsApiService(sl()));
 
   //token
-  sl.registerFactory<FlutterSecureStorage>(
-    () => const FlutterSecureStorage()
-  );
+  sl.registerFactory<FlutterSecureStorage>(() => const FlutterSecureStorage());
 
-  sl.registerFactory<ITokenHandler>(
-    () => TokenHandler(sl())
-  );
-  
+  sl.registerFactory<ITokenHandler>(() => TokenHandler(sl()));
+
   //repository
-  sl.registerSingleton<IArticleRepository>(
-    ArticleRepositoryImpl(sl(),sl())
-  );
+  sl.registerSingleton<IArticleRepository>(ArticleRepositoryImpl(sl(), sl()));
 
   sl.registerFactory<IAuthRepository>(() => AuthRepository());
   sl.registerFactory<IAreaRepository>(() => AreaRepository());
   sl.registerFactory<IRoomRepository>(() => RoomRepository());
 
   //UseCases
-  sl.registerSingleton<GetArticleUseCase>(
-    GetArticleUseCase(sl())
-  );
+  sl.registerSingleton<GetArticleUseCase>(GetArticleUseCase(sl()));
 
-  sl.registerSingleton<GetSavedArticleUseCase>(
-    GetSavedArticleUseCase(sl())
-  );
+  sl.registerSingleton<GetSavedArticleUseCase>(GetSavedArticleUseCase(sl()));
 
-  sl.registerSingleton<SaveArticleUseCase>(
-    SaveArticleUseCase(sl())
-  );
-  
-  sl.registerSingleton<RemoveArticleUseCase>(
-    RemoveArticleUseCase(sl())
-  );
+  sl.registerSingleton<SaveArticleUseCase>(SaveArticleUseCase(sl()));
 
-  sl.registerFactory<GetAreaDetailUseCase>(() => GetAreaDetailUseCase(sl(), sl()));
+  sl.registerSingleton<RemoveArticleUseCase>(RemoveArticleUseCase(sl()));
+
+  sl.registerFactory<GetAreaDetailUseCase>(
+      () => GetAreaDetailUseCase(sl(), sl()));
 
   //Blocs
-  sl.registerFactory<RemoteArticlesBloc>(
-    ()=> RemoteArticlesBloc(sl())
-  );
-  sl.registerFactory<MyAreaBloc>(
-    () => MyAreaBloc(sl(), sl()) 
-  );
-  sl.registerFactory<AreaDetailBloc>(
-    () => AreaDetailBloc(sl()) 
-  );
+  sl.registerFactory<RemoteArticlesBloc>(() => RemoteArticlesBloc(sl()));
+  sl.registerFactory<LoginBloc>(() => LoginBloc(sl(), sl()));
+  sl.registerFactory<MyAreaBloc>(() => MyAreaBloc(sl(), sl()));
+  sl.registerFactory<AreaDetailBloc>(() => AreaDetailBloc(sl()));
+  sl.registerFactory<AddRoomBloc>(() => AddRoomBloc(sl(), sl()));
   // sl.registerFactory<LocalArticleBloc>(
   //   ()=> LocalArticleBloc(sl(),sl(),sl())
   // );
-
-
 }

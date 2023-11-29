@@ -15,6 +15,7 @@ class TokenHandler extends ITokenHandler{
 
   @override
   Future<String> getByKey(String key) async {
+    var a = await secureStorage.readAll();
     var result = await secureStorage.read(key: key);
     result ??= '';
     return result.toString();

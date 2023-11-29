@@ -16,7 +16,7 @@ class MyAreaBloc extends Bloc<MyAreaEvent, MyAreaState>{
 
   getAreaList(GetMyAreaEvent event, Emitter<MyAreaState> emit) async {
     final username = await _tokenHandler.getByKey('username');
-    final dataState = await _areaRepository.getByUser('hung');
+    final dataState = await _areaRepository.getByUser(username);
 
     if(dataState is DataSuccess){
       emit(MyAreaDoneState(dataState.data!));
