@@ -8,10 +8,10 @@ class AreaDetailBloc extends Bloc<AreaDetailEvent, AreaDetailState> {
   final GetAreaDetailUseCase _areaDetailUseCase;
   AreaDetailBloc(this._areaDetailUseCase)
       : super(const AreaDetailLoadingState()) {
-        on<GetAreaDetailEvent>(getAreaDetail);
+        on<GetAreaDetailEvent>(_getAreaDetail);
       }
 
-  getAreaDetail(AreaDetailEvent event, Emitter<AreaDetailState> emit) async {
+  _getAreaDetail(AreaDetailEvent event, Emitter<AreaDetailState> emit) async {
     var dataState = await _areaDetailUseCase(params:event.areaId);
     if(dataState is DataSuccess){
       emit(AreaDetailDoneState(dataState.data!, dataState.data!.rooms));

@@ -42,8 +42,9 @@ class MyApp extends StatelessWidget {
           if (settings.name == '/add-room') {
             final args = settings.arguments as Map<String, dynamic>;
             final mode = args['mode'] as FormMode;
+            final selectedAreaId = args['selectedAreaId'] as int;
             return MaterialPageRoute(
-              builder: (context) => AddRoomPage(mode: mode),
+              builder: (context) => AddRoomPage(mode: mode, selectedAreaId: selectedAreaId,),
             );
           }
         },

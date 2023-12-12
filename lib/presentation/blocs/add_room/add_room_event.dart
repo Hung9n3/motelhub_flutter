@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:motelhub_flutter/domain/entities/area.dart';
 
 abstract class AddRoomEvent{
   final String? textValue;
@@ -14,14 +15,14 @@ class ChangeRoomNameEvent extends AddRoomEvent{
 }
 
 class ChangeAreaEvent extends AddRoomEvent{
-  int? selectedAreaId;
-  ChangeAreaEvent(this.selectedAreaId);
+  AreaEntity? selectedArea;
+  ChangeAreaEvent(this.selectedArea);
 }
 
 class ChangeAcreageEvent extends AddRoomEvent{
   ChangeAcreageEvent(String acreage) : super(textValue: acreage);
 }
 
-class SubmitButtonPressed extends AddRoomEvent{
-
+class AddRoomOnSubmitButtonPressed extends AddRoomEvent{
+  const AddRoomOnSubmitButtonPressed();
 }

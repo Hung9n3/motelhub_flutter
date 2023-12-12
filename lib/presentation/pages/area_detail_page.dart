@@ -18,63 +18,66 @@ class AreaDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<AreaDetailBloc>(
       create: (context) => sl()..add(GetAreaDetailEvent(areaId)),
-      child: Scaffold(
-          appBar: AppBar(
-            title: const Text(
-              'Area Detail',
-              textAlign: TextAlign.center,
-            ),
-          ),
-          body: BlocBuilder<AreaDetailBloc, AreaDetailState>(
-            builder: (context, state) {
-              if (state is AreaDetailLoadingState) {
-                return const Center(child: CupertinoActivityIndicator());
-              }
-              if (state is AreaDetailDoneState) {
-                return _buildAreaDetail(state.area!);
-              }
-              return const SizedBox();
-            },
-          ),
-          floatingActionButton: IconButton(icon: const Icon(Icons.add),
-          onPressed: () {
-            Navigator.pushNamed(context, '/add-room', arguments: {'mode':FormMode.add});
-          },),
-          ),
+      child: BlocBuilder<AreaDetailBloc, AreaDetailState>(
+        builder: (context, state) {
+          if (state is AreaDetailLoadingState) {
+            return const Center(child: CupertinoActivityIndicator());
+          }
+          if (state is AreaDetailDoneState) {
+            return _buildAreaDetail(state.area!, context);
+          }
+          return const SizedBox();
+        },
+      ),
     );
   }
 
-  Widget _buildAreaDetail(AreaEntity data) {
-    return SingleChildScrollView(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Wrap(
-              children: [
-                SectionWithBottomBorder(
-                  child: ListTile(
-                    leading: const Icon(Icons.holiday_village),
-                    title: Text('${data.name}'),
+  Widget _buildAreaDetail(AreaEntity data, BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Area Detail',
+          textAlign: TextAlign.center,
+        ),
+      ),
+      floatingActionButton: IconButton(
+        icon: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.pushNamed(context, '/add-room',
+              arguments: {'mode': FormMode.add, 'selectedAreaId': data.id});
+        },
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Wrap(
+                children: [
+                  SectionWithBottomBorder(
+                    child: ListTile(
+                      leading: const Icon(Icons.holiday_village),
+                      title: Text('${data.name}'),
+                    ),
                   ),
-                ),
-                SectionWithBottomBorder(
-                  child: ListTile(
-                    leading: const Icon(Icons.location_on),
-                    title: Text('${data.name}'),
+                  SectionWithBottomBorder(
+                    child: ListTile(
+                      leading: const Icon(Icons.location_on),
+                      title: Text('${data.name}'),
+                    ),
                   ),
-                ),
-                SectionWithBottomBorder(
-                  child: ListTile(
-                    leading: const Icon(Icons.person),
-                    title: Text('${data.owner}'),
+                  SectionWithBottomBorder(
+                    child: ListTile(
+                      leading: const Icon(Icons.person),
+                      title: Text('${data.owner}'),
+                    ),
                   ),
-                ),
-              ],
-            ),
-            _buildExpansion(data.rooms)
-          ],
+                ],
+              ),
+              _buildExpansion(data.rooms)
+            ],
+          ),
         ),
       ),
     );
