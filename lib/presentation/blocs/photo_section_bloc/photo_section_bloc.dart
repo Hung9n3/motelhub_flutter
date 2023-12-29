@@ -1,0 +1,40 @@
+import 'dart:io';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:motelhub_flutter/domain/entities/photo.dart';
+import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_event.dart';
+import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_state.dart';
+
+class PhotoSectionBloc extends Bloc<PhotoSectionEvent, PhotoSectionState> {
+  PhotoSectionBloc() : super(InitState([])) {
+    on<AddPhotoEvent>(_onAddPhoto);
+  }
+
+  _onAddPhoto(AddPhotoEvent event, Emitter<PhotoSectionState> emit) async {
+    try {
+      var photo = await ImagePicker().pickImage(source: event.mode!);
+      if (photo == null) {
+        return;
+      } else {
+        var file = File(photo.path);
+        var entity = PhotoEntity(id: 1, name: null, data: file, url: null);
+        if (state.photos != null) {
+          state.photos?.add(entity);
+          emit(GetPhotoSuccess(state.photos!));
+        }
+      }
+    } 
+    on Exception catch (ex) 
+    {
+      // TODO
+      print(ex);
+    }
+  }
+
+  _onDeletePhoto(
+      DeletePhotoEvent event, Emitter<PhotoSectionState> emit) async {
+    var photo = state.photos
+        ?.removeWhere((element) => element.id == event.selectedPhotoId);
+  }
+}

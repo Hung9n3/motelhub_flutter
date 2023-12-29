@@ -20,6 +20,7 @@ import 'package:motelhub_flutter/presentation/blocs/add_room/add_room_bloc.dart'
 import 'package:motelhub_flutter/presentation/blocs/area_detail/area_detail_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/login/login_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/my_area/my_area_bloc.dart';
+import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_bloc.dart';
 import 'features/daily_news/data/data_sources/local/app_database.dart';
 import 'features/daily_news/domain/usecases/get_saved_article.dart';
 import 'features/daily_news/domain/usecases/remove_article.dart';
@@ -69,6 +70,7 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<MyAreaBloc>(() => MyAreaBloc(sl(), sl()));
   sl.registerFactory<AreaDetailBloc>(() => AreaDetailBloc(sl()));
   sl.registerFactory<AddRoomBloc>(() => AddRoomBloc(sl(), sl()));
+  sl.registerFactory<PhotoSectionBloc>(() => PhotoSectionBloc());
   // sl.registerFactory<LocalArticleBloc>(
   //   ()=> LocalArticleBloc(sl(),sl(),sl())
   // );

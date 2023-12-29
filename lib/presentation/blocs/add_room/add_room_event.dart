@@ -7,7 +7,8 @@ abstract class AddRoomEvent{
 }
 
 class LoadingFormEvent extends AddRoomEvent{
-  const LoadingFormEvent();
+  final int? selectedAreaId;
+  const LoadingFormEvent({this.selectedAreaId});
 }
 
 class ChangeRoomNameEvent extends AddRoomEvent{

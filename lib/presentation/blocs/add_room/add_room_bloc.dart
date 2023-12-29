@@ -30,7 +30,7 @@ class AddRoomBloc extends Bloc<AddRoomEvent, AddRoomState> {
       if (areaDataState is DataSuccess) {
         areaList = areaDataState.data!;
       }
-      emit(LoadingFormStateDone(areaList, null, null));
+      emit(LoadingFormStateDone(areaList, null, event.selectedAreaId));
   }
 
   _changeArea(ChangeAreaEvent event, Emitter<AddRoomState> emit) async {
