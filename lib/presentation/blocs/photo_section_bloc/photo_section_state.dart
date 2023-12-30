@@ -19,5 +19,5 @@ class GetPhotoSuccess extends PhotoSectionState {
 }
 
 class GetPhotoFailed extends PhotoSectionState{
-  GetPhotoFailed(Exception exception) : super(error: exception);
+  GetPhotoFailed(Exception exception, List<PhotoEntity> currentPhotos) : super(error: exception, photos: currentPhotos);
 }

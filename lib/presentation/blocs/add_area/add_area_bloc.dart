@@ -8,17 +8,28 @@ import 'package:motelhub_flutter/presentation/blocs/add_area/add_area_state.dart
 class AddAreaBloc extends Bloc<AddAreaEvent, AddAreaState>{
   final ITokenHandler _tokenHandler;
   final IAreaRepository _areaRepository;
-  AddAreaBloc(this._tokenHandler, this._areaRepository):super(const AddAreaInitState()){
+  AddAreaBloc(this._tokenHandler, this._areaRepository):super(AddAreaInitState()){
     on<AddAreaInitEvent>(_loadingForm);
+    on<ChangeAreaNameEvent>(_changeAreaName);
+    on<ChangeAreaAddressEvent>(_changeAreaAddress);
+    on<SubmitAreaEvent>(_submit);
   }
   
   _loadingForm(AddAreaInitEvent event, Emitter<AddAreaState> emit) async {
-    emit(const AddAreaStateDone());
+    emit(AddAreaLoadFormDoneState());
   }
 
-  _submit(AddAreaSubmitEvent event, Emitter<AddAreaState> state) async {
+  _changeAreaName(ChangeAreaNameEvent event, Emitter<AddAreaState> emit) async {
+    state.name = event.name;
+  }
+
+  _changeAreaAddress(ChangeAreaAddressEvent event, Emitter<AddAreaState> emit) async {
+    state.address = event.address;
+  }
+  
+  _submit(SubmitAreaEvent event, Emitter<AddAreaState> emit) async {
     var username = await _tokenHandler.getByKey('username');
-    var area = AreaEntity(id: 999, address: event.address, name: event.name, owner: username);
+    var area = AreaEntity(id: 999, address: state.address, name: state.name, owner: username);
     print(area);
   }
 }

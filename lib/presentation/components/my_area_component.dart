@@ -13,41 +13,47 @@ class MyAreaComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<MyAreaBloc>(
       create: (context) => sl()..add(const GetMyAreaEvent()),
-      child: Scaffold(
-        body: BlocBuilder<MyAreaBloc, MyAreaState>(
-          builder: (context, state) {
-            if(state is MyAreaLoadingState){
-              return const Center(child: CupertinoActivityIndicator());
-            }
-            if(state is MyAreaDoneState){
-              return ListView.builder(
-                
-                itemCount: state.data!.length,
-                itemBuilder: (context, index){
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30),
-                    child: InkWell(
-                      onTap: () => Navigator.pushNamed(context, '/area-detail', arguments: {'areaId':state.data![index].id}),
-                      child: Card(
-                        child: Column(
-                          children: [
+      child: BlocBuilder<MyAreaBloc, MyAreaState>(builder: (context, state) {
+        if (state is MyAreaLoadingState) {
+          return const Center(child: CupertinoActivityIndicator());
+        }
+        if (state is MyAreaDoneState) {
+          return Scaffold(
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/add-area');
+                },
+                child: const Icon(Icons.add),
+              ),
+              body: ListView.builder(
+                  itemCount: state.data!.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 30),
+                      child: InkWell(
+                        onTap: () => Navigator.pushNamed(
+                            context, '/area-detail',
+                            arguments: {'areaId': state.data![index].id}),
+                        child: Card(
+                          child: Column(children: [
                             ListTile(
                               leading: const Icon(Icons.holiday_village),
                               title: Text(state.data![index].name.toString()),
                             ),
                             ListTile(
                               leading: const Icon(Icons.location_on),
-                              title: Text(state.data![index].address.toString()),
+                              title:
+                                  Text(state.data![index].address.toString()),
                             )
                           ]),
+                        ),
                       ),
-                    ),
-                  );
-              });
-            }
-            return const SizedBox();
-        },),
-      ),
+                    );
+                  }));
+        }
+        return const SizedBox();
+      }),
     );
   }
 }

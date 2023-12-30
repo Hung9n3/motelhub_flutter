@@ -27,8 +27,7 @@ class PhotoSectionBloc extends Bloc<PhotoSectionEvent, PhotoSectionState> {
     } 
     on Exception catch (ex) 
     {
-      // TODO
-      print(ex);
+      emit(GetPhotoFailed(ex, state.photos!));
     }
   }
 

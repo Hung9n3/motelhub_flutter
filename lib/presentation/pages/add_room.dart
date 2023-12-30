@@ -11,6 +11,7 @@ import 'package:motelhub_flutter/presentation/blocs/add_room/add_room_state.dart
 import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_event.dart';
 import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_state.dart';
+import 'package:motelhub_flutter/presentation/components/commons/alert_dialog.dart';
 
 class AddRoomPage extends StatelessWidget {
   final FormMode mode;
@@ -32,7 +33,7 @@ class AddRoomPage extends StatelessWidget {
           builder: (BuildContext context) {
             return Scaffold(
                 appBar: AppBar(
-                  title: const Text('Room Detail'),
+                  title: const Text('Room'),
                   actions: [
                     IconButton(
                         onPressed: () {
@@ -117,8 +118,12 @@ class AddRoomPage extends StatelessWidget {
                 context.read<AddRoomBloc>().add(ChangeAcreageEvent(value));
               },
             ),
-            BlocBuilder<PhotoSectionBloc, PhotoSectionState>(
-                builder: (context, state) {
+            BlocConsumer<PhotoSectionBloc, PhotoSectionState>(
+                listener: (context, state) {
+              if (state is GetPhotoFailed) {
+                showAlertDialog(context, "Add photo fail");
+              }
+            }, builder: (context, state) {
               return Wrap(
                 direction: Axis.horizontal,
                 children: state.photos!.map((photo) {

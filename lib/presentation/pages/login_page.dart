@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/login/login_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/login/login_event.dart';
 import 'package:motelhub_flutter/presentation/blocs/login/login_state.dart';
+import 'package:motelhub_flutter/presentation/components/commons/alert_dialog.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -157,23 +158,4 @@ class LoginPage extends StatelessWidget {
           child: icon,
         ));
   }
-}
-
-showAlertDialog(BuildContext context, String message) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        content: Text(message),
-        actions: [
-          TextButton(
-            child: const Text('Close'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
 }

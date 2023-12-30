@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motelhub_flutter/core/enums/option_sets.dart';
 import 'package:motelhub_flutter/injection_container.dart';
 import 'package:motelhub_flutter/presentation/blocs/login/login_bloc.dart';
+import 'package:motelhub_flutter/presentation/pages/add_area.dart';
 import 'package:motelhub_flutter/presentation/pages/add_room.dart';
 import 'package:motelhub_flutter/presentation/pages/area_detail_page.dart';
 import 'package:motelhub_flutter/presentation/pages/home_page.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         home: const LoginPage(),
         routes: {
           '/home': (context) => const HomePage(),
+          '/add-area': (context) => const AddAreaPage(),
         },
         onGenerateRoute: (settings) {
           if (settings.name == '/area-detail') {
