@@ -13,6 +13,9 @@ class PhotoSectionBloc extends Bloc<PhotoSectionEvent, PhotoSectionState> {
   }
 
   _initPhoto(UpdatePhotosEvent event, Emitter<PhotoSectionState> emit) async {
+    if(event.photos == null) {
+      emit(const InitState([]));
+    }
     emit(InitState(event.photos!));
   }
   _onAddPhoto(AddPhotoEvent event, Emitter<PhotoSectionState> emit) async {
@@ -24,8 +27,9 @@ class PhotoSectionBloc extends Bloc<PhotoSectionEvent, PhotoSectionState> {
         var file = File(photo.path);
         var entity = PhotoEntity(id: 1, name: null, data: file, url: null);
         if (state.photos != null) {
-          state.photos?.add(entity);
-          emit(GetPhotoSuccess(state.photos!));
+          var currentPhotos = state.photos!;
+          currentPhotos.add(entity);
+          emit(GetPhotoSuccess(currentPhotos));
         }
       }
     } 
@@ -37,7 +41,8 @@ class PhotoSectionBloc extends Bloc<PhotoSectionEvent, PhotoSectionState> {
 
   _onDeletePhoto(
       DeletePhotoEvent event, Emitter<PhotoSectionState> emit) async {
-    var photo = state.photos
-        ?.removeWhere((element) => element.id == event.selectedPhotoId);
+    var currentPhotos = state.photos!;
+    currentPhotos.removeWhere((element) => element.id == event.selectedPhotoId);
+    emit(DeletePhotoSuccess(currentPhotos));
   }
 }

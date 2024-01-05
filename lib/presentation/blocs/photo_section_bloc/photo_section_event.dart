@@ -10,7 +10,7 @@ abstract class PhotoSectionEvent {
 }
 
 class UpdatePhotosEvent extends PhotoSectionEvent {
-  const UpdatePhotosEvent(List<PhotoEntity> photos) : super(photos: photos);
+  const UpdatePhotosEvent(List<PhotoEntity>? photos) : super(photos: photos);
 }
 
 class AddPhotoEvent extends PhotoSectionEvent {

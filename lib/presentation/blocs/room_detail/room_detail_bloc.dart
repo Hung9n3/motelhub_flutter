@@ -37,9 +37,13 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
       acreage = room.acreage;
       areaId = room.areaId;
       isEmpty = room.isEmpty;
-      photos = room.photos;
+      //photos = room.photos;
       name = room.name;
-      areaName = room.name;
+      areaName = room.areaName;
+
+      photos = [
+        const PhotoEntity(id: 1, url: 'https://picsum.photos/250?image=9'),
+      ];
 
       emit(const RoomDetailLoadFormStateDone());
     } else {
@@ -50,7 +54,13 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
   _submitForm(SubmitFormEvent event, Emitter<BaseState> emit) async {
     //Todo: implement submit logic
     try {
-      var room = RoomEntity(id: id, name: name, acreage: acreage, photos: event.photos, isEmpty: isEmpty, areaId: areaId);
+      var room = RoomEntity(
+          id: id,
+          name: name,
+          acreage: acreage,
+          photos: event.photos,
+          isEmpty: isEmpty,
+          areaId: areaId);
       emit(const SubmitFormSuccess());
       print(room);
     } on Exception catch (err) {
@@ -63,7 +73,7 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
   }
 
   _changeAcreage(ChangeAcreageEvent event, Emitter<BaseState> emit) async {
-    if(event.acreage != null){
+    if (event.acreage != null) {
       var doubleValue = double.tryParse(event.acreage!) ?? 0;
       acreage = doubleValue;
     }

@@ -8,6 +8,7 @@ import 'package:motelhub_flutter/presentation/pages/add_room.dart';
 import 'package:motelhub_flutter/presentation/pages/area_detail_page.dart';
 import 'package:motelhub_flutter/presentation/pages/home_page.dart';
 import 'package:motelhub_flutter/presentation/pages/login_page.dart';
+import 'package:motelhub_flutter/presentation/pages/room_detail.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,6 +42,13 @@ class MyApp extends StatelessWidget {
               builder: (context) => AreaDetailPage(areaId: areaId),
             );
           }
+          if (settings.name == '/room-detail') {
+            final args = settings.arguments as Map<String, dynamic>;
+            final roomId = args['roomId'] as int;
+            return MaterialPageRoute(
+              builder: (context) => RoomDetailPage(roomId: roomId),
+            );
+          }
           if (settings.name == '/add-room') {
             final args = settings.arguments as Map<String, dynamic>;
             final mode = args['mode'] as FormMode;
@@ -49,6 +57,7 @@ class MyApp extends StatelessWidget {
               builder: (context) => AddRoomPage(mode: mode, selectedAreaId: selectedAreaId,),
             );
           }
+          return null;
         },
       ),
     );

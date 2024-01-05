@@ -15,7 +15,7 @@ class RoomEntity extends Equatable {
 
   @override
   List<Object?> get props {
-    return [id, name, areaId, isEmpty];
+    return [id, name, areaId, isEmpty, acreage, photos, areaName];
   }
 
   static RoomEntity getEntity(RoomEntity entity, List<PhotoEntity>? photo){

@@ -93,9 +93,10 @@ class AreaDetailPage extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: rooms.length,
             itemBuilder: (context, index) {
-              return Container(
-                padding: const EdgeInsets.symmetric(vertical: 5),
+              return GestureDetector(
+                onTap: () => Navigator.pushNamed(context, '/room-detail',arguments: {'mode': FormMode.update, 'roomId': rooms[index].id}),
                 child: Card(
+                  margin: const EdgeInsets.symmetric(vertical: 5),
                   child: Container(
                     padding: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 30),

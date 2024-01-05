@@ -22,6 +22,6 @@ class ChangeNameEvent extends RoomDetailEvent {
 }
 
 class SubmitFormEvent extends RoomDetailEvent {
-  const SubmitFormEvent(List<PhotoEntity> photos) 
+  const SubmitFormEvent(List<PhotoEntity>? photos) 
   : super(photos: photos);
 }
