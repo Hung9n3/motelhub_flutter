@@ -16,8 +16,8 @@ import 'package:motelhub_flutter/presentation/components/commons/alert_dialog.da
 
 class AddRoomPage extends StatelessWidget {
   final FormMode mode;
-  final int? selectedAreaId;
-  const AddRoomPage({super.key, required this.mode, this.selectedAreaId});
+  final int selectedAreaId;
+  const AddRoomPage({super.key, required this.mode, required this.selectedAreaId});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class AddRoomPage extends StatelessWidget {
           BlocProvider<AddRoomBloc>(
               create: (context) => sl()
                 ..add(
-                  LoadingFormEvent(selectedAreaId: selectedAreaId),
+                  LoadingFormEvent(selectedAreaId, mode),
                 )),
           BlocProvider<PhotoSectionBloc>(create: (context) => sl())
         ],
@@ -61,7 +61,7 @@ class AddRoomPage extends StatelessWidget {
   Widget _buildBody(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+        padding:const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

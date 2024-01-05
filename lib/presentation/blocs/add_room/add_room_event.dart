@@ -1,14 +1,16 @@
 import 'package:equatable/equatable.dart';
+import 'package:motelhub_flutter/core/enums/option_sets.dart';
 import 'package:motelhub_flutter/domain/entities/area.dart';
 
 abstract class AddRoomEvent{
   final String? textValue;
-  const AddRoomEvent({this.textValue});
+  final FormMode? mode;
+  final int? selectedAreaId;
+  const AddRoomEvent({this.textValue, this.mode, this.selectedAreaId});
 }
 
 class LoadingFormEvent extends AddRoomEvent{
-  final int? selectedAreaId;
-  const LoadingFormEvent({this.selectedAreaId});
+  const LoadingFormEvent(int selectedAreaId, FormMode mode) : super(selectedAreaId: selectedAreaId, mode: mode);
 }
 
 class ChangeRoomNameEvent extends AddRoomEvent{

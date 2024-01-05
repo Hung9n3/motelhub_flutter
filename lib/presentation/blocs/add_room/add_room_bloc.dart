@@ -34,7 +34,7 @@ class AddRoomBloc extends Bloc<AddRoomEvent, AddRoomState> {
   }
 
   _changeArea(ChangeAreaEvent event, Emitter<AddRoomState> emit) async {
-    emit(LoadingFormStateDone(state.areas, event.selectedArea!.name, event.selectedArea!.id));
+    //emit(LoadingFormStateDone(state.areas, event.selectedArea!.name, event.selectedArea!.id));
   }
 
   _changeRoomName(ChangeRoomNameEvent event, Emitter<AddRoomState> emit) async {
