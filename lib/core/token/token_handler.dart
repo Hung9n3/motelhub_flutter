@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:motelhub_flutter/features/daily_news/domain/token/token_handler_interface.dart';
 
@@ -15,7 +14,6 @@ class TokenHandler extends ITokenHandler{
 
   @override
   Future<String> getByKey(String key) async {
-    var a = await secureStorage.readAll();
     var result = await secureStorage.read(key: key);
     result ??= '';
     return result.toString();

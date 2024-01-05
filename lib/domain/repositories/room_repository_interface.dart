@@ -3,4 +3,5 @@ import 'package:motelhub_flutter/domain/entities/room.dart';
 
 abstract class IRoomRepository {
   Future<DataState<List<RoomEntity>>> getByArea(int areaId);
+  Future<DataState<RoomEntity>> getById(int roomId);
 }

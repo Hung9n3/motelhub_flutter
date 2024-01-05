@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 
 abstract class BaseState {
-  final DioError? error;
+  final Exception? error;
   const BaseState({this.error});
 }
 
 class ErrorState extends BaseState {
-  ErrorState(DioError? error) : super(error: error);
+  ErrorState(Exception? error) : super(error: error);
 } 

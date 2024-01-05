@@ -9,8 +9,12 @@ import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_sec
 class PhotoSectionBloc extends Bloc<PhotoSectionEvent, PhotoSectionState> {
   PhotoSectionBloc() : super(InitState([])) {
     on<AddPhotoEvent>(_onAddPhoto);
+    on<UpdatePhotosEvent>(_initPhoto);
   }
 
+  _initPhoto(UpdatePhotosEvent event, Emitter<PhotoSectionState> emit) async {
+    emit(InitState(event.photos!));
+  }
   _onAddPhoto(AddPhotoEvent event, Emitter<PhotoSectionState> emit) async {
     try {
       var photo = await ImagePicker().pickImage(source: event.mode!);

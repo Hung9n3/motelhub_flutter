@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:motelhub_flutter/core/enums/option_sets.dart';
 import 'package:motelhub_flutter/domain/entities/area.dart';
+import 'package:motelhub_flutter/domain/entities/photo.dart';
 import 'package:motelhub_flutter/injection_container.dart';
 import 'package:motelhub_flutter/presentation/blocs/add_room/add_room_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/add_room/add_room_event.dart';
