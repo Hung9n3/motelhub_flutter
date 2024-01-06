@@ -1,25 +1,40 @@
 import 'package:equatable/equatable.dart';
 import 'package:motelhub_flutter/domain/entities/photo.dart';
+import 'package:motelhub_flutter/domain/entities/user.dart';
 
 class RoomEntity extends Equatable {
   final int? id;
   final String? name;
   final int? areaId;
+  final int? ownerId;
   final bool isEmpty;
   final double? acreage;
   final String? areaName;
+  final String? ownerName;
+  final String? ownerPhone;
+  final String? ownerEmail;
+  final UserEntity? owner;
+  final List<UserEntity>? members;
   final List<PhotoEntity>? photos;
-  
+
   const RoomEntity(
-      {this.id, this.name, this.areaId, this.isEmpty = false, this.acreage, this.photos, this.areaName});
+      {this.id,
+      this.name,
+      this.areaId,
+      this.isEmpty = false,
+      this.acreage,
+      this.photos,
+      this.members,
+      this.areaName,
+      this.owner,
+      this.ownerId,
+      this.ownerEmail,
+      this.ownerName,
+      this.ownerPhone});
 
   @override
   List<Object?> get props {
-    return [id, name, areaId, isEmpty, acreage, photos, areaName];
-  }
-
-  static RoomEntity getEntity(RoomEntity entity, List<PhotoEntity>? photo){
-    return RoomEntity(id: entity.id, name: entity.name, acreage: entity.acreage, areaId: entity.areaId, isEmpty: entity.isEmpty, photos: entity.photos);
+    return [id, name, areaId, isEmpty, acreage, photos, areaName, members, ownerName, ownerId];
   }
 
   static List<RoomEntity> getFakeData() {
@@ -31,7 +46,8 @@ class RoomEntity extends Equatable {
         id: i,
         name: 'Room $i',
         areaId: 1,
-        isEmpty: i%3 == 0,
+        isEmpty: false,
+        ownerId: i,
         acreage: 12.0,
       );
       roomList.add(room);
@@ -43,7 +59,7 @@ class RoomEntity extends Equatable {
         id: i,
         name: 'Room $i',
         areaId: 2,
-        isEmpty: i%4 != 0,
+        isEmpty: true,
         acreage: 15.0,
       );
       roomList.add(room);

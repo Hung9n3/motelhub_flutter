@@ -7,16 +7,21 @@ import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_sec
 import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_state.dart';
 
 class PhotoSectionBloc extends Bloc<PhotoSectionEvent, PhotoSectionState> {
-  PhotoSectionBloc() : super(InitState([])) {
+  PhotoSectionBloc() : super(const InitState([])) {
     on<AddPhotoEvent>(_onAddPhoto);
     on<UpdatePhotosEvent>(_initPhoto);
   }
 
   _initPhoto(UpdatePhotosEvent event, Emitter<PhotoSectionState> emit) async {
-    if(event.photos == null) {
-      emit(const InitState([]));
+    try {
+      if(event.photos == null) {
+        emit(const InitState([]));
+        return;
+      }
+      emit(InitState(event.photos!));
+    } catch (err) {
+      print(err);
     }
-    emit(InitState(event.photos!));
   }
   _onAddPhoto(AddPhotoEvent event, Emitter<PhotoSectionState> emit) async {
     try {

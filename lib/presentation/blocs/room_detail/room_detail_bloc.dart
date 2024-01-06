@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motelhub_flutter/core/resources/data_state.dart';
 import 'package:motelhub_flutter/domain/entities/photo.dart';
 import 'package:motelhub_flutter/domain/entities/room.dart';
+import 'package:motelhub_flutter/domain/entities/user.dart';
 import 'package:motelhub_flutter/domain/repositories/room_repository_interface.dart';
 import 'package:motelhub_flutter/features/daily_news/domain/token/token_handler_interface.dart';
 import 'package:motelhub_flutter/presentation/blocs/base/base_state.dart';
@@ -18,14 +19,18 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
     on<SubmitFormEvent>(_submitForm);
     on<ChangeNameEvent>(_changeName);
     on<ChangeAcreageEvent>(_changeAcreage);
+    on<ChangeOwnerEvent>(_changeOwner);
   }
 
   int? id;
+  int? ownerId;
   String? name;
   String? areaName;
   double? acreage;
   int? areaId;
   bool isEmpty = false;
+  List<UserEntity> users = [];
+  List<UserEntity>? members;
   List<PhotoEntity>? photos;
   int? role;
 
@@ -37,19 +42,26 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
       acreage = room.acreage;
       areaId = room.areaId;
       isEmpty = room.isEmpty;
-      //photos = room.photos;
+      photos = room.photos;
       name = room.name;
       areaName = room.areaName;
+      members = room.members;
+      ownerId = room.ownerId;
 
-      photos = [
-        const PhotoEntity(id: 1, url: 'https://picsum.photos/250?image=9'),
-      ];
-
-      emit(const RoomDetailLoadFormStateDone());
+      users = UserEntity.getFakeData();
+      users.add(const UserEntity(id: 0, name: 'None'));
+      users.sort((a, b) => a.id!.compareTo(b.id!));
+      emit(RoomDetailLoadFormStateDone(ownerId, room.ownerName, members));
     } else {
       emit(ErrorState(dataState.error));
     }
   }
+
+_changeOwner(ChangeOwnerEvent event, Emitter<BaseState> emit) async {
+  var owner = users.where((element) => element.id == event.owner?.id).firstOrNull;
+  ownerId = owner?.id;
+  emit(RoomDetailLoadFormStateDone(ownerId, owner?.name, members));
+}
 
   _submitForm(SubmitFormEvent event, Emitter<BaseState> emit) async {
     //Todo: implement submit logic
@@ -59,6 +71,7 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
           name: name,
           acreage: acreage,
           photos: event.photos,
+          ownerId: ownerId,
           isEmpty: isEmpty,
           areaId: areaId);
       emit(const SubmitFormSuccess());

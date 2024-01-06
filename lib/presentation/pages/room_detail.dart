@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:motelhub_flutter/domain/entities/user.dart';
 import 'package:motelhub_flutter/injection_container.dart';
 import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_event.dart';
@@ -13,7 +14,9 @@ import 'package:motelhub_flutter/presentation/components/commons/section_with_bo
 
 class RoomDetailPage extends StatelessWidget {
   final int roomId;
-  const RoomDetailPage({super.key, required this.roomId});
+  bool isFirstBuild = true;
+
+  RoomDetailPage({super.key, required this.roomId});
 
   @override
   Widget build(BuildContext context) {
@@ -42,73 +45,102 @@ class RoomDetailPage extends StatelessWidget {
   }
 
   _buildBody(BuildContext context) {
-      var roomDetailBloc = context.read<RoomDetailBloc>();
-      var photoSectionBloc = context.read<PhotoSectionBloc>();
+    var roomDetailBloc = context.read<RoomDetailBloc>();
+    var photoSectionBloc = context.read<PhotoSectionBloc>();
     return BlocBuilder<RoomDetailBloc, RoomDetailState>(
       builder: (context, state) {
         if (state is RoomDetailLoadingFormState) {
           return const CupertinoActivityIndicator();
         } else {
-          photoSectionBloc.add(UpdatePhotosEvent(roomDetailBloc.photos));
+          if (isFirstBuild) {
+            photoSectionBloc.add(UpdatePhotosEvent(roomDetailBloc.photos));
+            isFirstBuild = false;
+          }
+          if (!isFirstBuild) {
+            print(isFirstBuild);
+          }
           return SingleChildScrollView(
             child: Center(
-                child: Column(
-              children: [
-                SectionWithBottomBorder(
-                    child: TextFormField(
-                  initialValue: roomDetailBloc.areaName,
-                  decoration: const InputDecoration(
-                    enabled: false,
-                    prefixIcon: Icon(Icons.holiday_village),
-                  ),
-                )),
-                SectionWithBottomBorder(
-                    child: TextFormField(
-                  initialValue: roomDetailBloc.name,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.meeting_room),
-                  ),
-                  onChanged: (value) =>
-                      roomDetailBloc.add(ChangeNameEvent(value)),
-                )),
-                SectionWithBottomBorder(
-                    child: TextFormField(
-                  initialValue: roomDetailBloc.acreage?.toString(),
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.meeting_room),
-                  ),
-                  onChanged: (value) =>
-                      roomDetailBloc.add(ChangeAcreageEvent(value)),
-                )),
-                BlocConsumer<PhotoSectionBloc, PhotoSectionState>(
-                    listener: (context, state) {
-                  if (state is GetPhotoFailed) {
-                    showAlertDialog(context, "Add photo fail");
-                  }
-                }, builder: (context, state) {
-                  return Wrap(
-                    direction: Axis.horizontal,
-                    children: state.photos!.map((photo) {
-                      final data = photo.data;
-                      final url = photo.url;
-                      if (data == null && url == null) {
-                        return const SizedBox();
-                      } else {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          child: Image(
-                            image: data != null
-                                ? FileImage(data)
-                                : NetworkImage(url!) as ImageProvider,
-                            height: 100,
-                          ),
-                        );
-                      }
-                    }).toList(),
-                  );
-                }),
-              ],
+                child: Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Column(
+                children: [
+                  DropdownMenu<UserEntity>(
+                      leadingIcon: const Icon(Icons.person),
+                      initialSelection: roomDetailBloc.users
+                          .where(
+                              (element) => element.id == roomDetailBloc.ownerId)
+                          .firstOrNull,
+                      requestFocusOnTap: true,
+                      label: const Text('Select owner'),
+                      dropdownMenuEntries: roomDetailBloc.users
+                          .map((value) => value.id == 0
+                              ? DropdownMenuEntry(
+                                  value: value, label: '${value.name}')
+                              : DropdownMenuEntry<UserEntity>(
+                                  value: value,
+                                  label: "${value.name} - ${value.phoneNumber}",
+                                ))
+                          .toList(),
+                      onSelected: (value) {
+                        roomDetailBloc.add(ChangeOwnerEvent(value));
+                      }),
+                  SectionWithBottomBorder(
+                      child: TextFormField(
+                    initialValue: roomDetailBloc.areaName,
+                    decoration: const InputDecoration(
+                      enabled: false,
+                      prefixIcon: Icon(Icons.holiday_village),
+                    ),
+                  )),
+                  SectionWithBottomBorder(
+                      child: TextFormField(
+                    initialValue: roomDetailBloc.name,
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.meeting_room),
+                    ),
+                    onChanged: (value) =>
+                        roomDetailBloc.add(ChangeNameEvent(value)),
+                  )),
+                  SectionWithBottomBorder(
+                      child: TextFormField(
+                    initialValue: roomDetailBloc.acreage?.toString(),
+                    decoration: const InputDecoration(
+                      prefixIcon: Icon(Icons.meeting_room),
+                    ),
+                    onChanged: (value) =>
+                        roomDetailBloc.add(ChangeAcreageEvent(value)),
+                  )),
+                  BlocConsumer<PhotoSectionBloc, PhotoSectionState>(
+                      listener: (context, state) {
+                    if (state is GetPhotoFailed) {
+                      showAlertDialog(context, "Add photo fail");
+                    }
+                  }, builder: (context, state) {
+                    return Wrap(
+                      direction: Axis.horizontal,
+                      children: state.photos!.map((photo) {
+                        final data = photo.data;
+                        final url = photo.url;
+                        if (data == null && url == null) {
+                          return const SizedBox();
+                        } else {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10),
+                            child: Image(
+                              image: data != null
+                                  ? FileImage(data)
+                                  : NetworkImage(url!) as ImageProvider,
+                              height: 100,
+                            ),
+                          );
+                        }
+                      }).toList(),
+                    );
+                  }),
+                ],
+              ),
             )),
           );
         }

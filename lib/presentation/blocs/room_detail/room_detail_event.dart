@@ -1,11 +1,13 @@
 import 'package:motelhub_flutter/domain/entities/photo.dart';
+import 'package:motelhub_flutter/domain/entities/user.dart';
 
 abstract class RoomDetailEvent {
   final int? roomId;
+  final UserEntity? owner;
   final String? name;
   final String? acreage;
   final List<PhotoEntity>? photos;
-  const RoomDetailEvent({this.roomId, this.name, this.acreage, this.photos});
+  const RoomDetailEvent({this.roomId, this.name, this.acreage, this.photos, this.owner});
 }
 
 class LoadFormDataEvent extends RoomDetailEvent {
@@ -19,6 +21,10 @@ class ChangeAcreageEvent extends RoomDetailEvent {
 
 class ChangeNameEvent extends RoomDetailEvent {
   const ChangeNameEvent(String name) : super(name: name);
+}
+
+class ChangeOwnerEvent extends RoomDetailEvent {
+  const ChangeOwnerEvent(UserEntity? owner) : super(owner: owner);
 }
 
 class SubmitFormEvent extends RoomDetailEvent {
