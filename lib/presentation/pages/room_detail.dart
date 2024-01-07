@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:motelhub_flutter/domain/entities/electric.dart';
 import 'package:motelhub_flutter/domain/entities/user.dart';
 import 'package:motelhub_flutter/injection_container.dart';
 import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_bloc.dart';
@@ -10,7 +11,9 @@ import 'package:motelhub_flutter/presentation/blocs/room_detail/room_detail_bloc
 import 'package:motelhub_flutter/presentation/blocs/room_detail/room_detail_event.dart';
 import 'package:motelhub_flutter/presentation/blocs/room_detail/room_detail_state.dart';
 import 'package:motelhub_flutter/presentation/components/commons/alert_dialog.dart';
+import 'package:motelhub_flutter/presentation/components/commons/common_listview.dart';
 import 'package:motelhub_flutter/presentation/components/commons/form_container.dart';
+import 'package:motelhub_flutter/presentation/components/commons/item_expansion.dart';
 import 'package:motelhub_flutter/presentation/components/commons/section_with_bottom_border.dart';
 
 class RoomDetailPage extends StatelessWidget {
@@ -109,39 +112,75 @@ class RoomDetailPage extends StatelessWidget {
                   onChanged: (value) =>
                       roomDetailBloc.add(ChangeAcreageEvent(value)),
                 )),
-                BlocConsumer<PhotoSectionBloc, PhotoSectionState>(
-                    listener: (context, state) {
-                  if (state is GetPhotoFailed) {
-                    showAlertDialog(context, "Add photo fail");
-                  }
-                }, builder: (context, state) {
-                  return Wrap(
-                    direction: Axis.horizontal,
-                    children: state.photos!.map((photo) {
-                      final data = photo.data;
-                      final url = photo.url;
-                      if (data == null && url == null) {
-                        return const SizedBox();
-                      } else {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          child: Image(
-                            image: data != null
-                                ? FileImage(data)
-                                : NetworkImage(url!) as ImageProvider,
-                            height: 100,
-                          ),
-                        );
-                      }
-                    }).toList(),
-                  );
-                }),
+                _electronicSection(state.electrics),
+                _photoSection(),
               ],
             ),
           );
         }
       },
     );
+  }
+
+  Widget _electronicSection(List<ElectricEntity>? electrics) {
+    return ItemExpansion(
+        title: 'Electronic',
+        icon: Icons.electric_bolt,
+        children: [
+          OutlinedButton(onPressed: () {}, child: const Icon(Icons.add)),
+          CommonListView<ElectricEntity>(
+              items: electrics,
+              builder: (context, index) {
+                return GestureDetector(
+                    child: Card(
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Value: ${electrics?[index].value}'),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text('Price: ${electrics?[index].price}'),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text('Total: ${electrics?[index].total}')
+                        ]),
+                  ),
+                ));
+              })
+        ]);
+  }
+
+  Widget _photoSection() {
+    return BlocConsumer<PhotoSectionBloc, PhotoSectionState>(
+        listener: (context, state) {
+      if (state is GetPhotoFailed) {
+        showAlertDialog(context, "Add photo fail");
+      }
+    }, builder: (context, state) {
+      return Wrap(
+        direction: Axis.horizontal,
+        children: state.photos!.map((photo) {
+          final data = photo.data;
+          final url = photo.url;
+          if (data == null && url == null) {
+            return const SizedBox();
+          } else {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+              child: Image(
+                image: data != null
+                    ? FileImage(data)
+                    : NetworkImage(url!) as ImageProvider,
+                height: 100,
+              ),
+            );
+          }
+        }).toList(),
+      );
+    });
   }
 }

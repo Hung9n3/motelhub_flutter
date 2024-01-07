@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:motelhub_flutter/domain/entities/electric.dart';
 import 'package:motelhub_flutter/domain/entities/photo.dart';
 import 'package:motelhub_flutter/domain/entities/user.dart';
 
@@ -14,6 +15,7 @@ class RoomEntity extends Equatable {
   final String? ownerPhone;
   final String? ownerEmail;
   final UserEntity? owner;
+  final List<ElectricEntity>? electric;
   final List<UserEntity>? members;
   final List<PhotoEntity>? photos;
 
@@ -23,8 +25,9 @@ class RoomEntity extends Equatable {
       this.areaId,
       this.isEmpty = false,
       this.acreage,
-      this.photos,
-      this.members,
+      this.electric = const [],
+      this.photos = const [],
+      this.members = const [],
       this.areaName,
       this.owner,
       this.ownerId,
@@ -34,7 +37,7 @@ class RoomEntity extends Equatable {
 
   @override
   List<Object?> get props {
-    return [id, name, areaId, isEmpty, acreage, photos, areaName, members, ownerName, ownerId];
+    return [id, name, areaId, isEmpty, acreage, electric, photos, areaName, members, ownerName, ownerId];
   }
 
   static List<RoomEntity> getFakeData() {

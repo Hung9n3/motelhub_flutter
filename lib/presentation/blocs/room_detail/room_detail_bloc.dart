@@ -51,7 +51,7 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
       users = UserEntity.getFakeData();
       users.add(const UserEntity(id: 0, name: 'None'));
       users.sort((a, b) => a.id!.compareTo(b.id!));
-      emit(RoomDetailLoadFormStateDone(ownerId, room.ownerName, members));
+      emit(RoomDetailLoadFormStateDone(ownerId, room.ownerName, members, room.electric));
     } else {
       emit(ErrorState(dataState.error));
     }
@@ -60,7 +60,7 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
 _changeOwner(ChangeOwnerEvent event, Emitter<BaseState> emit) async {
   var owner = users.where((element) => element.id == event.owner?.id).firstOrNull;
   ownerId = owner?.id;
-  emit(RoomDetailLoadFormStateDone(ownerId, owner?.name, members));
+  emit(RoomDetailLoadFormStateDone(ownerId, owner?.name, members, state.electrics));
 }
 
   _submitForm(SubmitFormEvent event, Emitter<BaseState> emit) async {

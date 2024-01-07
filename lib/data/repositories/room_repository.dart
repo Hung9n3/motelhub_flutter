@@ -1,5 +1,6 @@
 import 'package:motelhub_flutter/core/resources/data_state.dart';
 import 'package:motelhub_flutter/domain/entities/area.dart';
+import 'package:motelhub_flutter/domain/entities/electric.dart';
 import 'package:motelhub_flutter/domain/entities/room.dart';
 import 'package:dio/dio.dart';
 import 'package:motelhub_flutter/domain/entities/user.dart';
@@ -31,7 +32,7 @@ class RoomRepository extends IRoomRepository {
             .firstOrNull
             ?.name;
       }
-
+      var electrics = ElectricEntity.getFakeData().where((element) => element.id == data.id).toList();
       var owner = UserEntity.getFakeData()
           .where((element) => element.id == data.ownerId)
           .firstOrNull;
@@ -39,6 +40,7 @@ class RoomRepository extends IRoomRepository {
       data = RoomEntity(
           id: data.id,
           name: data.name,
+          electric: electrics,
           photos: data.photos,
           acreage: data.acreage,
           areaId: data.areaId,
