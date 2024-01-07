@@ -13,11 +13,13 @@ import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_sec
 import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_event.dart';
 import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_state.dart';
 import 'package:motelhub_flutter/presentation/components/commons/alert_dialog.dart';
+import 'package:motelhub_flutter/presentation/components/commons/form_container.dart';
 
 class AddRoomPage extends StatelessWidget {
   final FormMode mode;
   final int selectedAreaId;
-  const AddRoomPage({super.key, required this.mode, required this.selectedAreaId});
+  const AddRoomPage(
+      {super.key, required this.mode, required this.selectedAreaId});
 
   @override
   Widget build(BuildContext context) {
@@ -59,96 +61,92 @@ class AddRoomPage extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        padding:const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ButtonTheme(
-              alignedDropdown: true,
-              child: BlocBuilder<AddRoomBloc, AddRoomState>(
-                builder: (context, state) {
-                  if (state is LoadingFormStateDone) {
-                    return DropdownMenu<AreaEntity>(
-                        leadingIcon: const Icon(Icons.holiday_village),
-                        initialSelection: selectedAreaId != null
-                            ? state.areas!
-                                .where(
-                                    (element) => element.id == selectedAreaId)
-                                .firstOrNull
-                            : state.areas!.firstOrNull,
-                        requestFocusOnTap: true,
-                        label: const Text('Select area'),
-                        dropdownMenuEntries: state.areas!
-                            .map((value) => DropdownMenuEntry<AreaEntity>(
-                                  value: value,
-                                  label: "${value.name} - ${value.address}",
-                                ))
-                            .toList(),
-                        onSelected: (value) {
-                          context
-                              .read<AddRoomBloc>()
-                              .add(ChangeAreaEvent(value));
-                        });
-                  }
-                  if (state is LoadingFormState) {
-                    return const Center(child: CupertinoActivityIndicator());
-                  }
+    return FormContainer(
+      child: Column(
+        children: [
+          ButtonTheme(
+            alignedDropdown: true,
+            child: BlocBuilder<AddRoomBloc, AddRoomState>(
+              builder: (context, state) {
+                if (state is LoadingFormStateDone) {
+                  return DropdownMenu<AreaEntity>(
+                      width: MediaQuery.of(context).size.width >= 800
+                          ? 740
+                          : MediaQuery.of(context).size.width - 60,
+                      leadingIcon: const Icon(Icons.holiday_village),
+                      initialSelection: selectedAreaId != null
+                          ? state.areas!
+                              .where((element) => element.id == selectedAreaId)
+                              .firstOrNull
+                          : state.areas!.firstOrNull,
+                      requestFocusOnTap: true,
+                      label: const Text('Select area'),
+                      dropdownMenuEntries: state.areas!
+                          .map((value) => DropdownMenuEntry<AreaEntity>(
+                                value: value,
+                                label: "${value.name} - ${value.address}",
+                              ))
+                          .toList(),
+                      onSelected: (value) {
+                        context.read<AddRoomBloc>().add(ChangeAreaEvent(value));
+                      });
+                }
+                if (state is LoadingFormState) {
+                  return const Center(child: CupertinoActivityIndicator());
+                }
+                return const SizedBox();
+              },
+            ),
+          ),
+          TextField(
+            decoration: const InputDecoration(
+              hintText: 'Room Name',
+              prefixIcon: Icon(Icons.meeting_room),
+            ),
+            onChanged: (value) {
+              context.read<AddRoomBloc>().add(ChangeRoomNameEvent(value));
+            },
+          ),
+          TextField(
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(
+              hintText: 'Acreage',
+              suffixText: 'm2',
+              prefixIcon: Icon(Icons.square_foot),
+            ),
+            onChanged: (value) {
+              context.read<AddRoomBloc>().add(ChangeAcreageEvent(value));
+            },
+          ),
+          BlocConsumer<PhotoSectionBloc, PhotoSectionState>(
+              listener: (context, state) {
+            if (state is GetPhotoFailed) {
+              showAlertDialog(context, "Add photo fail");
+            }
+          }, builder: (context, state) {
+            return Wrap(
+              direction: Axis.horizontal,
+              children: state.photos!.map((photo) {
+                final data = photo.data;
+                final url = photo.url;
+                if (data == null && url == null) {
                   return const SizedBox();
-                },
-              ),
-            ),
-            TextField(
-              decoration: const InputDecoration(
-                hintText: 'Room Name',
-                prefixIcon: Icon(Icons.meeting_room),
-              ),
-              onChanged: (value) {
-                context.read<AddRoomBloc>().add(ChangeRoomNameEvent(value));
-              },
-            ),
-            TextField(
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                hintText: 'Acreage',
-                suffixText: 'm2',
-                prefixIcon: Icon(Icons.square_foot),
-              ),
-              onChanged: (value) {
-                context.read<AddRoomBloc>().add(ChangeAcreageEvent(value));
-              },
-            ),
-            BlocConsumer<PhotoSectionBloc, PhotoSectionState>(
-                listener: (context, state) {
-              if (state is GetPhotoFailed) {
-                showAlertDialog(context, "Add photo fail");
-              }
-            }, builder: (context, state) {
-              return Wrap(
-                direction: Axis.horizontal,
-                children: state.photos!.map((photo) {
-                  final data = photo.data;
-                  final url = photo.url;
-                  if (data == null && url == null) {
-                    return const SizedBox();
-                  } else {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 10),
-                      child: Image(
-                        image: data != null
-                            ? FileImage(data)
-                            : NetworkImage(url!) as ImageProvider,
-                        height: 100,
-                      ),
-                    );
-                  }
-                }).toList(),
-              );
-            }),
-          ],
-        ),
+                } else {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 10),
+                    child: Image(
+                      image: data != null
+                          ? FileImage(data)
+                          : NetworkImage(url!) as ImageProvider,
+                      height: 100,
+                    ),
+                  );
+                }
+              }).toList(),
+            );
+          }),
+        ],
       ),
     );
   }

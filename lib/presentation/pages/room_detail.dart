@@ -10,6 +10,7 @@ import 'package:motelhub_flutter/presentation/blocs/room_detail/room_detail_bloc
 import 'package:motelhub_flutter/presentation/blocs/room_detail/room_detail_event.dart';
 import 'package:motelhub_flutter/presentation/blocs/room_detail/room_detail_state.dart';
 import 'package:motelhub_flutter/presentation/components/commons/alert_dialog.dart';
+import 'package:motelhub_flutter/presentation/components/commons/form_container.dart';
 import 'package:motelhub_flutter/presentation/components/commons/section_with_bottom_border.dart';
 
 class RoomDetailPage extends StatelessWidget {
@@ -56,92 +57,88 @@ class RoomDetailPage extends StatelessWidget {
             photoSectionBloc.add(UpdatePhotosEvent(roomDetailBloc.photos));
             isFirstBuild = false;
           }
-          if (!isFirstBuild) {
-            print(isFirstBuild);
-          }
-          return SingleChildScrollView(
-            child: Center(
-                child: Padding(
-              padding: const EdgeInsets.all(30.0),
-              child: Column(
-                children: [
-                  DropdownMenu<UserEntity>(
-                      leadingIcon: const Icon(Icons.person),
-                      initialSelection: roomDetailBloc.users
-                          .where(
-                              (element) => element.id == roomDetailBloc.ownerId)
-                          .firstOrNull,
-                      requestFocusOnTap: true,
-                      label: const Text('Select owner'),
-                      dropdownMenuEntries: roomDetailBloc.users
-                          .map((value) => value.id == 0
-                              ? DropdownMenuEntry(
-                                  value: value, label: '${value.name}')
-                              : DropdownMenuEntry<UserEntity>(
-                                  value: value,
-                                  label: "${value.name} - ${value.phoneNumber}",
-                                ))
-                          .toList(),
-                      onSelected: (value) {
-                        roomDetailBloc.add(ChangeOwnerEvent(value));
-                      }),
-                  SectionWithBottomBorder(
-                      child: TextFormField(
-                    initialValue: roomDetailBloc.areaName,
-                    decoration: const InputDecoration(
-                      enabled: false,
-                      prefixIcon: Icon(Icons.holiday_village),
-                    ),
-                  )),
-                  SectionWithBottomBorder(
-                      child: TextFormField(
-                    initialValue: roomDetailBloc.name,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.meeting_room),
-                    ),
-                    onChanged: (value) =>
-                        roomDetailBloc.add(ChangeNameEvent(value)),
-                  )),
-                  SectionWithBottomBorder(
-                      child: TextFormField(
-                    initialValue: roomDetailBloc.acreage?.toString(),
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.meeting_room),
-                    ),
-                    onChanged: (value) =>
-                        roomDetailBloc.add(ChangeAcreageEvent(value)),
-                  )),
-                  BlocConsumer<PhotoSectionBloc, PhotoSectionState>(
-                      listener: (context, state) {
-                    if (state is GetPhotoFailed) {
-                      showAlertDialog(context, "Add photo fail");
-                    }
-                  }, builder: (context, state) {
-                    return Wrap(
-                      direction: Axis.horizontal,
-                      children: state.photos!.map((photo) {
-                        final data = photo.data;
-                        final url = photo.url;
-                        if (data == null && url == null) {
-                          return const SizedBox();
-                        } else {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 10),
-                            child: Image(
-                              image: data != null
-                                  ? FileImage(data)
-                                  : NetworkImage(url!) as ImageProvider,
-                              height: 100,
-                            ),
-                          );
-                        }
-                      }).toList(),
-                    );
-                  }),
-                ],
-              ),
-            )),
+          return FormContainer(
+            child: Column(
+              children: [
+                DropdownMenu<UserEntity>(
+                    width: MediaQuery.of(context).size.width >= 800
+                        ? 740
+                        : MediaQuery.of(context).size.width - 60,
+                    leadingIcon: const Icon(Icons.person),
+                    initialSelection: roomDetailBloc.users
+                        .where(
+                            (element) => element.id == roomDetailBloc.ownerId)
+                        .firstOrNull,
+                    requestFocusOnTap: true,
+                    label: const Text('Select owner'),
+                    dropdownMenuEntries: roomDetailBloc.users
+                        .map((value) => value.id == 0
+                            ? DropdownMenuEntry(
+                                value: value, label: '${value.name}')
+                            : DropdownMenuEntry<UserEntity>(
+                                value: value,
+                                label: "${value.name} - ${value.phoneNumber}",
+                              ))
+                        .toList(),
+                    onSelected: (value) {
+                      roomDetailBloc.add(ChangeOwnerEvent(value));
+                    }),
+                SectionWithBottomBorder(
+                    child: TextFormField(
+                  initialValue: roomDetailBloc.areaName,
+                  decoration: const InputDecoration(
+                    enabled: false,
+                    prefixIcon: Icon(Icons.holiday_village),
+                  ),
+                )),
+                SectionWithBottomBorder(
+                    child: TextFormField(
+                  initialValue: roomDetailBloc.name,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.meeting_room),
+                  ),
+                  onChanged: (value) =>
+                      roomDetailBloc.add(ChangeNameEvent(value)),
+                )),
+                SectionWithBottomBorder(
+                    child: TextFormField(
+                  initialValue: roomDetailBloc.acreage?.toString(),
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.meeting_room),
+                  ),
+                  onChanged: (value) =>
+                      roomDetailBloc.add(ChangeAcreageEvent(value)),
+                )),
+                BlocConsumer<PhotoSectionBloc, PhotoSectionState>(
+                    listener: (context, state) {
+                  if (state is GetPhotoFailed) {
+                    showAlertDialog(context, "Add photo fail");
+                  }
+                }, builder: (context, state) {
+                  return Wrap(
+                    direction: Axis.horizontal,
+                    children: state.photos!.map((photo) {
+                      final data = photo.data;
+                      final url = photo.url;
+                      if (data == null && url == null) {
+                        return const SizedBox();
+                      } else {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 10),
+                          child: Image(
+                            image: data != null
+                                ? FileImage(data)
+                                : NetworkImage(url!) as ImageProvider,
+                            height: 100,
+                          ),
+                        );
+                      }
+                    }).toList(),
+                  );
+                }),
+              ],
+            ),
           );
         }
       },
