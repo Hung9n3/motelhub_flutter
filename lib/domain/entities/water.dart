@@ -2,26 +2,26 @@ import 'dart:math';
 
 import 'package:motelhub_flutter/domain/entities/bases/meter_reading.dart';
 
-class ElectricEntity extends MeterReadingEntity {
-  const ElectricEntity(
+class WaterEntity extends MeterReadingEntity {
+  const WaterEntity(
       {super.id,
       required super.roomId,
       required super.name,
       super.price,
       super.total,
       super.value,
-      super.photos = const [],
       super.lastMonth,
       super.thisMonth,
+      super.photos = const [],
       super.createdAt,
       super.isActive,
       super.modifiedAt})
       : super();
 
-  static List<ElectricEntity> getFakeData() {
-    List<ElectricEntity> result = [];
+  static List<WaterEntity> getFakeData() {
+    List<WaterEntity> result = [];
     for (int i = 1; i <= 50; i++) {
-      result.add(ElectricEntity(
+      result.add(WaterEntity(
           id: i,
           roomId: i,
           name: 'December bill',

@@ -32,7 +32,7 @@ class PhotoSectionBloc extends Bloc<PhotoSectionEvent, PhotoSectionState> {
         var file = File(photo.path);
         var entity = PhotoEntity(id: 1, name: null, data: file, url: null);
         if (state.photos != null) {
-          var currentPhotos = state.photos!;
+          var currentPhotos = state.photos!.toList();
           currentPhotos.add(entity);
           emit(GetPhotoSuccess(currentPhotos));
         }

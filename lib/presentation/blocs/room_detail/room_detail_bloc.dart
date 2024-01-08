@@ -51,17 +51,20 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
       users = UserEntity.getFakeData();
       users.add(const UserEntity(id: 0, name: 'None'));
       users.sort((a, b) => a.id!.compareTo(b.id!));
-      emit(RoomDetailLoadFormStateDone(ownerId, room.ownerName, members, room.electric));
+      emit(RoomDetailLoadFormStateDone(
+          ownerId, room.ownerName, members, room.electrics, room.waters));
     } else {
       emit(ErrorState(dataState.error));
     }
   }
 
-_changeOwner(ChangeOwnerEvent event, Emitter<BaseState> emit) async {
-  var owner = users.where((element) => element.id == event.owner?.id).firstOrNull;
-  ownerId = owner?.id;
-  emit(RoomDetailLoadFormStateDone(ownerId, owner?.name, members, state.electrics));
-}
+  _changeOwner(ChangeOwnerEvent event, Emitter<BaseState> emit) async {
+    var owner =
+        users.where((element) => element.id == event.owner?.id).firstOrNull;
+    ownerId = owner?.id;
+    emit(RoomDetailLoadFormStateDone(
+        ownerId, owner?.name, members, state.electrics, state.waters));
+  }
 
   _submitForm(SubmitFormEvent event, Emitter<BaseState> emit) async {
     //Todo: implement submit logic

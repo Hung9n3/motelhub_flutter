@@ -8,6 +8,7 @@ import 'package:motelhub_flutter/injection_container.dart';
 import 'package:motelhub_flutter/presentation/blocs/area_detail/area_detail_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/area_detail/area_detail_event.dart';
 import 'package:motelhub_flutter/presentation/blocs/area_detail/area_detail_state.dart';
+import 'package:motelhub_flutter/presentation/components/commons/form_container.dart';
 import 'package:motelhub_flutter/presentation/components/commons/section_with_bottom_border.dart';
 
 class AreaDetailPage extends StatelessWidget {
@@ -47,9 +48,7 @@ class AreaDetailPage extends StatelessWidget {
               arguments: {'mode': FormMode.add, 'selectedAreaId': data.id});
         },
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+      body: FormContainer(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -79,7 +78,6 @@ class AreaDetailPage extends StatelessWidget {
             ],
           ),
         ),
-      ),
     );
   }
 
