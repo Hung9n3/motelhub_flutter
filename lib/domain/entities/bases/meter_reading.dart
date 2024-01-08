@@ -10,7 +10,7 @@ abstract class MeterReadingEntity extends BaseEntity {
   final double? total;
   final double? lastMonth;
   final double? thisMonth;
-  final List<PhotoEntity> photos;
+  final List<PhotoEntity>? photos;
 
   const MeterReadingEntity(
       {this.id,

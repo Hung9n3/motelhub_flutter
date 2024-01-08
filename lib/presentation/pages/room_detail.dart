@@ -20,7 +20,7 @@ import 'package:motelhub_flutter/presentation/components/commons/common_listview
 import 'package:motelhub_flutter/presentation/components/commons/form_container.dart';
 import 'package:motelhub_flutter/presentation/components/commons/item_expansion.dart';
 import 'package:motelhub_flutter/presentation/components/commons/section_with_bottom_border.dart';
-import 'package:motelhub_flutter/presentation/pages/add_meterReading.dart';
+import 'package:motelhub_flutter/presentation/pages/add_meter_reading.dart';
 
 class RoomDetailPage extends StatelessWidget {
   final int roomId;

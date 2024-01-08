@@ -7,7 +7,7 @@ import 'package:motelhub_flutter/domain/repositories/meter_reading_repository_in
 
 class MeterReadingRepository extends IMeterReadingRepository{
   @override
-  Future<DataState<MeterReadingEntity>> getById(int? id, MeterReadingType type) async {
+  Future<DataState<MeterReadingEntity>> getById(int? id, MeterReadingType? type) async {
     // TODO: implement getById api
     switch(type) {
       case MeterReadingType.water: 
@@ -27,6 +27,13 @@ class MeterReadingRepository extends IMeterReadingRepository{
           return DataSuccess(data);
         }
     }
+  }
+  
+  @override
+  Future<DataState<MeterReadingEntity>> submit(MeterReadingEntity entity, MeterReadingType? type) async {
+    // TODO: implement submit api
+    print(entity);
+    return DataSuccess(entity);
   }
 
 }
