@@ -1,7 +1,9 @@
 import 'package:motelhub_flutter/presentation/blocs/base/base_state.dart';
 
 abstract class MeterReadingFormState extends BaseState {
-  const MeterReadingFormState();
+  final double? value;
+  final double? total;
+  const MeterReadingFormState({this.value, this.total});
 }
 
 class MeterReadingFormLoading extends MeterReadingFormState {
@@ -13,7 +15,7 @@ class MeterReadingChangingField extends MeterReadingFormState {
 }
 
 class MeterReadingFormLoadDone extends MeterReadingFormState {
-  const MeterReadingFormLoadDone();
+  const MeterReadingFormLoadDone(double? value, double? total);
 }
 
 class MeterReadingFormNotFound extends MeterReadingFormState {

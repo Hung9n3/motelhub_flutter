@@ -59,6 +59,7 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<IAreaRepository>(() => AreaRepository());
   sl.registerFactory<IRoomRepository>(() => RoomRepository());
   sl.registerFactory<IMeterReadingRepository<WaterEntity>>(() => MeterReadingRepository<WaterEntity>());
+  sl.registerFactory<IMeterReadingRepository<ElectricEntity>>(() => MeterReadingRepository<ElectricEntity>());
 
   //UseCases
   sl.registerSingleton<GetArticleUseCase>(GetArticleUseCase(sl()));

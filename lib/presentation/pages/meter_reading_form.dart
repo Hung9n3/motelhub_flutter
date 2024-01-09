@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -52,7 +54,7 @@ class MeterReadingForm<T extends MeterReadingEntity> extends StatelessWidget {
                           var photos =
                               context.read<PhotoSectionBloc>().state.photos;
                           context
-                              .read<MeterReadingFormBloc>()
+                              .read<MeterReadingFormBloc<T>>()
                               .add(SubmitFormEvent(meterReadingType, photos));
                         },
                         icon: const Icon(Icons.check))
@@ -62,7 +64,7 @@ class MeterReadingForm<T extends MeterReadingEntity> extends StatelessWidget {
                   onPressed: () {
                     context
                         .read<PhotoSectionBloc>()
-                        .add(const AddPhotoEvent(ImageSource.camera));
+                        .add(const AddPhotoEvent(ImageSource.gallery));
                   },
                   child: const Icon(Icons.add_a_photo),
                 ),
@@ -76,6 +78,8 @@ class MeterReadingForm<T extends MeterReadingEntity> extends StatelessWidget {
   _buildBody(BuildContext context) {
     var meterReadingFormbloc = context.read<MeterReadingFormBloc<T>>();
     var photoSectionBloc = context.read<PhotoSectionBloc>();
+    var valueController = TextEditingController(text: '${meterReadingFormbloc.value}');
+    var totalController = TextEditingController(text: '${meterReadingFormbloc.total}');
     if (isFirstBuild == null) {
       photoSectionBloc.add(UpdatePhotosEvent(meterReadingFormbloc.photos));
       isFirstBuild = true;
@@ -86,65 +90,85 @@ class MeterReadingForm<T extends MeterReadingEntity> extends StatelessWidget {
         SectionWithBottomBorder(
             child: TextFormField(
           initialValue: meterReadingFormbloc.name,
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             hintText: 'Input title, shoul be relating to time',
             enabled: true,
-            prefixIcon: Icon(Icons.title),
+            prefixIcon: Container(
+              margin: const EdgeInsets.fromLTRB(20,0,20,0),
+              child: const Icon(Icons.title),
+            ),
           ),
           onChanged: (value) => meterReadingFormbloc.add(ChangeNameEvent(value)),
         )),
         SectionWithBottomBorder(
             child: TextFormField(
+              textAlignVertical: TextAlignVertical.center,
               keyboardType: TextInputType.number,
           initialValue: meterReadingFormbloc.lastMonth?.toString(),
-          decoration: const InputDecoration(
-            hintText: 'Input last month value',
+          decoration: InputDecoration(
+            suffixText: 'Last month value',
             enabled: true,
-            prefixIcon: Icon(Icons.pin),
+            prefixIcon: Container(
+              margin: const EdgeInsets.fromLTRB(20,0,20,0),
+              child: const Icon(Icons.pin),
+            ),
           ),
           onChanged: (value) => meterReadingFormbloc.add(ChangeLastMonthEvent(value)),
         )),
         SectionWithBottomBorder(
             child: TextFormField(
+              textAlignVertical: TextAlignVertical.center,
               keyboardType: TextInputType.number,
           initialValue: meterReadingFormbloc.thisMonth?.toString(),
-          decoration: const InputDecoration(
-            hintText: 'Input this month value',
+          decoration: InputDecoration(
+            suffixText: 'This month value',
             enabled: true,
-            prefixIcon: Icon(Icons.pin),
+            prefixIcon: Container(
+              margin: const EdgeInsets.fromLTRB(20,0,20,0),
+              child: const Icon(Icons.pin),
+            ),
           ),
           onChanged: (value) => meterReadingFormbloc.add(ChangeThisMonthEvent(value)),
         )),
         SectionWithBottomBorder(
             child: TextFormField(
-              keyboardType: TextInputType.number,
-          initialValue: meterReadingFormbloc.value?.toString(),
-          decoration: const InputDecoration(
-            hintText: 'This is an auto calculated field',
-            enabled: true,
-            prefixIcon: Icon(Icons.water_drop),
-          ),
-        )),
-        SectionWithBottomBorder(
-            child: TextFormField(
+              textAlignVertical: TextAlignVertical.center,
               keyboardType: TextInputType.number,
           initialValue: meterReadingFormbloc.price?.toString(),
-          decoration: const InputDecoration(
-            hintText: 'Input price per value',
+          decoration: InputDecoration(
             enabled: true,
-            suffix: Text('per value'),
-            prefixIcon: Icon(Icons.attach_money),
+            suffix: const Text('price per value'),
+            prefixIcon: Container(
+              margin: const EdgeInsets.fromLTRB(20,0,20,0),
+              child: const Icon(Icons.attach_money),
+            ),
           ),
           onChanged: (value) => meterReadingFormbloc.add(ChangePriceEvent(value)),
         )),
         SectionWithBottomBorder(
             child: TextFormField(
-              keyboardType: TextInputType.number,
-          initialValue: meterReadingFormbloc.total?.toString(),
-          decoration: const InputDecoration(
-            hintText: 'This is an auto calculated field',
-            enabled: true,
-            prefixIcon: Icon(Icons.functions),
+              textAlignVertical: TextAlignVertical.center,
+          controller: valueController,
+          decoration: InputDecoration(
+            enabled: false,
+            suffix: const Text('Value'),
+            prefixIcon: Container(
+              margin: const EdgeInsets.fromLTRB(20,0,20,0),
+              child: const Icon(Icons.water_drop),
+            ),
+          ),
+        )),
+        SectionWithBottomBorder(
+            child: TextFormField(
+              textAlignVertical: TextAlignVertical.center,
+          controller: totalController,
+          decoration: InputDecoration(
+            enabled: false,
+            suffix: const Text('Total'),
+            prefixIcon: Container(
+              margin: const EdgeInsets.fromLTRB(20,0,20,0),
+              child: const Icon(Icons.functions),
+            ),
           ),
         )),
         const PhotoSection()

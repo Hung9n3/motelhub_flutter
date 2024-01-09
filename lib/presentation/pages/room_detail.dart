@@ -148,9 +148,9 @@ class RoomDetailPage extends StatelessWidget {
               onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MeterReadingForm<WaterEntity>(
+                      builder: (context) => MeterReadingForm<ElectricEntity>(
                           roomId: roomId,
-                          meterReadingType: MeterReadingType.water))),
+                          meterReadingType: MeterReadingType.electric))),
               child: const Icon(Icons.add)),
           CommonListView<ElectricEntity>(
               items: electrics,

@@ -1,7 +1,7 @@
 import 'package:motelhub_flutter/domain/entities/bases/base.dart';
 import 'package:motelhub_flutter/domain/entities/photo.dart';
 
- class MeterReadingEntity extends BaseEntity {
+class MeterReadingEntity extends BaseEntity {
   final int? id;
   final int? roomId;
   final String? name;
@@ -27,5 +27,15 @@ import 'package:motelhub_flutter/domain/entities/photo.dart';
       super.modifiedAt})
       : super();
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [
+        id,
+        roomId,
+        name,
+        price,
+        value,
+        total,
+        lastMonth,
+        thisMonth,
+        photos,
+      ];
 }
