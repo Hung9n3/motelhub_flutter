@@ -1,7 +1,7 @@
 import 'package:motelhub_flutter/domain/entities/bases/base.dart';
 import 'package:motelhub_flutter/domain/entities/photo.dart';
 
-abstract class MeterReadingEntity extends BaseEntity {
+ class MeterReadingEntity extends BaseEntity {
   final int? id;
   final int? roomId;
   final String? name;

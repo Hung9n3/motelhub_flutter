@@ -8,6 +8,10 @@ class MeterReadingFormLoading extends MeterReadingFormState {
   const MeterReadingFormLoading();
 }
 
+class MeterReadingChangingField extends MeterReadingFormState {
+  const MeterReadingChangingField();
+}
+
 class MeterReadingFormLoadDone extends MeterReadingFormState {
   const MeterReadingFormLoadDone();
 }

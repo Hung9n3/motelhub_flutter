@@ -11,14 +11,19 @@ import 'package:motelhub_flutter/presentation/blocs/base/base_state.dart';
 import 'package:motelhub_flutter/presentation/blocs/meter_reading_form/meter_reading_form_event.dart';
 import 'package:motelhub_flutter/presentation/blocs/meter_reading_form/meter_reading_form_state.dart';
 
-class MeterReadingFormBloc
+class MeterReadingFormBloc<T extends MeterReadingEntity>
     extends Bloc<MeterReadingFormEvent, MeterReadingFormState> {
-  final IMeterReadingRepository _meterReadingRepository;
+  final IMeterReadingRepository<T> _meterReadingRepository;
   final ITokenHandler _tokenHandler;
 
   MeterReadingFormBloc(this._meterReadingRepository, this._tokenHandler)
       : super(const MeterReadingFormLoading()) {
     on<InitFormEvent>(_loadForm);
+    on<SubmitFormEvent>(_submit);
+    on<ChangeNameEvent>(_changeName);
+    on<ChangeLastMonthEvent>(_changeLastMonth);
+    on<ChangePriceEvent>(_changePrice);
+    on<ChangeThisMonthEvent>(_changeThisMonth);
   }
 
   List<PhotoEntity>? photos;
@@ -28,11 +33,12 @@ class MeterReadingFormBloc
   double? lastMonth = 0;
   double? value = 0;
   double? price = 0;
-  double? total = 0;
+  double? total = 10;
 
   _loadForm(InitFormEvent event, Emitter<BaseState> emit) async {
     if (event.meterReadingId == null) {
       name = 'Month ${DateTime.now().month}';
+      //todo: implement get meter reading price
       emit(const MeterReadingFormLoadDone());
     } else {
       var dataState = await _meterReadingRepository.getById(
@@ -61,20 +67,23 @@ class MeterReadingFormBloc
   }
 
   _changeLastMonth(ChangeLastMonthEvent event, Emitter<BaseState> emit) async {
-    lastMonth = double.parse(event.textValue!);
-    value = lastMonth! - thisMonth!;
-    total = value! * price!;
+    lastMonth = double.tryParse(event.textValue!);
+    value = lastMonth != null && thisMonth != null ? thisMonth! - lastMonth! : 0;
+    total = price!= null ? value! * price! : 0;
+    emit(const MeterReadingFormLoadDone());
   }
 
   _changeThisMonth(ChangeThisMonthEvent event, Emitter<BaseState> emit) async {
-    thisMonth = double.parse(event.textValue!);
-    value = lastMonth! - thisMonth!;
-    total = value! * price!;
+    thisMonth = double.tryParse(event.textValue!);
+    value = lastMonth != null && thisMonth != null ? thisMonth! - lastMonth! : 0;
+    total = price!= null ? value! * price! : 0;
+    emit(const MeterReadingFormLoadDone());
   }
 
   _changePrice(ChangePriceEvent event, Emitter<BaseState> emit) async {
-    price = double.parse(event.textValue!);
-    total = value! * price!;
+    price = double.tryParse(event.textValue!);
+    total = price!= null ? value! * price! : 0;
+    emit(const MeterReadingFormLoadDone());
   }
 
   _submit(SubmitFormEvent event, Emitter<BaseState> emit) async {

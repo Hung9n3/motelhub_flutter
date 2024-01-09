@@ -16,8 +16,8 @@ class InitFormEvent extends MeterReadingFormEvent {
 
 class SubmitFormEvent extends MeterReadingFormEvent {
   const SubmitFormEvent(
-      int? meterReadingId, MeterReadingType? type, List<PhotoEntity>? photos)
-      : super(meterReadingId: meterReadingId, type: type, photos: photos);
+      MeterReadingType? type, List<PhotoEntity>? photos)
+      : super(type: type, photos: photos);
 }
 
 class ChangeNameEvent extends MeterReadingFormEvent {

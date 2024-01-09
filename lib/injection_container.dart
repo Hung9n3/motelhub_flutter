@@ -4,10 +4,15 @@ import 'package:dio/dio.dart';
 import 'package:motelhub_flutter/core/token/token_handler.dart';
 import 'package:motelhub_flutter/data/repositories/auth_repository.dart';
 import 'package:motelhub_flutter/data/repositories/area_repository.dart';
+import 'package:motelhub_flutter/data/repositories/meter_reading_repository.dart';
 import 'package:motelhub_flutter/data/repositories/room_repository.dart';
 import 'package:motelhub_flutter/domain/entities/area.dart';
+import 'package:motelhub_flutter/domain/entities/bases/meter_reading.dart';
+import 'package:motelhub_flutter/domain/entities/electric.dart';
+import 'package:motelhub_flutter/domain/entities/water.dart';
 import 'package:motelhub_flutter/domain/repositories/auth_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/area_repository_interface.dart';
+import 'package:motelhub_flutter/domain/repositories/meter_reading_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/room_repository_interface.dart';
 import 'package:motelhub_flutter/domain/usecases/area_detail/get_area_detail_usecases.dart';
 import 'package:motelhub_flutter/features/daily_news/data/data_sources/remote/news_api_service.dart';
@@ -19,6 +24,7 @@ import 'package:motelhub_flutter/features/daily_news/presentation/bloc/article/r
 import 'package:motelhub_flutter/presentation/blocs/add_room/add_room_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/area_detail/area_detail_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/login/login_bloc.dart';
+import 'package:motelhub_flutter/presentation/blocs/meter_reading_form/meter_reading_form_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/my_area/my_area_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/room_detail/room_detail_bloc.dart';
@@ -52,6 +58,7 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<IAuthRepository>(() => AuthRepository());
   sl.registerFactory<IAreaRepository>(() => AreaRepository());
   sl.registerFactory<IRoomRepository>(() => RoomRepository());
+  sl.registerFactory<IMeterReadingRepository<WaterEntity>>(() => MeterReadingRepository<WaterEntity>());
 
   //UseCases
   sl.registerSingleton<GetArticleUseCase>(GetArticleUseCase(sl()));
@@ -72,6 +79,8 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<AreaDetailBloc>(() => AreaDetailBloc(sl()));
   sl.registerFactory<AddRoomBloc>(() => AddRoomBloc(sl(), sl()));
   sl.registerFactory<RoomDetailBloc>(() => RoomDetailBloc(sl(), sl()));
+  sl.registerFactory<MeterReadingFormBloc<WaterEntity>>(() => MeterReadingFormBloc<WaterEntity>(sl(), sl()));
+  sl.registerFactory<MeterReadingFormBloc<ElectricEntity>>(() => MeterReadingFormBloc<ElectricEntity>(sl(), sl()));
   sl.registerFactory<PhotoSectionBloc>(() => PhotoSectionBloc());
   // sl.registerFactory<LocalArticleBloc>(
   //   ()=> LocalArticleBloc(sl(),sl(),sl())

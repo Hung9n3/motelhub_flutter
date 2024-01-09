@@ -5,7 +5,7 @@ import 'package:motelhub_flutter/domain/entities/electric.dart';
 import 'package:motelhub_flutter/domain/entities/water.dart';
 import 'package:motelhub_flutter/domain/repositories/meter_reading_repository_interface.dart';
 
-class MeterReadingRepository extends IMeterReadingRepository{
+class MeterReadingRepository<T extends MeterReadingEntity> implements IMeterReadingRepository<T>{
   @override
   Future<DataState<MeterReadingEntity>> getById(int? id, MeterReadingType? type) async {
     // TODO: implement getById api

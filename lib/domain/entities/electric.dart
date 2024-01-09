@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:motelhub_flutter/domain/entities/bases/meter_reading.dart';
 
 class ElectricEntity extends MeterReadingEntity {
