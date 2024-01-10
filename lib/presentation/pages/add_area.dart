@@ -9,6 +9,7 @@ import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_sec
 import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_state.dart';
 import 'package:motelhub_flutter/presentation/components/commons/alert_dialog.dart';
 import 'package:motelhub_flutter/presentation/components/commons/form_container.dart';
+import 'package:motelhub_flutter/presentation/components/commons/photo_section.dart';
 
 class AddAreaPage extends StatelessWidget {
   const AddAreaPage({super.key});
@@ -70,34 +71,7 @@ class AddAreaPage extends StatelessWidget {
             context.read<AddAreaBloc>().add(ChangeAreaAddressEvent(value));
           },
         ),
-        BlocConsumer<PhotoSectionBloc, PhotoSectionState>(
-            listener: (context, state) {
-          if (state is GetPhotoFailed) {
-            showAlertDialog(context, "Add photo failed");
-          }
-        }, builder: (context, state) {
-          return Wrap(
-            direction: Axis.horizontal,
-            children: state.photos!.map((photo) {
-              final data = photo.data;
-              final url = photo.url;
-              if (data == null && url == null) {
-                return const SizedBox();
-              } else {
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: Image(
-                    image: data != null
-                        ? FileImage(data)
-                        : NetworkImage(url!) as ImageProvider,
-                    height: 100,
-                  ),
-                );
-              }
-            }).toList(),
-          );
-        }),
+        const PhotoSection(),
       ]),
     );
   }

@@ -19,6 +19,7 @@ import 'package:motelhub_flutter/presentation/components/commons/alert_dialog.da
 import 'package:motelhub_flutter/presentation/components/commons/common_listview.dart';
 import 'package:motelhub_flutter/presentation/components/commons/form_container.dart';
 import 'package:motelhub_flutter/presentation/components/commons/item_expansion.dart';
+import 'package:motelhub_flutter/presentation/components/commons/photo_section.dart';
 import 'package:motelhub_flutter/presentation/components/commons/section_with_bottom_border.dart';
 import 'package:motelhub_flutter/presentation/pages/meter_reading_form.dart';
 
@@ -125,7 +126,7 @@ class RoomDetailPage extends StatelessWidget {
                 )),
                 _electronicSection(context, state.electrics),
                 _waterSection(context, state.waters),
-                _photoSection(),
+                const PhotoSection(),
               ],
             ),
           );
@@ -211,44 +212,6 @@ class RoomDetailPage extends StatelessWidget {
                     child: meterReadingCard(context, water));
               })
         ]);
-  }
-
-  Widget _photoSection() {
-    return BlocConsumer<PhotoSectionBloc, PhotoSectionState>(
-        listener: (context, state) {
-      if (state is GetPhotoFailed) {
-        showAlertDialog(context, "Add photo fail");
-      }
-    }, builder: (context, state) {
-      return ItemExpansion(
-        itemCount: state.photos?.length,
-        icon: Icons.photo,
-        title: 'Photo',
-        children: [
-          Wrap(
-            direction: Axis.horizontal,
-            children: state.photos!.map((photo) {
-              final data = photo.data;
-              final url = photo.url;
-              if (data == null && url == null) {
-                return const SizedBox();
-              } else {
-                return Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: Image(
-                    image: data != null
-                        ? FileImage(data)
-                        : NetworkImage(url!) as ImageProvider,
-                    height: 100,
-                  ),
-                );
-              }
-            }).toList(),
-          ),
-        ],
-      );
-    });
   }
 
   Widget meterReadingCard(

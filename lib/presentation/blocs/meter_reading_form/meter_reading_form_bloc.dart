@@ -26,7 +26,7 @@ class MeterReadingFormBloc<T extends MeterReadingEntity>
     on<ChangeThisMonthEvent>(_changeThisMonth);
   }
 
-  List<PhotoEntity>? photos;
+  List<PhotoEntity>? photos = [];
   int? id;
   String? name = '';
   double? thisMonth = 0;
@@ -39,7 +39,7 @@ class MeterReadingFormBloc<T extends MeterReadingEntity>
     if (event.meterReadingId == null) {
       name = 'Month ${DateTime.now().month}';
       //todo: implement get meter reading price
-      emit(MeterReadingFormLoadDone(value, total));
+      emit(const MeterReadingFormLoadDone());
     } else {
       var dataState = await _meterReadingRepository.getById(
           event.meterReadingId, event.type);
@@ -52,9 +52,10 @@ class MeterReadingFormBloc<T extends MeterReadingEntity>
           value = data.value;
           price = data.price;
           total = data.total;
-          photos = data.photos;
+          photos = data.photos?.toList() ?? photos;
 
-          emit(MeterReadingFormLoadDone(value, total));
+          photos!.add(const PhotoEntity(id: 1, url: 'https://picsum.photos/250?image=9'));
+          emit(const MeterReadingFormLoadDone());
         } else {
           emit(const MeterReadingFormNotFound());
         }
@@ -70,20 +71,20 @@ class MeterReadingFormBloc<T extends MeterReadingEntity>
     lastMonth = double.tryParse(event.textValue!);
     value = lastMonth != null && thisMonth != null ? thisMonth! - lastMonth! : 0;
     total = price!= null ? value! * price! : 0;
-    emit(MeterReadingFormLoadDone(value, total));
+    emit(const MeterReadingFormUpdateFieldDone());
   }
 
   _changeThisMonth(ChangeThisMonthEvent event, Emitter<BaseState> emit) async {
     thisMonth = double.tryParse(event.textValue!);
     value = lastMonth != null && thisMonth != null ? thisMonth! - lastMonth! : 0;
     total = price!= null ? value! * price! : 0;
-    emit(MeterReadingFormLoadDone(value, total));
+    emit(const MeterReadingFormUpdateFieldDone());
   }
 
   _changePrice(ChangePriceEvent event, Emitter<BaseState> emit) async {
     price = double.tryParse(event.textValue!);
     total = price!= null ? value! * price! : 0;
-    emit(MeterReadingFormLoadDone(value, total));
+    emit(const MeterReadingFormUpdateFieldDone());
   }
 
   _submit(SubmitFormEvent event, Emitter<BaseState> emit) async {

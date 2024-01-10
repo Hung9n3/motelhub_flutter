@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:motelhub_flutter/domain/entities/electric.dart';
 import 'package:motelhub_flutter/domain/entities/photo.dart';
+import 'package:motelhub_flutter/domain/entities/room_bill.dart';
 import 'package:motelhub_flutter/domain/entities/user.dart';
 import 'package:motelhub_flutter/domain/entities/water.dart';
 
@@ -20,17 +21,21 @@ class RoomEntity extends Equatable {
   final List<WaterEntity>? waters;
   final List<UserEntity>? members;
   final List<PhotoEntity>? photos;
+  final List<RoomBillEntity>? bills;
+  final double? price;
 
   const RoomEntity(
       {this.id,
       this.name,
       this.areaId,
+      this.price,
       this.isEmpty = false,
       this.acreage,
       this.waters = const [],
       this.electrics = const [],
       this.photos = const [],
       this.members = const [],
+      this.bills = const [],
       this.areaName,
       this.owner,
       this.ownerId,

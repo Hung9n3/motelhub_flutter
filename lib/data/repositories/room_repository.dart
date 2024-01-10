@@ -3,6 +3,7 @@ import 'package:motelhub_flutter/domain/entities/area.dart';
 import 'package:motelhub_flutter/domain/entities/electric.dart';
 import 'package:motelhub_flutter/domain/entities/room.dart';
 import 'package:dio/dio.dart';
+import 'package:motelhub_flutter/domain/entities/room_bill.dart';
 import 'package:motelhub_flutter/domain/entities/user.dart';
 import 'package:motelhub_flutter/domain/entities/water.dart';
 import 'package:motelhub_flutter/domain/repositories/room_repository_interface.dart';
@@ -38,6 +39,7 @@ class RoomRepository extends IRoomRepository {
       var owner = UserEntity.getFakeData()
           .where((element) => element.id == data.ownerId)
           .firstOrNull;
+      var bills = RoomBillEntity.getGakeData().where((element) => element.roomId == data.id).toList();    
 
       data = RoomEntity(
           id: data.id,
@@ -45,6 +47,7 @@ class RoomRepository extends IRoomRepository {
           waters: waters,
           electrics: electrics,
           photos: data.photos,
+          bills: bills,
           acreage: data.acreage,
           areaId: data.areaId,
           ownerName: owner?.name,

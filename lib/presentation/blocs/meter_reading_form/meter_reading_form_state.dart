@@ -10,12 +10,12 @@ class MeterReadingFormLoading extends MeterReadingFormState {
   const MeterReadingFormLoading();
 }
 
-class MeterReadingChangingField extends MeterReadingFormState {
-  const MeterReadingChangingField();
+class MeterReadingFormUpdateFieldDone extends MeterReadingFormState {
+  const MeterReadingFormUpdateFieldDone();
 }
 
 class MeterReadingFormLoadDone extends MeterReadingFormState {
-  const MeterReadingFormLoadDone(double? value, double? total);
+  const MeterReadingFormLoadDone();
 }
 
 class MeterReadingFormNotFound extends MeterReadingFormState {
