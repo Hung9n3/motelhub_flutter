@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:motelhub_flutter/core/enums/option_sets.dart';
 import 'package:motelhub_flutter/domain/entities/bases/meter_reading.dart';
 import 'package:motelhub_flutter/injection_container.dart';
-import 'package:motelhub_flutter/presentation/blocs/base/base_state.dart';
 import 'package:motelhub_flutter/presentation/blocs/meter_reading_form/meter_reading_form_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/meter_reading_form/meter_reading_form_event.dart';
 import 'package:motelhub_flutter/presentation/blocs/meter_reading_form/meter_reading_form_state.dart';

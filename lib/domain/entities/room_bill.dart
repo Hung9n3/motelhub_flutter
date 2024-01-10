@@ -1,40 +1,49 @@
 import 'package:equatable/equatable.dart';
+import 'package:motelhub_flutter/domain/entities/electric.dart';
+import 'package:motelhub_flutter/domain/entities/room.dart';
+import 'package:motelhub_flutter/domain/entities/water.dart';
 
 class RoomBillEntity extends Equatable {
   final int? id;
-  final int? ownerId;
-  final int? roomId;
+  final int? hostId;
+  final int? contractId;
   final int? waterId;
   final int? electricId;
   final double? total;
   final DateTime? startDate;
   final DateTime? endDate;
   final double? rentPrice;
+  final RoomEntity? room;
+  final ElectricEntity? electric;
+  final WaterEntity? water;
 
   const RoomBillEntity(
       {this.id,
-      this.ownerId,
-      this.roomId,
+      this.hostId,
+      this.contractId,
       this.waterId,
       this.electricId,
       this.total,
       this.startDate,
       this.endDate,
-      this.rentPrice})
+      this.rentPrice,
+      this.room,
+      this.water,
+      this.electric})
       : super();
 
   @override
   // TODO: implement props
   List<Object?> get props =>
-      [id, ownerId, roomId, waterId, electricId, total, startDate, endDate];
+      [id, contractId, waterId, electricId, total, startDate, endDate];
 
   static List<RoomBillEntity> getGakeData() {
     var result = <RoomBillEntity>[];
     for (int i = 1; i <= 5; i++) {
       result.add(RoomBillEntity(
           id: i,
-          ownerId: i,
-          roomId: i,
+          hostId: 1,
+          contractId: i,
           waterId: i,
           electricId: i,
           total: 0,

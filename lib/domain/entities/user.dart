@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:motelhub_flutter/domain/entities/contract.dart';
 
 class UserEntity extends Equatable {
   final int? id;
@@ -7,6 +8,7 @@ class UserEntity extends Equatable {
   final String? name;
   final String? phoneNumber;
   final int? roomId;
+  final List<ContractEntity> contracts;
 
   const UserEntity(
       {this.id,
@@ -14,11 +16,12 @@ class UserEntity extends Equatable {
       this.username,
       this.name,
       this.phoneNumber,
-      this.roomId});
+      this.roomId,
+      this.contracts = const []});
 
   @override
   List<Object?> get props =>
-      [id, username, password, name, phoneNumber, roomId];
+      [id, username, password, name, phoneNumber, roomId, contracts];
 
   static List<UserEntity> getFakeData() {
     List<UserEntity> result = [];

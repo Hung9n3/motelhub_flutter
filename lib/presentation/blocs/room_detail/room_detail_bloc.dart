@@ -4,6 +4,7 @@ import 'package:motelhub_flutter/domain/entities/photo.dart';
 import 'package:motelhub_flutter/domain/entities/room.dart';
 import 'package:motelhub_flutter/domain/entities/room_bill.dart';
 import 'package:motelhub_flutter/domain/entities/user.dart';
+import 'package:motelhub_flutter/domain/entities/contract.dart';
 import 'package:motelhub_flutter/domain/repositories/room_repository_interface.dart';
 import 'package:motelhub_flutter/features/daily_news/domain/token/token_handler_interface.dart';
 import 'package:motelhub_flutter/presentation/blocs/base/base_state.dart';
@@ -31,9 +32,9 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
   int? areaId;
   bool isEmpty = false;
   List<UserEntity> users = [];
-  List<UserEntity>? members;
-  List<PhotoEntity>? photos;
-  List<RoomBillEntity>? bills;
+  List<UserEntity>? members = [];
+  List<PhotoEntity>? photos = [];
+  List<ContractEntity>? contracts = [];
   int? role;
 
   _loadForm(LoadFormDataEvent event, Emitter<BaseState> emit) async {
@@ -49,6 +50,7 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
       areaName = room.areaName;
       members = room.members;
       ownerId = room.ownerId;
+      contracts = room.contracts;
 
       users = UserEntity.getFakeData();
       users.add(const UserEntity(id: 0, name: 'None'));
