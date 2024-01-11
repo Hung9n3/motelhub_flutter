@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motelhub_flutter/core/resources/data_state.dart';
 import 'package:motelhub_flutter/domain/entities/room_bill.dart';
@@ -12,9 +13,13 @@ class ContractFormBloc extends Bloc<ContractFormEvent, ContractFormState> {
   final ITokenHandler _tokenHandler;
   ContractFormBloc(this._contractRepository, this._tokenHandler)
       : super(const ContractFormLoading()) {
-        on<ContractFormInitEvent>(_loadForm);
-        on<SubmitContractFormEvent>(_submit);
-      }
+    on<ContractFormInitEvent>(_loadForm);
+    on<SubmitContractFormEvent>(_submit);
+    on<ContractFormChangeOwnerEvent>(_changeOwner);
+    on<ContractFormChangeStartDateEvent>(_changeDate);
+    on<ContractFormChangeEndDateEvent>(_changeDate);
+    on<ContractFormChangeCancelDateEvent>(_changeDate);
+  }
 
   List<RoomBillEntity> bills = [];
   DateTime? startDate;
@@ -46,7 +51,32 @@ class ContractFormBloc extends Bloc<ContractFormEvent, ContractFormState> {
     }
   }
 
-  _submit(SubmitContractFormEvent event, Emitter<ContractFormState> emit){
-
+  _changeOwner(ContractFormChangeOwnerEvent event, Emitter<ContractFormState> emit) {
+    selectOwnerId = event.owner?.id;
+    //emit(ContractFormChangeOwnerDone(selectedOwner));
   }
+
+  _changeDate(ContractFormEvent event, Emitter<ContractFormState> emit) {
+    if (event.selectedDate != null) {
+      if (event is ContractFormChangeStartDateEvent) {
+        startDate = event.selectedDate;
+        if( startDate != null && endDate != null && startDate!.isAfter(endDate!)) {
+          endDate = null;
+          cancelDate = null;
+        }
+      }
+      if (event is ContractFormChangeEndDateEvent) {
+        endDate = event.selectedDate;
+        if( cancelDate != null && endDate != null && endDate!.isAfter(cancelDate!)) {
+          cancelDate = null;
+        }
+      }
+      if (event is ContractFormChangeCancelDateEvent) {
+        cancelDate = event.selectedDate;
+      }
+      emit(ContractFormChangeDateDone(state.selectedOwner));
+    }
+  }
+
+  _submit(SubmitContractFormEvent event, Emitter<ContractFormState> emit) {}
 }

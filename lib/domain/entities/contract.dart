@@ -50,7 +50,7 @@ class ContractEntity extends Equatable {
           owner: UserEntity.getFakeData()
               .where((element) => element.id == i)
               .firstOrNull,
-          startDate: DateTime.now(),
+          startDate: DateTime.now().add(const Duration(days: 2)),
           endDate: DateTime.now().add(const Duration(days: 365)),
           cancelDate: DateTime.now().add(const Duration(days: 200))
           ));

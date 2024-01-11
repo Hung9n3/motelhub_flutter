@@ -22,6 +22,10 @@ class ContractFormChangeOwnerDone extends ContractFormState {
   ContractFormChangeOwnerDone(UserEntity? selectedOwner) : super(selectedOwner: selectedOwner);
 }
 
+class ContractFormChangeDateDone extends ContractFormState {
+  ContractFormChangeDateDone(UserEntity? selectedOwner) : super();
+}
+
 class SubmitContractFormDone extends ContractFormState {
   const SubmitContractFormDone() : super();
 }

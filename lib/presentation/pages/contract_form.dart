@@ -20,7 +20,8 @@ class ContractForm extends StatelessWidget {
     return MultiBlocProvider(
         providers: [
           BlocProvider<ContractFormBloc>(
-              create: (context) => sl()..add(ContractFormInitEvent(contractId))),
+              create: (context) =>
+                  sl()..add(ContractFormInitEvent(contractId))),
         ],
         child: BlocBuilder<ContractFormBloc, ContractFormState>(
             builder: (context, state) {
@@ -81,18 +82,74 @@ class ContractForm extends StatelessWidget {
                 .read<ContractFormBloc>()
                 .add(ContractFormChangeOwnerEvent(value));
           }),
-          SectionWithBottomBorder(
-            child: TextFormField(
-          controller: startDateController,
-          decoration: InputDecoration(
-            suffixText: 'Start date',
-            enabled: false,
-            prefixIcon: Container(
-              margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-              child: const Icon(Icons.calendar_month),
-            ),
+      SectionWithBottomBorder(
+          child: TextFormField(
+        onTap: () async {
+          var selectedDate = await _selectDate(
+              context, DateTime.now(), DateTime(9999), bloc.startDate);
+          bloc.add(ContractFormChangeStartDateEvent(selectedDate));
+        },
+        readOnly: true,
+        enabled: contractId == null || bloc.startDate == null,
+        controller: startDateController,
+        decoration: InputDecoration(
+          suffixText: 'Start date',
+          prefixIcon: Container(
+            margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: const Icon(Icons.calendar_month),
           ),
-        )),
+        ),
+      )),
+      SectionWithBottomBorder(
+          child: TextFormField(
+        onTap: () async {
+          var selectedDate = await _selectDate(
+              context, bloc.startDate, DateTime(9999), bloc.endDate);
+          bloc.add(ContractFormChangeEndDateEvent(selectedDate));
+        },
+        readOnly: true,
+        enabled: contractId == null || bloc.endDate == null,
+        controller: endDateController,
+        decoration: InputDecoration(
+          suffixText: 'End date',
+          prefixIcon: Container(
+            margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: const Icon(Icons.calendar_month),
+          ),
+        ),
+      )),
+      SectionWithBottomBorder(
+          child: TextFormField(
+        onTap: () async {
+          var selectedDate = await _selectDate(
+              context, bloc.startDate, bloc.endDate, bloc.cancelDate);
+          bloc.add(ContractFormChangeCancelDateEvent(selectedDate));
+        },
+        readOnly: true,
+        enabled: bloc.endDate != null && bloc.startDate != null,
+        controller: cancelDateController,
+        decoration: InputDecoration(
+          suffixText: 'Cancel date',
+          prefixIcon: Container(
+            margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: const Icon(Icons.calendar_month),
+          ),
+        ),
+      )),
     ]));
+  }
+
+  Future<DateTime?> _selectDate(BuildContext context, DateTime? firstDate,
+      DateTime? lastDate, DateTime? initialDate) async {
+    if (lastDate == null) {
+      return null;
+    }
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      firstDate: firstDate ?? DateTime.now(),
+      lastDate: lastDate,
+      initialDate: initialDate,
+    );
+    return pickedDate;
   }
 }
