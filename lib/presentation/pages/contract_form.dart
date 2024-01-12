@@ -2,13 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:motelhub_flutter/domain/entities/room_bill.dart';
 import 'package:motelhub_flutter/domain/entities/user.dart';
 import 'package:motelhub_flutter/injection_container.dart';
 import 'package:motelhub_flutter/presentation/blocs/contract_form/contract_form_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/contract_form/contract_form_event.dart';
 import 'package:motelhub_flutter/presentation/blocs/contract_form/contract_form_state.dart';
+import 'package:motelhub_flutter/presentation/components/commons/common_date_picker.dart';
+import 'package:motelhub_flutter/presentation/components/commons/common_listview.dart';
 import 'package:motelhub_flutter/presentation/components/commons/form_container.dart';
+import 'package:motelhub_flutter/presentation/components/commons/item_expansion.dart';
 import 'package:motelhub_flutter/presentation/components/commons/section_with_bottom_border.dart';
+import 'package:motelhub_flutter/presentation/components/commons/swipeable_with_delete_button.dart';
+import 'package:motelhub_flutter/presentation/pages/bill_form.dart';
 
 class ContractForm extends StatelessWidget {
   final int? contractId;
@@ -85,7 +91,7 @@ class ContractForm extends StatelessWidget {
       SectionWithBottomBorder(
           child: TextFormField(
         onTap: () async {
-          var selectedDate = await _selectDate(
+          var selectedDate = await selectDate(
               context, DateTime.now(), DateTime(9999), bloc.startDate);
           bloc.add(ContractFormChangeStartDateEvent(selectedDate));
         },
@@ -103,7 +109,7 @@ class ContractForm extends StatelessWidget {
       SectionWithBottomBorder(
           child: TextFormField(
         onTap: () async {
-          var selectedDate = await _selectDate(
+          var selectedDate = await selectDate(
               context, bloc.startDate, DateTime(9999), bloc.endDate);
           bloc.add(ContractFormChangeEndDateEvent(selectedDate));
         },
@@ -121,7 +127,7 @@ class ContractForm extends StatelessWidget {
       SectionWithBottomBorder(
           child: TextFormField(
         onTap: () async {
-          var selectedDate = await _selectDate(
+          var selectedDate = await selectDate(
               context, bloc.startDate, bloc.endDate, bloc.cancelDate);
           bloc.add(ContractFormChangeCancelDateEvent(selectedDate));
         },
@@ -136,20 +142,71 @@ class ContractForm extends StatelessWidget {
           ),
         ),
       )),
+      _billSection(context, bloc.bills),
     ]));
   }
 
-  Future<DateTime?> _selectDate(BuildContext context, DateTime? firstDate,
-      DateTime? lastDate, DateTime? initialDate) async {
-    if (lastDate == null) {
-      return null;
+  _billSection(BuildContext context, List<RoomBillEntity>? bills) {
+    if (bills == null) {
+      return const SizedBox();
     }
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      firstDate: firstDate ?? DateTime.now(),
-      lastDate: lastDate,
-      initialDate: initialDate,
+    return Visibility(
+      visible: contractId != null,
+      child: ItemExpansion(
+        itemCount: bills.length,
+        title: 'Bill',
+        icon: Icons.receipt_long,
+        children: [
+          OutlinedButton(
+              onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => BillForm(contractId: contractId))),
+              child: const Icon(Icons.add)),
+          CommonListView(items: bills, builder: (context, index) {
+            var bill = bills[index];
+            return SwipeableWithDeleteButton(child: _billCard(context, bill));
+          })
+        ],
+      ),
     );
-    return pickedDate;
+  }
+
+  Widget _billCard(BuildContext context, RoomBillEntity? bill) {
+    if(bill == null) {
+      return const SizedBox();
+    }
+    var startDate = bill.startDate == null
+        ? ''
+        : DateFormat('dd, MMM y').format(bill.startDate!);
+    var endDate = bill.endDate == null
+        ? ''
+        : DateFormat('dd, MMM y').format(bill.endDate!);
+    return GestureDetector(
+      onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  BillForm(billId: bill.id, contractId: contractId)
+                  )),
+      child: Card(
+        child: Container(
+          width: MediaQuery.of(context).size.width >= 800
+              ? 800
+              : MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.all(8),
+          child: ListTile(
+            title: Text('${bill.title}'),
+            subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('$startDate - $endDate'),
+                  Text('Owneing: ${bill.owneing}'),
+                  Text('Total: ${bill.total}')
+                ]),
+          ),
+        ),
+      ),
+    );
   }
 }

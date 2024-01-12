@@ -53,7 +53,6 @@ class ContractFormBloc extends Bloc<ContractFormEvent, ContractFormState> {
 
   _changeOwner(ContractFormChangeOwnerEvent event, Emitter<ContractFormState> emit) {
     selectOwnerId = event.owner?.id;
-    //emit(ContractFormChangeOwnerDone(selectedOwner));
   }
 
   _changeDate(ContractFormEvent event, Emitter<ContractFormState> emit) {
@@ -78,5 +77,7 @@ class ContractFormBloc extends Bloc<ContractFormEvent, ContractFormState> {
     }
   }
 
-  _submit(SubmitContractFormEvent event, Emitter<ContractFormState> emit) {}
+  _submit(SubmitContractFormEvent event, Emitter<ContractFormState> emit) {
+
+  }
 }
