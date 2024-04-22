@@ -90,21 +90,21 @@ class ContractForm extends StatelessWidget {
           }),
       SectionWithBottomBorder(
           child: TextFormField(
-        onTap: () async {
-          var selectedDate = await selectDate(
-              context, DateTime.now(), DateTime(9999), bloc.startDate);
-          bloc.add(ContractFormChangeStartDateEvent(selectedDate));
-        },
-        readOnly: true,
-        enabled: contractId == null || bloc.startDate == null,
-        controller: startDateController,
-        decoration: InputDecoration(
-          suffixText: 'Start date',
-          prefixIcon: Container(
-            margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-            child: const Icon(Icons.calendar_month),
-          ),
-        ),
+            onTap: () async {
+              var selectedDate = await selectDate(
+                  context, DateTime.now(), DateTime(9999), bloc.startDate);
+              bloc.add(ContractFormChangeStartDateEvent(selectedDate));
+            },
+            readOnly: true,
+            enabled: contractId == null || bloc.startDate == null,
+            controller: startDateController,
+            decoration: InputDecoration(
+              suffixText: 'Start date',
+              prefixIcon: Container(
+                margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                child: const Icon(Icons.calendar_month),
+              ),
+            ),
       )),
       SectionWithBottomBorder(
           child: TextFormField(
@@ -163,17 +163,20 @@ class ContractForm extends StatelessWidget {
                   MaterialPageRoute(
                       builder: (context) => BillForm(contractId: contractId))),
               child: const Icon(Icons.add)),
-          CommonListView(items: bills, builder: (context, index) {
-            var bill = bills[index];
-            return SwipeableWithDeleteButton(child: _billCard(context, bill));
-          })
+          CommonListView(
+              items: bills,
+              builder: (context, index) {
+                var bill = bills[index];
+                return SwipeableWithDeleteButton(
+                    child: _billCard(context, bill));
+              })
         ],
       ),
     );
   }
 
   Widget _billCard(BuildContext context, RoomBillEntity? bill) {
-    if(bill == null) {
+    if (bill == null) {
       return const SizedBox();
     }
     var startDate = bill.startDate == null
@@ -187,8 +190,7 @@ class ContractForm extends StatelessWidget {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  BillForm(billId: bill.id, contractId: contractId)
-                  )),
+                  BillForm(billId: bill.id, contractId: contractId))),
       child: Card(
         child: Container(
           width: MediaQuery.of(context).size.width >= 800
@@ -197,13 +199,12 @@ class ContractForm extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: ListTile(
             title: Text('${bill.title}'),
-            subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('$startDate - $endDate'),
-                  Text('Owneing: ${bill.owneing}'),
-                  Text('Total: ${bill.total}')
-                ]),
+            subtitle:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text('$startDate - $endDate'),
+              Text('Owneing: ${bill.owneing}'),
+              Text('Total: ${bill.total}')
+            ]),
           ),
         ),
       ),

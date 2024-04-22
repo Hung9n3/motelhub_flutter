@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
-class StatisticComponent extends StatelessWidget {
-  const StatisticComponent({super.key});
+class AppointmentComponent extends StatelessWidget {
+  const AppointmentComponent({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,5 @@
 import 'package:motelhub_flutter/core/resources/data_state.dart';
+import 'package:motelhub_flutter/core/resources/search/search_model.dart';
 import 'package:motelhub_flutter/domain/entities/area.dart';
 import 'package:motelhub_flutter/domain/entities/electric.dart';
 import 'package:motelhub_flutter/domain/entities/room.dart';
@@ -52,6 +53,18 @@ class RoomRepository extends IRoomRepository {
           ownerName: owner?.name,
           ownerId: owner?.id,
           areaName: areaName);
+      return DataSuccess(data);
+    } on DioError catch (err) {
+      return DataFailed(err);
+    }
+  }
+
+  @override
+  Future<DataState<List<RoomEntity>>> Search(SearchModel searchModel) async {
+    // TODO: implement Search
+    try {
+      var list = RoomEntity.getFakeData();
+      var data = list.getRange(1, 20).toList();
       return DataSuccess(data);
     } on DioError catch (err) {
       return DataFailed(err);

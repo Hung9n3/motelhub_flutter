@@ -9,7 +9,7 @@ Future<DateTime?> selectDate(BuildContext context, DateTime? firstDate,
       context: context,
       firstDate: firstDate ?? DateTime.now(),
       lastDate: lastDate,
-      initialDate: initialDate,
+      initialDate: initialDate ?? firstDate!,
     );
     return pickedDate;
   }

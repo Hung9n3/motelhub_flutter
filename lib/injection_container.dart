@@ -31,6 +31,7 @@ import 'package:motelhub_flutter/presentation/blocs/meter_reading_form/meter_rea
 import 'package:motelhub_flutter/presentation/blocs/my_area/my_area_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/room_detail/room_detail_bloc.dart';
+import 'package:motelhub_flutter/presentation/blocs/search_room/search_room_bloc.dart';
 import 'features/daily_news/data/data_sources/local/app_database.dart';
 import 'features/daily_news/domain/usecases/get_saved_article.dart';
 import 'features/daily_news/domain/usecases/remove_article.dart';
@@ -88,6 +89,7 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<MeterReadingFormBloc<WaterEntity>>(() => MeterReadingFormBloc<WaterEntity>(sl(), sl()));
   sl.registerFactory<MeterReadingFormBloc<ElectricEntity>>(() => MeterReadingFormBloc<ElectricEntity>(sl(), sl()));
   sl.registerFactory<PhotoSectionBloc>(() => PhotoSectionBloc());
+  sl.registerFactory<SearchRoomBloc>(() => SearchRoomBloc(sl()));
   // sl.registerFactory<LocalArticleBloc>(
   //   ()=> LocalArticleBloc(sl(),sl(),sl())
   // );

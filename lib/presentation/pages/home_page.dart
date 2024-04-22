@@ -5,6 +5,7 @@ import 'package:motelhub_flutter/presentation/blocs/home/home_event.dart';
 import 'package:motelhub_flutter/presentation/components/my_area_component.dart';
 import 'package:motelhub_flutter/presentation/components/profile_component.dart';
 import 'package:motelhub_flutter/presentation/components/statistic_component.dart';
+import 'package:motelhub_flutter/presentation/pages/search_room.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -25,8 +26,12 @@ class HomePage extends StatelessWidget {
                     label: 'Home',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.favorite),
-                    label: 'Favorites',
+                    icon: Icon(Icons.search),
+                    label: 'Search',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.calendar_month_outlined),
+                    label: 'Appointments',
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.person),
@@ -47,8 +52,10 @@ class HomePage extends StatelessWidget {
     switch (currentTab) {
       case NavigationTab.profile:
         return const ProfileComponent();
-      case NavigationTab.statistic:
-        return const StatisticComponent();
+      case NavigationTab.search:
+        return const SearchRoom();
+      case NavigationTab.appointment:
+        return const AppointmentComponent();
       default:
         return const MyAreaComponent();
     }
