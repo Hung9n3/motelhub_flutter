@@ -1,4 +1,5 @@
 import 'package:motelhub_flutter/domain/entities/bases/base.dart';
+import 'package:motelhub_flutter/domain/entities/room.dart';
 import 'package:motelhub_flutter/domain/entities/user.dart';
 
 class AppointmentEntity extends BaseEntity {
@@ -11,6 +12,8 @@ class AppointmentEntity extends BaseEntity {
   final int? creatorId;
   final int? participantId;
   final bool? isAccepted;
+  final RoomEntity? room;
+  final int? roomId;
 
   const AppointmentEntity(
       {super.id,
@@ -25,7 +28,9 @@ class AppointmentEntity extends BaseEntity {
       this.participant,
       this.creatorId,
       this.participantId,
-      this.isAccepted})
+      this.isAccepted,
+      this.room,
+      this.roomId})
       : super();
   @override
   // TODO: implement props
@@ -42,7 +47,9 @@ class AppointmentEntity extends BaseEntity {
         participant,
         creatorId,
         participantId,
-        isAccepted
+        isAccepted,
+        room,
+        roomId
       ];
   
   static List<AppointmentEntity> getFakeData() {
@@ -54,7 +61,9 @@ class AppointmentEntity extends BaseEntity {
       creatorId: i,
       participant: UserEntity.getFakeData().firstWhere((element) => element.id == i+1),
       participantId: i+1,
-      isAccepted: i%2 == 0 ? true : false));
+      isAccepted: i%2 == 0 ? true : false,
+      room: RoomEntity.getFakeData().firstWhere((element) => element.id == i),
+      roomId: i),);
     }
     return result;
   }

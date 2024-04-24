@@ -4,7 +4,7 @@ import 'package:motelhub_flutter/presentation/blocs/home/home_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/home/home_event.dart';
 import 'package:motelhub_flutter/presentation/components/my_area_component.dart';
 import 'package:motelhub_flutter/presentation/components/profile_component.dart';
-import 'package:motelhub_flutter/presentation/components/statistic_component.dart';
+import 'package:motelhub_flutter/presentation/pages/my_appointment.dart';
 import 'package:motelhub_flutter/presentation/pages/search_room.dart';
 
 class HomePage extends StatelessWidget {
@@ -55,7 +55,7 @@ class HomePage extends StatelessWidget {
       case NavigationTab.search:
         return const SearchRoom();
       case NavigationTab.appointment:
-        return const AppointmentComponent();
+        return const MyAppointment();
       default:
         return const MyAreaComponent();
     }
