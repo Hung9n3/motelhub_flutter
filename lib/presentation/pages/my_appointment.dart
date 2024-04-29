@@ -46,7 +46,6 @@ class MyAppointment extends StatelessWidget {
                 onTap: () => Navigator.pushNamed(context, '/area-detail',
                     arguments: {'areaId': state.data![index].id}),
                 child: Card(
-<<<<<<< HEAD
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -73,26 +72,6 @@ class MyAppointment extends StatelessWidget {
                               "${state.data![index].startTime ?? ""} - ${state.data![index].endTime ?? ""}"),
                         ),
                       ]),
-=======
-                  child: Column(children: [
-                    Text(
-                        "${(state.data![index].title.toString())} - ${state.data![index].room!.name}"),
-                    ListTile(
-                      leading: const Icon(Icons.person),
-                      title: Text(state.data![index].creator!.name.toString()),
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.person),
-                      title:
-                          Text(state.data![index].participant!.name.toString()),
-                    ),
-                    ListTile(
-                      leading: const Icon(Icons.timelapse),
-                      title: Text(
-                          "${state.data![index].startTime.toString()} - ${state.data![index].endTime.toString()}"),
-                    ),
-                  ]),
->>>>>>> 00034b943fa1a3e6021e4a9404b14a58779d7d03
                 ),
               ),
             );
