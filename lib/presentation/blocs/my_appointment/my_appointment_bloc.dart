@@ -14,12 +14,16 @@ class MyAppointmentBloc extends Bloc<MyAppointmentEvent, MyAppointmentState> {
   }
 
   getAppointments(MyAppointmentInitEvent event, Emitter<MyAppointmentState> emit) async {
-    var dataState = await this._appointmentRepository.getByUser(1);
-    if(dataState is DataSuccess) {
-        emit(MyAppointmentDoneState(dataState.data ?? []));
-      }
-      else {
-        emit(MyAppointmentErrorState(dataState.error!));
-      }
+    try {
+  var dataState = await this._appointmentRepository.getByUser(1);
+  if(dataState is DataSuccess) {
+      emit(MyAppointmentDoneState(dataState.data ?? []));
+    }
+    else {
+      emit(MyAppointmentErrorState(dataState.error!));
+    }
+} on Exception catch (e) {
+  print(e);
+}
   }
 }

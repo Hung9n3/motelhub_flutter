@@ -53,7 +53,7 @@ class AppointmentEntity extends BaseEntity {
       ];
   
   static List<AppointmentEntity> getFakeData() {
-    var result = List<AppointmentEntity>.empty();
+    List<AppointmentEntity> result = [];
     for(int i = 1; i <= 10; i++){
       result.add(AppointmentEntity(id: i, createdAt: DateTime.now(), isActive: true, modifiedAt: DateTime.now(), title: "Appointment $i",
       duration: 90,

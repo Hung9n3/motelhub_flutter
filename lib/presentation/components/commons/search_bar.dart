@@ -29,9 +29,9 @@ class CustomSearchBar extends StatelessWidget {
         Visibility(
             visible: filterDialog != null,
             child: IconButton(
-                onPressed: () async {
+                onPressed: () {
                   if (filterDialog != null) {
-                    var dialog = await showDialog(
+                    showDialog(
                         context: context,
                         builder: (context) {
                           return filterDialog!;

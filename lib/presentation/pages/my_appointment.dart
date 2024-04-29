@@ -11,59 +11,71 @@ class MyAppointment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<MyAppointmentBloc>(create: (context) => sl()..add(const MyAppointmentInitEvent()), child: BlocBuilder<MyAppointmentBloc, MyAppointmentState>(builder: (context, state) {
-      if(state is MyAppointmentErrorState) {
-        return Center(child: Text("${state.error}"));
-      }
-      if(state is MyAppointmentLoadingState){
-        return const Center(child: CupertinoActivityIndicator());
-      }
-      if(state is MyAppointmentDoneState){
-        return _buildBody(state);
-      }
-      return const SizedBox();
-    },),);
+    return BlocProvider<MyAppointmentBloc>(
+      create: (context) => sl()..add(const MyAppointmentInitEvent()),
+      child: BlocBuilder<MyAppointmentBloc, MyAppointmentState>(
+        builder: (context, state) {
+          if (state is MyAppointmentErrorState) {
+            return Center(child: Text("${state.error}"));
+          }
+          if (state is MyAppointmentLoadingState) {
+            return const Center(child: CupertinoActivityIndicator());
+          }
+          if (state is MyAppointmentDoneState) {
+            return _buildBody(state);
+          }
+          return const SizedBox();
+        },
+      ),
+    );
   }
 
   Widget _buildBody(MyAppointmentState state) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: (){}, child: const Icon(Icons.add),),
-      body: ListView.builder(
-        itemCount: state.data!.length,
-                  itemBuilder: (context, index){
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10.0, horizontal: 30),
-                      child: InkWell(
-                        onTap: () => Navigator.pushNamed(
-                            context, '/area-detail',
-                            arguments: {'areaId': state.data![index].id}),
-                        child: Card(
-                          child: Column(children: [
-                            Text(
-                              "${(state.data![index].title.toString())} - ${state.data![index].room!.name}"
-                            ),
-                            ListTile(
-                              leading: const Icon(Icons.person),
-                              title:
-                                  Text(state.data![index].creator!.name.toString()),
-                            ),
-                            ListTile(
-                              leading: const Icon(Icons.person),
-                              title:
-                                  Text(state.data![index].participant!.name.toString()),
-                            ),
-                            ListTile(
-                              leading: const Icon(Icons.timelapse),
-                              title:
-                                  Text("${state.data![index].startTime.toString()} - ${state.data![index].endTime.toString()}"),
-                            ),
-                          ]),
-                        ),
-                      ),
-                    );
-                  }
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
       ),
+      body: ListView.builder(
+          itemCount: state.data!.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30),
+              child: InkWell(
+                onTap: () => Navigator.pushNamed(context, '/area-detail',
+                    arguments: {'areaId': state.data![index].id}),
+                child: Card(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                          child: Text(
+                            "${(state.data![index].title)} - ${state.data![index].room?.name}",
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.person),
+                          title:
+                              Text(state.data![index].creator!.name.toString()),
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.person),
+                          title: Text(
+                              state.data![index].participant!.name.toString()),
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.timelapse),
+                          title: Text(
+                              "${state.data![index].startTime ?? ""} - ${state.data![index].endTime ?? ""}"),
+                        ),
+                      ]),
+                ),
+              ),
+            );
+          }),
     );
   }
 }

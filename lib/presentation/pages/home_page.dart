@@ -19,10 +19,12 @@ class HomePage extends StatelessWidget {
             return Scaffold(
               body: _buildBody(currentTab),
               bottomNavigationBar: BottomNavigationBar(
+                unselectedItemColor: Colors.grey,
+                selectedItemColor: Colors.blue,
                 currentIndex: currentTab.index,
                 items: const [
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
+                    icon: Icon(Icons.home,),
                     label: 'Home',
                   ),
                   BottomNavigationBarItem(
