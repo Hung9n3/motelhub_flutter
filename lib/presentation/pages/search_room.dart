@@ -36,42 +36,175 @@ class SearchRoom extends StatelessWidget {
 
   _buildBody(BuildContext context) {
     var bloc = context.read<SearchRoomBloc>();
+    var searchTextController = TextEditingController(text: bloc.roomName);
     return Scaffold(
         body: SafeArea(
-      child: Column(
-        children: [
-          CustomSearchBar(
-            bloc: bloc,
-            event: const SearchRoomSubmitEvent(),
-            filterDialog: _buildDialog(context),
-          )
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    onChanged: (value) {
+                      bloc.roomName = value;
+                    },
+                    decoration: InputDecoration(
+                        label: const Text('Room name'),
+                        suffixIcon: IconButton(
+                            onPressed: () {
+                              bloc.add(SearchRoomFindButtonPressed(
+                                  searchTextController.text));
+                            },
+                            icon: const Icon(Icons.search))),
+                    controller: searchTextController,
+                  ),
+                ),
+                IconButton(
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return _buildDialog(context, bloc);
+                          });
+                    },
+                    icon: const Icon(Icons.filter_alt_outlined))
+              ],
+            )
+          ],
+        ),
       ),
     ));
   }
 
-  Widget _buildDialog(BuildContext context) {
-    var bloc = context.read<SearchRoomBloc>();
+  Widget _buildDialog(BuildContext context, SearchRoomBloc bloc) {
+    var nameTextEditingController = TextEditingController(text: bloc.roomName);
+    var addressTextEditingController =
+        TextEditingController(text: bloc.address);
+    var priceFromTextEditingController =
+        TextEditingController(text: bloc.priceFrom.toStringAsFixed(2));
+    var priceToTextEditingController =
+        TextEditingController(text: bloc.priceTo.toStringAsFixed(2));
+    var acreageFromTextEditingController =
+        TextEditingController(text: bloc.acreageFrom.toStringAsFixed(2));
+    var acreageToTextEditingController =
+        TextEditingController(text: bloc.acreageTo.toStringAsFixed(2));
     return AlertDialog(
+      scrollable: true,
+      title: const Text('Search'),
       contentPadding: const EdgeInsets.all(10),
-      content: const Column(children: [
-        ListTile(
-          leading: Text('Address'),
-          title: TextField(),
-        )
+      content: Column(children: [
+        TextField(
+          controller: nameTextEditingController,
+          decoration: InputDecoration(
+            label: const Text('Room name'),
+            border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
+          ),
+        ),
+        const SizedBox(height: 10),
+        TextField(
+          controller: addressTextEditingController,
+          decoration: InputDecoration(
+            label: const Text('Address'),
+            border:
+                OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: priceFromTextEditingController,
+                decoration: InputDecoration(
+                  label: const Text('From price'),
+                  suffixIcon: const Text('VND'),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: TextField(
+                controller: priceToTextEditingController,
+                decoration: InputDecoration(
+                  label: const Text('To price'),
+                  suffixIcon: const Text('VND'),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                ),
+              ),
+            ),
+          ],
+        ), //Price Range
+        const SizedBox(
+          height: 10,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: acreageFromTextEditingController,
+                decoration: InputDecoration(
+                  label: const Text('From acreage'),
+                  suffixIcon: const Text('M2'),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: TextField(
+                controller: acreageToTextEditingController,
+                decoration: InputDecoration(
+                  label: const Text('To acreage'),
+                  suffixIcon: const Text('M2'),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(
+          height: 10,
+        ),
       ]),
       actions: [
         TextButton(
             onPressed: () {
+              bloc.add(SearchRoomCloseDialogEvent(
+                  roomName: nameTextEditingController.text,
+                  address: addressTextEditingController.text,
+                  priceFrom: priceFromTextEditingController.text,
+                  priceTo: priceToTextEditingController.text,
+                  acreageFrom: acreageFromTextEditingController.text,
+                  acreageTo: acreageToTextEditingController.text));
               Navigator.of(context).pop();
             },
             child: const Text('Close')),
         TextButton(
             onPressed: () {
-              bloc.add(const SearchRoomSubmitEvent());
+              bloc.add(SearchRoomSubmitEvent(
+                  roomName: nameTextEditingController.text,
+                  address: addressTextEditingController.text,
+                  priceFrom: priceFromTextEditingController.text,
+                  priceTo: priceToTextEditingController.text,
+                  acreageFrom: acreageFromTextEditingController.text,
+                  acreageTo: acreageToTextEditingController.text));
               Navigator.of(context).pop();
             },
-            child: const Text('Submit'))
+            child: const Text('Find'))
       ],
     );
   }

@@ -5,16 +5,22 @@ import 'package:dio/dio.dart';
 abstract class SearchRoomState {
   final String? searchText;
   final SearchModel? searchModel;
+  final bool? isAirConditioned;
   final List<RoomEntity>? data;
   final DioError? error;
-  const SearchRoomState({this.searchModel = const SearchModel(), this.searchText, this.data, this.error});
+  const SearchRoomState(
+      {this.searchModel = const SearchModel(),
+      this.searchText,
+      this.isAirConditioned,
+      this.data,
+      this.error});
 }
 
 class SearchRoomLoadingState extends SearchRoomState {
   const SearchRoomLoadingState();
 }
 
-class SearchRoomDoneState extends SearchRoomState{
+class SearchRoomDoneState extends SearchRoomState {
   const SearchRoomDoneState(List<RoomEntity> data) : super(data: data);
 }
 
