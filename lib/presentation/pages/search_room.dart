@@ -1,11 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:motelhub_flutter/core/enums/option_sets.dart';
+import 'package:motelhub_flutter/domain/entities/room.dart';
 import 'package:motelhub_flutter/injection_container.dart';
 import 'package:motelhub_flutter/presentation/blocs/search_room/search_room_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/search_room/search_room_event.dart';
 import 'package:motelhub_flutter/presentation/blocs/search_room/search_room_state.dart';
+import 'package:motelhub_flutter/presentation/components/commons/common_listview.dart';
 import 'package:motelhub_flutter/presentation/components/commons/search_bar.dart';
+import 'package:motelhub_flutter/presentation/pages/room_detail.dart';
 
 class SearchRoom extends StatelessWidget {
   const SearchRoom({super.key});
@@ -40,39 +44,50 @@ class SearchRoom extends StatelessWidget {
     return Scaffold(
         body: SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    onChanged: (value) {
-                      bloc.roomName = value;
-                    },
-                    decoration: InputDecoration(
-                        label: const Text('Room name'),
-                        suffixIcon: IconButton(
-                            onPressed: () {
-                              bloc.add(SearchRoomFindButtonPressed(
-                                  searchTextController.text));
-                            },
-                            icon: const Icon(Icons.search))),
-                    controller: searchTextController,
+        padding: const EdgeInsets.symmetric(horizontal: 30),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      onChanged: (value) {
+                        bloc.roomName = value;
+                      },
+                      decoration: InputDecoration(
+                          label: const Text('Room name'),
+                          suffixIcon: IconButton(
+                              onPressed: () {
+                                bloc.add(SearchRoomFindButtonPressed(
+                                    searchTextController.text));
+                              },
+                              icon: const Icon(Icons.search))),
+                      controller: searchTextController,
+                    ),
                   ),
-                ),
-                IconButton(
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return _buildDialog(context, bloc);
-                          });
-                    },
-                    icon: const Icon(Icons.filter_alt_outlined))
-              ],
-            )
-          ],
+                  IconButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return _buildDialog(context, bloc);
+                            });
+                      },
+                      icon: const Icon(Icons.filter_alt_outlined))
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              CommonListView(
+                  items: bloc.state.data,
+                  builder: (context, index) {
+                    var item = bloc.state.data![index];
+                    return _buildRoomCard(context, item);
+                  })
+            ],
+          ),
         ),
       ),
     ));
@@ -206,6 +221,44 @@ class SearchRoom extends StatelessWidget {
             },
             child: const Text('Find'))
       ],
+    );
+  }
+
+  Widget _buildRoomCard(BuildContext context, RoomEntity room) {
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, '/room-detail',
+          arguments: {'roomId': room.id}),
+      child: Card(
+        child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            child: ListTile(
+              title:
+                  Text('${room.name} - ${room.address ?? 'not given address'}'),
+              subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text('Host: ${room.ownerName ?? 'host name'}'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text('Contact: ${room.ownerPhone ?? 'phone number'} - ${room.ownerEmail ?? 'email'}'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text('Price: ${room.price ?? '0'} VND'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text('Acreage: ${room.acreage ?? '0'} M2'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ]),
+            )),
+      ),
     );
   }
 }

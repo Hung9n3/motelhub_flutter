@@ -1,13 +1,13 @@
 import 'package:equatable/equatable.dart';
-import 'package:motelhub_flutter/domain/entities/electric.dart';
 import 'package:motelhub_flutter/domain/entities/photo.dart';
 import 'package:motelhub_flutter/domain/entities/user.dart';
 import 'package:motelhub_flutter/domain/entities/contract.dart';
-import 'package:motelhub_flutter/domain/entities/water.dart';
+import 'package:motelhub_flutter/domain/entities/work_order.dart';
 
 class RoomEntity extends Equatable {
   final int? id;
   final String? name;
+  final String? address;
   final int? areaId;
   final int? ownerId;
   final bool isEmpty;
@@ -17,25 +17,24 @@ class RoomEntity extends Equatable {
   final String? ownerPhone;
   final String? ownerEmail;
   final UserEntity? owner;
-  final List<ElectricEntity>? electrics;
-  final List<WaterEntity>? waters;
   final List<UserEntity>? members;
   final List<PhotoEntity>? photos;
   final List<ContractEntity>? contracts;
+  final List<WorkOrderEntity>? workOrders;
   final double? price;
 
   const RoomEntity(
       {this.id,
       this.name,
+      this.address,
       this.areaId,
       this.price,
       this.isEmpty = false,
       this.acreage,
-      this.waters = const [],
-      this.electrics = const [],
       this.photos = const [],
       this.members = const [],
       this.contracts = const [],
+      this.workOrders = const [],
       this.areaName,
       this.owner,
       this.ownerId,
@@ -45,7 +44,7 @@ class RoomEntity extends Equatable {
 
   @override
   List<Object?> get props {
-    return [id, name, areaId, isEmpty, acreage, electrics, photos, areaName, members, ownerName, ownerId];
+    return [id, name, areaId, isEmpty, acreage, photos, workOrders, areaName, members, ownerName, ownerId];
   }
 
   static List<RoomEntity> getFakeData() {
@@ -59,6 +58,7 @@ class RoomEntity extends Equatable {
         areaId: 1,
         isEmpty: false,
         ownerId: i,
+        price: 1000000,
         acreage: 12.0,
       );
       roomList.add(room);
@@ -71,6 +71,7 @@ class RoomEntity extends Equatable {
         name: 'Room $i',
         areaId: 2,
         isEmpty: true,
+        price: 2500000,
         acreage: 15.0,
       );
       roomList.add(room);

@@ -5,6 +5,7 @@ import 'package:motelhub_flutter/domain/entities/room.dart';
 import 'package:motelhub_flutter/domain/entities/room_bill.dart';
 import 'package:motelhub_flutter/domain/entities/user.dart';
 import 'package:motelhub_flutter/domain/entities/contract.dart';
+import 'package:motelhub_flutter/domain/entities/work_order.dart';
 import 'package:motelhub_flutter/domain/repositories/room_repository_interface.dart';
 import 'package:motelhub_flutter/features/daily_news/domain/token/token_handler_interface.dart';
 import 'package:motelhub_flutter/presentation/blocs/base/base_state.dart';
@@ -35,6 +36,7 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
   List<UserEntity>? members = [];
   List<PhotoEntity>? photos = [];
   List<ContractEntity>? contracts = [];
+  List<WorkOrderEntity>? workOrders = [];
   int? role;
 
   _loadForm(LoadFormDataEvent event, Emitter<BaseState> emit) async {
@@ -51,12 +53,13 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
       members = room.members;
       ownerId = room.ownerId;
       contracts = room.contracts;
+      workOrders = room.workOrders;
 
       users = UserEntity.getFakeData();
       users.add(const UserEntity(id: 0, name: 'None'));
       users.sort((a, b) => a.id!.compareTo(b.id!));
       emit(RoomDetailLoadFormStateDone(
-          ownerId, room.ownerName, members, room.electrics, room.waters));
+          ownerId, room.ownerName, members));
     } else {
       emit(ErrorState(dataState.error));
     }
@@ -67,7 +70,7 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
         users.where((element) => element.id == event.owner?.id).firstOrNull;
     ownerId = owner?.id;
     emit(RoomDetailLoadFormStateDone(
-        ownerId, owner?.name, members, state.electrics, state.waters));
+        ownerId, owner?.name, members));
   }
 
   _submitForm(SubmitFormEvent event, Emitter<BaseState> emit) async {
@@ -82,7 +85,6 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
           isEmpty: isEmpty,
           areaId: areaId);
       emit(const SubmitFormSuccess());
-      print(room);
     } on Exception catch (err) {
       emit(ErrorState(err));
     }

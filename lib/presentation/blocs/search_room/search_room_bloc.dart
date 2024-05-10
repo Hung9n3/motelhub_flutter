@@ -61,8 +61,8 @@ class SearchRoomBloc extends Bloc<SearchRoomEvent, SearchRoomState> {
     if (address != '') {
       searchSingles.add(SearchSingle(value: address, field: 'Address'));
     }
-    var searchModel =
-        SearchModel(searchRanges: searchRanges, searchSingles: searchSingles);
+    var searchModel = SearchModel(searchRanges: searchRanges, searchSingles: searchSingles);
+
     var dataState = await this._roomRepository.Search(searchModel);
     if (dataState is DataSuccess) {
       emit(SearchRoomDoneState(dataState.data ?? []));

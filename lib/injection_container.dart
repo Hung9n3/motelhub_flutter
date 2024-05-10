@@ -6,18 +6,15 @@ import 'package:motelhub_flutter/data/repositories/appointment_repository.dart';
 import 'package:motelhub_flutter/data/repositories/auth_repository.dart';
 import 'package:motelhub_flutter/data/repositories/area_repository.dart';
 import 'package:motelhub_flutter/data/repositories/contract_repository.dart';
-import 'package:motelhub_flutter/data/repositories/meter_reading_repository.dart';
 import 'package:motelhub_flutter/data/repositories/room_repository.dart';
+import 'package:motelhub_flutter/data/repositories/work_order_repository.dart';
 import 'package:motelhub_flutter/domain/entities/area.dart';
-import 'package:motelhub_flutter/domain/entities/bases/meter_reading.dart';
-import 'package:motelhub_flutter/domain/entities/electric.dart';
-import 'package:motelhub_flutter/domain/entities/water.dart';
 import 'package:motelhub_flutter/domain/repositories/appointment_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/auth_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/area_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/contract_repository_interface.dart';
-import 'package:motelhub_flutter/domain/repositories/meter_reading_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/room_repository_interface.dart';
+import 'package:motelhub_flutter/domain/repositories/work_order_repository_interface.dart';
 import 'package:motelhub_flutter/domain/usecases/area_detail/get_area_detail_usecases.dart';
 import 'package:motelhub_flutter/features/daily_news/data/data_sources/remote/news_api_service.dart';
 import 'package:motelhub_flutter/features/daily_news/data/repositories/article_repository.dart';
@@ -29,12 +26,12 @@ import 'package:motelhub_flutter/presentation/blocs/add_room/add_room_bloc.dart'
 import 'package:motelhub_flutter/presentation/blocs/area_detail/area_detail_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/contract_form/contract_form_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/login/login_bloc.dart';
-import 'package:motelhub_flutter/presentation/blocs/meter_reading_form/meter_reading_form_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/my_appointment/my_appointment_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/my_area/my_area_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/room_detail/room_detail_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/search_room/search_room_bloc.dart';
+import 'package:motelhub_flutter/presentation/blocs/work_order_form/work_order_form_bloc.dart';
 import 'features/daily_news/data/data_sources/local/app_database.dart';
 import 'features/daily_news/domain/usecases/get_saved_article.dart';
 import 'features/daily_news/domain/usecases/remove_article.dart';
@@ -67,8 +64,7 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<IRoomRepository>(() => RoomRepository());
   sl.registerFactory<IAppointmentRepository>(() => AppointmentRepository());
   sl.registerFactory<IContractRepository>(() => ContractRepository());
-  sl.registerFactory<IMeterReadingRepository<WaterEntity>>(() => MeterReadingRepository<WaterEntity>());
-  sl.registerFactory<IMeterReadingRepository<ElectricEntity>>(() => MeterReadingRepository<ElectricEntity>());
+  sl.registerFactory<IWorkOrderRepository>(() => WorkOrderRepository());
 
   //UseCases
   sl.registerSingleton<GetArticleUseCase>(GetArticleUseCase(sl()));
@@ -90,11 +86,10 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<AddRoomBloc>(() => AddRoomBloc(sl(), sl()));
   sl.registerFactory<RoomDetailBloc>(() => RoomDetailBloc(sl(), sl()));
   sl.registerFactory<ContractFormBloc>(() => ContractFormBloc(sl(), sl()));
-  sl.registerFactory<MeterReadingFormBloc<WaterEntity>>(() => MeterReadingFormBloc<WaterEntity>(sl(), sl()));
-  sl.registerFactory<MeterReadingFormBloc<ElectricEntity>>(() => MeterReadingFormBloc<ElectricEntity>(sl(), sl()));
   sl.registerFactory<PhotoSectionBloc>(() => PhotoSectionBloc());
   sl.registerFactory<SearchRoomBloc>(() => SearchRoomBloc(sl()));
   sl.registerFactory<MyAppointmentBloc>(() => MyAppointmentBloc(sl(),sl()));
+  sl.registerFactory<WorkOrderFormBloc>(() => WorkOrderFormBloc(sl()));
   // sl.registerFactory<LocalArticleBloc>(
   //   ()=> LocalArticleBloc(sl(),sl(),sl())
   // );

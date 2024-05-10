@@ -1,8 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
-import 'package:motelhub_flutter/domain/entities/electric.dart';
 import 'package:motelhub_flutter/domain/entities/room.dart';
-import 'package:motelhub_flutter/domain/entities/water.dart';
 
 class RoomBillEntity extends Equatable {
   final int? id;
@@ -17,8 +15,6 @@ class RoomBillEntity extends Equatable {
   final DateTime? endDate;
   final double? rentPrice;
   final RoomEntity? room;
-  final ElectricEntity? electric;
-  final WaterEntity? water;
 
   const RoomBillEntity(
       {this.id,
@@ -32,9 +28,7 @@ class RoomBillEntity extends Equatable {
       this.startDate,
       this.endDate,
       this.rentPrice,
-      this.room,
-      this.water,
-      this.electric})
+      this.room})
       : super();
 
   @override
@@ -52,8 +46,6 @@ class RoomBillEntity extends Equatable {
         endDate,
         rentPrice,
         room,
-        water,
-        electric
       ];
 
   RoomBillEntity copyWith(
@@ -83,9 +75,7 @@ class RoomBillEntity extends Equatable {
         startDate: startDate ?? this.startDate,
         endDate: endDate ?? this.endDate,
         rentPrice: rentPrice ?? this.rentPrice,
-        room: room ?? this.room,
-        water: water ?? this.water,
-        electric: electric ?? this.electric);
+        room: room ?? this.room);
   }
 
   static List<RoomBillEntity> getGakeData() {

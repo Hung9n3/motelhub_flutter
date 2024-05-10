@@ -4,11 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:motelhub_flutter/core/enums/option_sets.dart';
-import 'package:motelhub_flutter/domain/entities/bases/meter_reading.dart';
-import 'package:motelhub_flutter/domain/entities/electric.dart';
+import 'package:motelhub_flutter/domain/entities/appointment.dart';
 import 'package:motelhub_flutter/domain/entities/user.dart';
 import 'package:motelhub_flutter/domain/entities/contract.dart';
-import 'package:motelhub_flutter/domain/entities/water.dart';
+import 'package:motelhub_flutter/domain/entities/work_order.dart';
 import 'package:motelhub_flutter/injection_container.dart';
 import 'package:intl/intl.dart';
 import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_bloc.dart';
@@ -22,7 +21,6 @@ import 'package:motelhub_flutter/presentation/components/commons/item_expansion.
 import 'package:motelhub_flutter/presentation/components/commons/photo_section.dart';
 import 'package:motelhub_flutter/presentation/components/commons/section_with_bottom_border.dart';
 import 'package:motelhub_flutter/presentation/pages/contract_form.dart';
-import 'package:motelhub_flutter/presentation/pages/meter_reading_form.dart';
 
 class RoomDetailPage extends StatelessWidget {
   final int roomId;
@@ -125,8 +123,7 @@ class RoomDetailPage extends StatelessWidget {
                   onChanged: (value) =>
                       roomDetailBloc.add(ChangeAcreageEvent(value)),
                 )),
-                _electronicSection(context, state.electrics),
-                _waterSection(context, state.waters),
+                _workOrderSection(context, roomDetailBloc.workOrders),
                 _contractSection(context, roomDetailBloc.contracts),
                 const PhotoSection(),
               ],
@@ -137,28 +134,26 @@ class RoomDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _electronicSection(
-      BuildContext context, List<ElectricEntity>? electrics) {
-    if (electrics == null) {
+  Widget _workOrderSection(
+      BuildContext context, List<WorkOrderEntity>? workOrders) {
+    if (workOrders == null) {
       return const SizedBox();
     }
     return ItemExpansion(
-        itemCount: electrics.length,
-        title: 'Electronic',
-        icon: Icons.electric_bolt,
+        title: 'Contracts',
+        icon: Icons.description,
+        itemCount: workOrders.length,
         children: [
           OutlinedButton(
               onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MeterReadingForm<ElectricEntity>(
-                          roomId: roomId,
-                          meterReadingType: MeterReadingType.electric))),
+                      builder: (context) => ContractForm(roomId: roomId))),
               child: const Icon(Icons.add)),
-          CommonListView<ElectricEntity>(
-              items: electrics,
+          CommonListView(
+              items: workOrders,
               builder: (context, index) {
-                var electric = electrics[index];
+                var workOrder = workOrders[index];
                 return Slidable(
                     endActionPane: ActionPane(
                         extentRatio: 0.2,
@@ -172,46 +167,7 @@ class RoomDetailPage extends StatelessWidget {
                             label: 'Delete',
                           )
                         ]),
-                    child: meterReadingCard(context, electric));
-              })
-        ]);
-  }
-
-  Widget _waterSection(BuildContext context, List<WaterEntity>? waters) {
-    if (waters == null) {
-      return const SizedBox();
-    }
-    return ItemExpansion(
-        itemCount: waters.length,
-        title: 'Water',
-        icon: Icons.water_drop,
-        children: [
-          OutlinedButton(
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MeterReadingForm<WaterEntity>(
-                          roomId: roomId,
-                          meterReadingType: MeterReadingType.water))),
-              child: const Icon(Icons.add)),
-          CommonListView<WaterEntity>(
-              items: waters,
-              builder: (context, index) {
-                var water = waters[index];
-                return Slidable(
-                    endActionPane: ActionPane(
-                        extentRatio: 0.2,
-                        motion: const BehindMotion(),
-                        children: [
-                          SlidableAction(
-                            onPressed: (context) {},
-                            backgroundColor: const Color(0xFFFE4A49),
-                            foregroundColor: Colors.white,
-                            icon: Icons.delete,
-                            label: 'Delete',
-                          )
-                        ]),
-                    child: meterReadingCard(context, water));
+                    child: workOrderCard(context, workOrder));
               })
         ]);
   }
@@ -254,49 +210,25 @@ class RoomDetailPage extends StatelessWidget {
         ]);
   }
 
-  Widget meterReadingCard<T extends MeterReadingEntity>(
-      BuildContext context, T meterReading) {
+  Widget workOrderCard(BuildContext context, WorkOrderEntity workOrder) {
     return GestureDetector(
-      onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MeterReadingForm<T>(
-                    roomId: roomId,
-                    meterReadingType: meterReading is WaterEntity
-                        ? MeterReadingType.water
-                        : MeterReadingType.electric,
-                    meterReadingId: meterReading.id,
-                  ))),
+      onTap: () {},
       child: Card(
         child: Container(
-            width: MediaQuery.of(context).size.width >= 800
-                ? 800
-                : MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.all(8),
-            child: ListTile(
-              title: Text('${meterReading.name}'),
-              subtitle: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Last Month: ${meterReading.lastMonth}'),
-                          Text('Price: ${meterReading.price}'),
-                        ]),
-                    Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('This Month: ${meterReading.thisMonth}'),
-                          Text('Total: ${meterReading.total}'),
-                        ]),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [Text('Value: ${meterReading.value}')],
-                    )
-                  ]),
-            )),
+          width: MediaQuery.of(context).size.width >= 800
+              ? 800
+              : MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.all(8),
+          child: ListTile(
+            title: Text('${workOrder.name}'),
+            subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Status : ${workOrder.isOpen == true ? 'Opening' : 'Closed'}'),
+                  Text('Created On: ${workOrder.createdOn?.toString == null ? '' : DateFormat('dd, MMM y').format(workOrder.createdOn!)}')
+                ]),
+          ),
+        ),
       ),
     );
   }
