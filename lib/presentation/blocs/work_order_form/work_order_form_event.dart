@@ -37,3 +37,7 @@ class WorkOrderFormSubmitEvent extends WorkOrderFormEvent {
             price: price,
             photos: photos);
 }
+
+class WorkOrderFormIsCustomerPayChangedEvent extends WorkOrderFormEvent {
+  WorkOrderFormIsCustomerPayChangedEvent(bool? isCustomerPay) : super(isCustomerPay: isCustomerPay);
+}

@@ -1,6 +1,3 @@
-import 'dart:isolate';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motelhub_flutter/core/resources/data_state.dart';
 import 'package:motelhub_flutter/domain/entities/photo.dart';
@@ -15,6 +12,7 @@ class WorkOrderFormBloc extends Bloc<WorkOrderFormEvent, WorkOrderFormState> {
       : super(const WorkOrderFormLoadingState()) {
     on<WorkOrderFormInitEvent>(getData);
     on<WorkOrderFormSubmitEvent>(submit);
+    on<WorkOrderFormIsCustomerPayChangedEvent>(updateIsCustomerPay);
   }
 
   int workOrderId = 0;
@@ -30,6 +28,9 @@ class WorkOrderFormBloc extends Bloc<WorkOrderFormEvent, WorkOrderFormState> {
   getData(
       WorkOrderFormInitEvent event, Emitter<WorkOrderFormState> emit) async {
     try {
+      if(event.workOrderId == null) {
+        emit(const WorkOrderFormDoneState(false, true));
+      }
       var dataState = await _workOrderRepository.getById(event.workOrderId);
       if (dataState is DataSuccess && dataState.data != null) {
         workOrderId = dataState.data!.roomId ?? 0;
@@ -41,7 +42,7 @@ class WorkOrderFormBloc extends Bloc<WorkOrderFormEvent, WorkOrderFormState> {
         isCustomerPay = dataState.data!.isCustomerPay ?? false;
         isOpen = dataState.data!.isOpen ?? false;
         photos = dataState.data!.photos ?? [];
-        emit(const WorkOrderFormDoneState());
+        emit(WorkOrderFormDoneState(isCustomerPay, isOpen));
       } else {
         emit(WorkOrderFormErrorState(dataState.error));
       }
@@ -53,6 +54,7 @@ class WorkOrderFormBloc extends Bloc<WorkOrderFormEvent, WorkOrderFormState> {
   submit(
       WorkOrderFormSubmitEvent event, Emitter<WorkOrderFormState> emit) async {
     try {
+      emit(const WorkOrderFormLoadingState());
       var workOrderEntity = WorkOrderEntity(
           id: workOrderId,
           roomId: roomId,
@@ -64,7 +66,7 @@ class WorkOrderFormBloc extends Bloc<WorkOrderFormEvent, WorkOrderFormState> {
           photos: photos);
       var dataState = await _workOrderRepository.save(workOrderEntity);
       if(dataState is DataSuccess){
-        emit(const WorkOrderFormDoneState());
+        emit(WorkOrderFormDoneState(isCustomerPay, isOpen));
       }
       else {
         emit(WorkOrderFormErrorState(dataState.error));
@@ -72,5 +74,10 @@ class WorkOrderFormBloc extends Bloc<WorkOrderFormEvent, WorkOrderFormState> {
     } on Error catch (e) {
       print(e);
     }
+  }
+
+  updateIsCustomerPay(WorkOrderFormIsCustomerPayChangedEvent event, Emitter<WorkOrderFormState> emit) {
+    isCustomerPay = event.isCustomerPay ?? false;
+    emit(WorkOrderFormDoneState(isCustomerPay, isOpen));
   }
 }

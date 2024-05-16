@@ -1,7 +1,7 @@
 class AppointmentFormEvent {
   final int? appointmentId;
   final DateTime? startTime;
-  final int? duration;
+  final double? duration;
   final int? creatorId;
   final int? participantId;
   final int? roomId;
@@ -17,15 +17,15 @@ class AppointmentFormEvent {
 }
 
 class AppointmentFormInitEvent extends AppointmentFormEvent {
-  const AppointmentFormInitEvent(int? appointmentId)
-      : super(appointmentId: appointmentId);
+  const AppointmentFormInitEvent(int? appointmentId, int? participantId)
+      : super(appointmentId: appointmentId, participantId: participantId);
 }
 
 class AppointmentFormSubmitEvent extends AppointmentFormEvent {
   const AppointmentFormSubmitEvent(
     int? appointmentId,
     DateTime? startTime,
-    int? duration,
+    double? duration,
     int? creatorId,
     int? participantId,
     int? roomId,

@@ -6,7 +6,8 @@ class AppointmentEntity extends BaseEntity {
   final String? title;
   final DateTime? startTime;
   final DateTime? endTime;
-  final int? duration;
+  final double? duration;
+  final bool? isCanceled;
   final UserEntity? creator;
   final UserEntity? participant;
   final int? creatorId;
@@ -21,6 +22,7 @@ class AppointmentEntity extends BaseEntity {
       super.isActive,
       super.modifiedAt,
       this.title,
+      this.isCanceled,
       this.startTime,
       this.endTime,
       this.duration,
@@ -40,6 +42,7 @@ class AppointmentEntity extends BaseEntity {
         isActive,
         modifiedAt,
         title,
+        isCanceled,
         startTime,
         endTime,
         duration,

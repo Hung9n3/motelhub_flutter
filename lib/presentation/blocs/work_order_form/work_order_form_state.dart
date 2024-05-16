@@ -2,7 +2,9 @@ import 'package:dio/dio.dart';
 
 class WorkOrderFormState {
   final DioError? error;
-  const WorkOrderFormState({this.error});
+  final bool? isCustomerPay;
+  final bool? isOpen;
+  const WorkOrderFormState({this.error, this.isCustomerPay, this.isOpen});
 }
 
 class WorkOrderFormLoadingState extends WorkOrderFormState {
@@ -10,7 +12,7 @@ class WorkOrderFormLoadingState extends WorkOrderFormState {
 }
 
 class WorkOrderFormDoneState extends WorkOrderFormState {
-  const WorkOrderFormDoneState() : super();
+  const WorkOrderFormDoneState(bool? isCustomerPay, bool? isOpen) : super(isCustomerPay: isCustomerPay, isOpen: isOpen);
 }
 
 class WorkOrderFormErrorState extends WorkOrderFormState {

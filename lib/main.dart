@@ -9,6 +9,7 @@ import 'package:motelhub_flutter/presentation/pages/area_detail_page.dart';
 import 'package:motelhub_flutter/presentation/pages/home_page.dart';
 import 'package:motelhub_flutter/presentation/pages/login_page.dart';
 import 'package:motelhub_flutter/presentation/pages/room_detail.dart';
+import 'package:motelhub_flutter/presentation/pages/work_order_form.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,6 +57,14 @@ class MyApp extends StatelessWidget {
             final selectedAreaId = args['selectedAreaId'] as int;
             return MaterialPageRoute(
               builder: (context) => AddRoomPage(mode: mode, selectedAreaId: selectedAreaId,),
+            );
+          }
+          if (settings.name == '/work-order-form') {
+            final args = settings.arguments as Map<String, dynamic>;
+            final roomId = args['roomId'] as int?;
+            final workOrderId = args['workOrderId'] as int?;
+            return MaterialPageRoute(
+              builder: (context) => WorkOrderForm(roomId: roomId, workOrderId: workOrderId,),
             );
           }
           return null;

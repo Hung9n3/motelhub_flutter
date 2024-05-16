@@ -21,6 +21,7 @@ import 'package:motelhub_flutter/presentation/components/commons/item_expansion.
 import 'package:motelhub_flutter/presentation/components/commons/photo_section.dart';
 import 'package:motelhub_flutter/presentation/components/commons/section_with_bottom_border.dart';
 import 'package:motelhub_flutter/presentation/pages/contract_form.dart';
+import 'package:motelhub_flutter/presentation/pages/work_order_form.dart';
 
 class RoomDetailPage extends StatelessWidget {
   final int roomId;
@@ -148,7 +149,7 @@ class RoomDetailPage extends StatelessWidget {
               onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => ContractForm(roomId: roomId))),
+                      builder: (context) => WorkOrderForm(roomId: roomId))),
               child: const Icon(Icons.add)),
           CommonListView(
               items: workOrders,
@@ -212,7 +213,15 @@ class RoomDetailPage extends StatelessWidget {
 
   Widget workOrderCard(BuildContext context, WorkOrderEntity workOrder) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => WorkOrderForm(
+                      roomId: roomId,
+                      workOrderId: workOrder.id,
+                    )));
+      },
       child: Card(
         child: Container(
           width: MediaQuery.of(context).size.width >= 800
@@ -221,12 +230,13 @@ class RoomDetailPage extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: ListTile(
             title: Text('${workOrder.name}'),
-            subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Status : ${workOrder.isOpen == true ? 'Opening' : 'Closed'}'),
-                  Text('Created On: ${workOrder.createdOn?.toString == null ? '' : DateFormat('dd, MMM y').format(workOrder.createdOn!)}')
-                ]),
+            subtitle:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(
+                  'Status : ${workOrder.isOpen == true ? 'Opening' : 'Closed'}'),
+              Text(
+                  'Created On: ${workOrder.createdOn?.toString == null ? '' : DateFormat('dd, MMM y').format(workOrder.createdOn!)}')
+            ]),
           ),
         ),
       ),
@@ -248,8 +258,7 @@ class RoomDetailPage extends StatelessWidget {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  ContractForm(roomId: roomId, contractId: contract.id)
-                  )),
+                  ContractForm(roomId: roomId, contractId: contract.id))),
       child: Card(
         child: Container(
           width: MediaQuery.of(context).size.width >= 800
