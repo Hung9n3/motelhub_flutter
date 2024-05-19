@@ -1,4 +1,3 @@
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motelhub_flutter/core/resources/data_state.dart';
 import 'package:motelhub_flutter/domain/entities/room_bill.dart';
@@ -73,7 +72,7 @@ class ContractFormBloc extends Bloc<ContractFormEvent, ContractFormState> {
       if (event is ContractFormChangeCancelDateEvent) {
         cancelDate = event.selectedDate;
       }
-      emit(ContractFormChangeDateDone(state.selectedOwner));
+      emit(ContractFormChangeDateDone(state.selectedCustomer));
     }
   }
 

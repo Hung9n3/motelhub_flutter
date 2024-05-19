@@ -80,4 +80,9 @@ class WorkOrderFormBloc extends Bloc<WorkOrderFormEvent, WorkOrderFormState> {
     isCustomerPay = event.isCustomerPay ?? false;
     emit(WorkOrderFormDoneState(isCustomerPay, isOpen));
   }
+
+  updateIsOpen(WorkOrderFormIsOpenChangedEvent event, Emitter<WorkOrderFormState> emit) {
+    isOpen = event.isOpen ?? false;
+    emit(WorkOrderFormDoneState(isCustomerPay, isOpen));
+  }
 }

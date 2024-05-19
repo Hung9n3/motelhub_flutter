@@ -74,7 +74,7 @@ class ContractForm extends StatelessWidget {
               ? 740
               : MediaQuery.of(context).size.width - 60,
           leadingIcon: const Icon(Icons.holiday_village),
-          initialSelection: bloc.state.selectedOwner,
+          initialSelection: bloc.state.selectedCustomer,
           requestFocusOnTap: true,
           label: const Text('Select current owner'),
           dropdownMenuEntries: bloc.users

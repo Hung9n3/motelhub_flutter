@@ -5,6 +5,7 @@ import 'package:motelhub_flutter/injection_container.dart';
 import 'package:motelhub_flutter/presentation/blocs/login/login_bloc.dart';
 import 'package:motelhub_flutter/presentation/pages/add_area.dart';
 import 'package:motelhub_flutter/presentation/pages/add_room.dart';
+import 'package:motelhub_flutter/presentation/pages/appointment_form.dart';
 import 'package:motelhub_flutter/presentation/pages/area_detail_page.dart';
 import 'package:motelhub_flutter/presentation/pages/home_page.dart';
 import 'package:motelhub_flutter/presentation/pages/login_page.dart';
@@ -65,6 +66,14 @@ class MyApp extends StatelessWidget {
             final workOrderId = args['workOrderId'] as int?;
             return MaterialPageRoute(
               builder: (context) => WorkOrderForm(roomId: roomId, workOrderId: workOrderId,),
+            );
+          }
+          if (settings.name == '/appointment-form') {
+            final args = settings.arguments as Map<String, dynamic>;
+            final appointmentId = args['appointmentId'] as int?;
+            final roomId = args['roomId'] as int?;
+            return MaterialPageRoute(
+              builder: (context) => AppointmentForm(roomId: roomId, appointmentId: appointmentId,),
             );
           }
           return null;

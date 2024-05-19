@@ -26,13 +26,9 @@ class WorkOrderFormInitEvent extends WorkOrderFormEvent {
 class WorkOrderFormSubmitEvent extends WorkOrderFormEvent {
   WorkOrderFormSubmitEvent(
     String? name,
-    bool? isCustomerPay,
-    bool? isOpen,
     double? price,
     List<PhotoEntity>? photos,
   ) : super(
-            isCustomerPay: isCustomerPay,
-            isOpen: isOpen,
             name: name,
             price: price,
             photos: photos);
@@ -40,4 +36,8 @@ class WorkOrderFormSubmitEvent extends WorkOrderFormEvent {
 
 class WorkOrderFormIsCustomerPayChangedEvent extends WorkOrderFormEvent {
   WorkOrderFormIsCustomerPayChangedEvent(bool? isCustomerPay) : super(isCustomerPay: isCustomerPay);
+}
+
+class WorkOrderFormIsOpenChangedEvent extends WorkOrderFormEvent {
+  WorkOrderFormIsOpenChangedEvent(bool? isOpen) : super(isCustomerPay: isOpen);
 }

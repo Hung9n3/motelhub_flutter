@@ -28,25 +28,34 @@ class WorkOrderForm extends StatelessWidget {
         ],
         child: Builder(
           builder: (context) {
+            var bloc = context.read<WorkOrderFormBloc>();
+            var nameController = TextEditingController(text: bloc.name);
+            var priceController =
+                TextEditingController(text: bloc.price.toString());
             return Scaffold(
               appBar: AppBar(title: const Text('Work Order'), actions: [
-                IconButton(onPressed: () {}, icon: const Icon(Icons.check))
+                IconButton(
+                    onPressed: () {
+                      var photos =
+                          context.read<PhotoSectionBloc>().state.photos;
+                      bloc.add(WorkOrderFormSubmitEvent(nameController.text,
+                          double.tryParse(priceController.text), photos));
+                    },
+                    icon: const Icon(Icons.check))
               ]),
               floatingActionButton: IconButton(
                 onPressed: () {},
                 icon: const Icon(Icons.add_a_photo),
               ),
-              body: _buildBody(context),
+              body: _buildBody(context, nameController, priceController),
             );
           },
         ));
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget _buildBody(BuildContext context, TextEditingController nameController,
+      TextEditingController priceController) {
     var workOrderFormBloc = context.read<WorkOrderFormBloc>();
-    var nameController = TextEditingController(text: workOrderFormBloc.name);
-    var priceController =
-        TextEditingController(text: workOrderFormBloc.price.toString());
     return FormContainer(
         child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +65,7 @@ class WorkOrderForm extends StatelessWidget {
           readOnly: workOrderFormBloc.isClosed,
           controller: nameController,
           decoration: const InputDecoration(
-            prefixText: 'Title',
+            prefixIcon: Icon(Icons.report_gmailerrorred),
           ),
         )),
         SectionWithBottomBorder(
@@ -71,11 +80,12 @@ class WorkOrderForm extends StatelessWidget {
             child: TextField(
           readOnly: workOrderId == null,
           controller: priceController,
-          decoration:
-              const InputDecoration(prefixText: 'Price', suffixText: 'VND'),
+          decoration: const InputDecoration(
+              prefixIcon: Icon(Icons.attach_money), suffixText: 'VND'),
         )),
-        BlocBuilder<WorkOrderFormBloc, WorkOrderFormState>(builder: (context, state) {
-            return Switch(
+        BlocBuilder<WorkOrderFormBloc, WorkOrderFormState>(
+            builder: (context, state) {
+          return Switch(
               value: workOrderFormBloc.isCustomerPay,
               onChanged: (value) {
                 workOrderFormBloc

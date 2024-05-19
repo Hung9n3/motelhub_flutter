@@ -142,7 +142,7 @@ class RoomDetailPage extends StatelessWidget {
     }
     return ItemExpansion(
         title: 'Contracts',
-        icon: Icons.description,
+        icon: Icons.report_gmailerrorred,
         itemCount: workOrders.length,
         children: [
           OutlinedButton(

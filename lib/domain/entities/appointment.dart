@@ -6,15 +6,15 @@ class AppointmentEntity extends BaseEntity {
   final String? title;
   final DateTime? startTime;
   final DateTime? endTime;
-  final double? duration;
+  final int? duration;
   final bool? isCanceled;
-  final UserEntity? creator;
-  final UserEntity? participant;
+  final bool? isAccepted;
   final int? creatorId;
   final int? participantId;
-  final bool? isAccepted;
-  final RoomEntity? room;
   final int? roomId;
+  final UserEntity? creator;
+  final UserEntity? participant;
+  final RoomEntity? room;
 
   const AppointmentEntity(
       {super.id,
@@ -54,19 +54,29 @@ class AppointmentEntity extends BaseEntity {
         room,
         roomId
       ];
-  
+
   static List<AppointmentEntity> getFakeData() {
     List<AppointmentEntity> result = [];
-    for(int i = 1; i <= 10; i++){
-      result.add(AppointmentEntity(id: i, createdAt: DateTime.now(), isActive: true, modifiedAt: DateTime.now(), title: "Appointment $i",
-      duration: 90,
-      creator: UserEntity.getFakeData().firstWhere((element) => element.id == i),
-      creatorId: i,
-      participant: UserEntity.getFakeData().firstWhere((element) => element.id == i+1),
-      participantId: i+1,
-      isAccepted: i%2 == 0 ? true : false,
-      room: RoomEntity.getFakeData().firstWhere((element) => element.id == i),
-      roomId: i),);
+    for (int i = 1; i <= 10; i++) {
+      result.add(
+        AppointmentEntity(
+            id: i,
+            createdAt: DateTime.now(),
+            isActive: true,
+            modifiedAt: DateTime.now(),
+            title: "Appointment $i",
+            duration: 90,
+            creator: UserEntity.getFakeData()
+                .firstWhere((element) => element.id == i),
+            creatorId: i,
+            participant: UserEntity.getFakeData()
+                .firstWhere((element) => element.id == i + 1),
+            participantId: i + 1,
+            isAccepted: i % 2 == 0 ? true : false,
+            room: RoomEntity.getFakeData()
+                .firstWhere((element) => element.id == i),
+            roomId: i),
+      );
     }
     return result;
   }

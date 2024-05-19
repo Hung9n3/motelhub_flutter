@@ -2,8 +2,8 @@ import 'package:motelhub_flutter/domain/entities/user.dart';
 import 'package:motelhub_flutter/presentation/blocs/base/base_state.dart';
 
 abstract class ContractFormState extends BaseState {
-  final UserEntity? selectedOwner;
-  const ContractFormState({this.selectedOwner});
+  final UserEntity? selectedCustomer;
+  const ContractFormState({this.selectedCustomer});
 }
 
 class ContractFormLoading extends ContractFormState {
@@ -11,7 +11,7 @@ class ContractFormLoading extends ContractFormState {
 }
 
 class ContractFormLoadDone extends ContractFormState {
-  ContractFormLoadDone(UserEntity? selectedOwner) : super(selectedOwner: selectedOwner);
+  ContractFormLoadDone(UserEntity? selectedOwner) : super(selectedCustomer: selectedOwner);
 }
 
 class ContractFormNotFound extends ContractFormState {
@@ -19,7 +19,7 @@ class ContractFormNotFound extends ContractFormState {
 }
 
 class ContractFormChangeOwnerDone extends ContractFormState {
-  ContractFormChangeOwnerDone(UserEntity? selectedOwner) : super(selectedOwner: selectedOwner);
+  ContractFormChangeOwnerDone(UserEntity? selectedOwner) : super(selectedCustomer: selectedOwner);
 }
 
 class ContractFormChangeDateDone extends ContractFormState {

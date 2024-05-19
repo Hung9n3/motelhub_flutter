@@ -43,8 +43,8 @@ class MyAppointment extends StatelessWidget {
               padding:
                   const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30),
               child: InkWell(
-                onTap: () => Navigator.pushNamed(context, '/area-detail',
-                    arguments: {'areaId': state.data![index].id}),
+                onTap: () => Navigator.pushNamed(context, '/appointment-form',
+                    arguments: {'appointmentId': state.data![index].id, 'roomId': state.data![index].roomId}),
                 child: Card(
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

@@ -23,6 +23,7 @@ import 'package:motelhub_flutter/features/daily_news/domain/token/token_handler_
 import 'package:motelhub_flutter/features/daily_news/domain/usecases/get_article.dart';
 import 'package:motelhub_flutter/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/add_room/add_room_bloc.dart';
+import 'package:motelhub_flutter/presentation/blocs/appointment_form/appointment_form_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/area_detail/area_detail_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/contract_form/contract_form_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/login/login_bloc.dart';
@@ -89,6 +90,7 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<PhotoSectionBloc>(() => PhotoSectionBloc());
   sl.registerFactory<SearchRoomBloc>(() => SearchRoomBloc(sl()));
   sl.registerFactory<MyAppointmentBloc>(() => MyAppointmentBloc(sl(),sl()));
+  sl.registerFactory<AppointmentFormBloc>(() => AppointmentFormBloc(sl(),sl()));
   sl.registerFactory<WorkOrderFormBloc>(() => WorkOrderFormBloc(sl()));
   // sl.registerFactory<LocalArticleBloc>(
   //   ()=> LocalArticleBloc(sl(),sl(),sl())
