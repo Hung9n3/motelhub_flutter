@@ -11,7 +11,7 @@ class ContractRepository implements IContractRepository {
     var contract = ContractEntity.getFakeData()
         .where((element) => element.id == contractId)
         .firstOrNull;
-    var bills = RoomBillEntity.getGakeData()
+    var bills = BillEntity.getFakeData()
         .where((element) => element.contractId == contractId)
         .toList();
     var data = ContractEntity(

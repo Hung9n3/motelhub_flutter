@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
 import 'package:motelhub_flutter/domain/entities/room.dart';
 
-class RoomBillEntity extends Equatable {
+class BillEntity extends Equatable {
   final int? id;
   final int? hostId;
   final int? contractId;
@@ -10,13 +10,23 @@ class RoomBillEntity extends Equatable {
   final int? electricId;
   final double? total;
   final String? title;
-  final double? owneing;
+  final double? oweing;
   final DateTime? startDate;
   final DateTime? endDate;
   final double? rentPrice;
+  final double? waterPrice;
+  final double? electricPrice;
+  final double? electricLast;
+  final double? electricCurrent;
+  final double? waterLast;
+  final double? waterCurrent;
+  final DateTime? waterFrom;
+  final DateTime? waterTo;
+  final DateTime? electricFrom;
+  final DateTime? electricTo;
   final RoomEntity? room;
 
-  const RoomBillEntity(
+  const BillEntity(
       {this.id,
       this.hostId,
       this.contractId,
@@ -24,10 +34,20 @@ class RoomBillEntity extends Equatable {
       this.electricId,
       this.total,
       this.title,
-      this.owneing,
+      this.oweing,
       this.startDate,
       this.endDate,
       this.rentPrice,
+      this.electricPrice,
+      this.waterPrice,
+      this.electricCurrent,
+      this.electricFrom,
+      this.electricLast,
+      this.electricTo,
+      this.waterCurrent,
+      this.waterFrom,
+      this.waterLast,
+      this.waterTo,
       this.room})
       : super();
 
@@ -41,14 +61,14 @@ class RoomBillEntity extends Equatable {
         electricId,
         total,
         title,
-        owneing,
+        oweing,
         startDate,
         endDate,
         rentPrice,
         room,
       ];
 
-  RoomBillEntity copyWith(
+  BillEntity copyWith(
       {id,
       hostId,
       contractId,
@@ -63,7 +83,7 @@ class RoomBillEntity extends Equatable {
       room,
       water,
       electric}) {
-    return RoomBillEntity(
+    return BillEntity(
         id: id ?? this.id,
         hostId: hostId ?? this.hostId,
         contractId: contractId ?? this.contractId,
@@ -71,21 +91,22 @@ class RoomBillEntity extends Equatable {
         electricId: electricId ?? this.electricId,
         total: total ?? this.total,
         title: title ?? this.title,
-        owneing: owneing ?? this.owneing,
+        oweing: owneing ?? this.oweing,
         startDate: startDate ?? this.startDate,
         endDate: endDate ?? this.endDate,
         rentPrice: rentPrice ?? this.rentPrice,
         room: room ?? this.room);
   }
 
-  static List<RoomBillEntity> getGakeData() {
-    var result = <RoomBillEntity>[];
+  static List<BillEntity> getFakeData() {
+    var result = <BillEntity>[];
     for (int i = 1; i <= 5; i++) {
-      result.add(RoomBillEntity(
+      result.add(BillEntity(
           id: i,
           hostId: 1,
-          title: '${DateFormat('MMM y').format(DateTime.now().subtract(const Duration(days: 30)))} Bill',
-          owneing: 0,
+          title:
+              '${DateFormat('MMM y').format(DateTime.now().subtract(const Duration(days: 30)))} Bill',
+          oweing: 0,
           contractId: i,
           rentPrice: 1000,
           waterId: i,

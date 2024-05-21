@@ -21,7 +21,7 @@ class ContractFormBloc extends Bloc<ContractFormEvent, ContractFormState> {
     on<ContractFormChangeCancelDateEvent>(_changeDate);
   }
 
-  List<RoomBillEntity> bills = [];
+  List<BillEntity> bills = [];
   DateTime? startDate;
   DateTime? endDate;
   DateTime? cancelDate;
