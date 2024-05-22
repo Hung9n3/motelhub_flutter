@@ -13,7 +13,7 @@ class ContractEntity extends Equatable {
   final DateTime? cancelDate;
   final UserEntity? owner;
   final RoomEntity? roomEntity;
-  final List<RoomBillEntity>? bills;
+  final List<BillEntity>? bills;
 
   const ContractEntity(
       {this.id,

@@ -146,7 +146,7 @@ class ContractForm extends StatelessWidget {
     ]));
   }
 
-  _billSection(BuildContext context, List<RoomBillEntity>? bills) {
+  _billSection(BuildContext context, List<BillEntity>? bills) {
     if (bills == null) {
       return const SizedBox();
     }
@@ -175,7 +175,7 @@ class ContractForm extends StatelessWidget {
     );
   }
 
-  Widget _billCard(BuildContext context, RoomBillEntity? bill) {
+  Widget _billCard(BuildContext context, BillEntity? bill) {
     if (bill == null) {
       return const SizedBox();
     }
@@ -202,7 +202,7 @@ class ContractForm extends StatelessWidget {
             subtitle:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text('$startDate - $endDate'),
-              Text('Owneing: ${bill.owneing}'),
+              Text('Owneing: ${bill.oweing}'),
               Text('Total: ${bill.total}')
             ]),
           ),
