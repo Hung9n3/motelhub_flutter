@@ -1,4 +1,3 @@
-import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motelhub_flutter/core/resources/data_state.dart';
 import 'package:motelhub_flutter/domain/repositories/bill_repository_interface.dart';
@@ -51,9 +50,13 @@ class BillFormBloc extends Bloc<BaseBillFormEvent, BaseBillFormState> {
         electricPrice = dataState.data!.electricPrice;
         oweing = dataState.data!.oweing;
         waterFrom = dataState.data!.waterFrom;
+        waterTo = dataState.data!.waterTo;
+        electricFrom = dataState.data!.electricFrom;
+        electricTo = dataState.data!.electricTo;
         waterCurrent = dataState.data!.waterCurrent;
-        electricCurrent = dataState.data!.rentePrice;
-        roomPrice = dataState.data!.rentPrice;
+        waterLast = dataState.data!.waterLast;
+        electricLast = dataState.data!.electricLast;
+        electricCurrent = dataState.data!.electricCurrent;
       }
     } on DioError catch (e) {
       emit(BillFormError(e.message));
