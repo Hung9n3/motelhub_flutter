@@ -111,24 +111,13 @@ class BillForm extends StatelessWidget {
               billBloc,
               electricFromController,
               electricToController,
-              electricPriceController,
-              electricLastController,
-              electricCurrentController,
               electricValueController,
               electricTotalController),
           HorizontalDivider(
             text: 'Water',
           ),
-          _waterSection(
-              context,
-              billBloc,
-              waterFromController,
-              waterToController,
-              waterPriceController,
-              waterLastController,
-              waterCurrentController,
-              waterValueController,
-              waterTotalController),
+          _waterSection(context, billBloc, waterFromController,
+              waterToController, waterValueController, waterTotalController),
         ]),
       ),
     );
@@ -139,9 +128,6 @@ class BillForm extends StatelessWidget {
     BillFormBloc billBloc,
     TextEditingController electricFromController,
     TextEditingController electricToController,
-    TextEditingController electricPriceController,
-    TextEditingController electricLastController,
-    TextEditingController electricCurrentController,
     TextEditingController electricValueController,
     TextEditingController electricTotalController,
   ) {
@@ -204,9 +190,8 @@ class BillForm extends StatelessWidget {
         children: [
           Expanded(
             child: SectionWithBottomBorder(
-                child: TextField(
-                    controller: electricLastController,
-                    readOnly: true,
+                child: TextFormField(
+                    initialValue: '${billBloc.electricLast}',
                     onChanged: (value) {
                       if (double.tryParse(value) == null) {
                         value = '0';
@@ -229,9 +214,8 @@ class BillForm extends StatelessWidget {
           ),
           Expanded(
             child: SectionWithBottomBorder(
-                child: TextField(
-                    controller: electricCurrentController,
-                    readOnly: true,
+                child: TextFormField(
+                    initialValue: '${billBloc.electricCurrent}',
                     onChanged: (value) {
                       if (double.tryParse(value) == null) {
                         value = '0';
@@ -271,9 +255,8 @@ class BillForm extends StatelessWidget {
           ),
           Expanded(
             child: SectionWithBottomBorder(
-                child: TextField(
-                    controller: electricPriceController,
-                    readOnly: true,
+                child: TextFormField(
+                    initialValue: '${billBloc.electricPrice}',
                     onChanged: (value) {
                       if (double.tryParse(value) == null) {
                         value = '0';
@@ -300,7 +283,7 @@ class BillForm extends StatelessWidget {
           ),
           Expanded(
             child: SectionWithBottomBorder(
-                child: TextField(
+                child: TextFormField(
                     controller: electricTotalController,
                     readOnly: true,
                     decoration: const InputDecoration(
@@ -317,9 +300,6 @@ class BillForm extends StatelessWidget {
     BillFormBloc billBloc,
     TextEditingController waterFromController,
     TextEditingController waterToController,
-    TextEditingController waterPriceController,
-    TextEditingController waterLastController,
-    TextEditingController waterCurrentController,
     TextEditingController waterValueController,
     TextEditingController waterTotalController,
   ) {
@@ -382,8 +362,8 @@ class BillForm extends StatelessWidget {
         children: [
           Expanded(
             child: SectionWithBottomBorder(
-                child: TextField(
-                    controller: waterLastController,
+                child: TextFormField(
+                    initialValue: '${billBloc.waterLast}',
                     readOnly: false,
                     onChanged: (value) {
                       if (double.tryParse(value) == null) {
@@ -407,8 +387,8 @@ class BillForm extends StatelessWidget {
           ),
           Expanded(
             child: SectionWithBottomBorder(
-                child: TextField(
-                    controller: waterCurrentController,
+                child: TextFormField(
+                    initialValue: '${billBloc.waterCurrent}',
                     readOnly: false,
                     onChanged: (value) {
                       if (double.tryParse(value) == null) {
@@ -449,8 +429,8 @@ class BillForm extends StatelessWidget {
           ),
           Expanded(
             child: SectionWithBottomBorder(
-                child: TextField(
-                    controller: waterPriceController,
+                child: TextFormField(
+                    initialValue: '${billBloc.waterPrice}',
                     readOnly: false,
                     onChanged: (value) {
                       if (double.tryParse(value) == null) {
