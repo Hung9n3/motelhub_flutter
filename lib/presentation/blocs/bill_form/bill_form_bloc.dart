@@ -11,8 +11,12 @@ class BillFormBloc extends Bloc<BaseBillFormEvent, BaseBillFormState> {
   final IBillRepository _billRepository;
   final IContractRepository _contractRepository;
   final IRoomRepository _roomRepository;
-  BillFormBloc(this._billRepository, this._contractRepository, this._roomRepository)
+  BillFormBloc(
+      this._billRepository, this._contractRepository, this._roomRepository)
       : super(const BillFormLoading()) {
+    on<BillFormInitEvent>(_getData);
+    on<BillFormChangeDateEvent>(_changeDate);
+    on<BillFormChangeTextEvent>(_changeText);
   }
 
   int? billId = 0;
@@ -31,19 +35,20 @@ class BillFormBloc extends Bloc<BaseBillFormEvent, BaseBillFormState> {
   DateTime? electricFrom;
   DateTime? electricTo;
 
-  _getData(BaseBillFormEvent event, Emitter<BaseBillFormState> emit) async{
+  _getData(BaseBillFormEvent event, Emitter<BaseBillFormState> emit) async {
     try {
       var contract = await _contractRepository.getById(event.contractId);
-      var room =  await _roomRepository.getById(contract.data!.roomId!);
-      contractId = contractId;
+      var room = await _roomRepository.getById(contract.data!.roomId!);
+      contractId = event.contractId;
       roomName = room.data?.name;
+      roomPrice = room.data?.price;
 
-      if(event.billId == null) {
+      if (event.billId == null) {
         emit(const BillFormDone());
         return;
       }
       var dataState = await _billRepository.getById(billId);
-      if(dataState is DataSuccess && dataState.data != null) {
+      if (dataState is DataSuccess && dataState.data != null) {
         billId = billId;
         roomPrice = dataState.data!.rentPrice;
         waterPrice = dataState.data!.waterPrice;
@@ -60,6 +65,40 @@ class BillFormBloc extends Bloc<BaseBillFormEvent, BaseBillFormState> {
       }
     } on DioError catch (e) {
       emit(BillFormError(e.message));
+    } on Exception catch (ex) {
+      emit(BillFormError(ex.toString()));
     }
+  }
+
+  _changeDate(BillFormChangeDateEvent event, Emitter<BaseBillFormState> emit) {
+    try {
+      electricFrom = event.electricFrom;
+      electricTo = event.electricTo;
+      waterFrom = event.waterFrom;
+      waterTo = event.waterTo;
+      emit(
+          BillFormChangeDateDone(electricFrom, electricTo, waterFrom, waterTo));
+    } on Exception catch (e) {
+      emit(BillFormError(e.toString()));
+    }
+  }
+
+  _changeText(BillFormChangeTextEvent event, Emitter<BaseBillFormState> emit) {
+    try {
+      roomPrice = double.tryParse(event.roomPrice ?? '0');
+      electricPrice = double.tryParse(event.electricPrice ?? '0');
+      electricLast = double.tryParse(event.electricLast ?? '0');
+      electricCurrent = double.tryParse(event.electricCurrent ?? '0');
+      waterPrice = double.tryParse(event.waterPrice ?? '0');
+      waterLast = double.tryParse(event.waterLast ?? '0');
+      waterCurrent = double.tryParse(event.waterCurrent ?? '0');
+
+      var waterUsed = waterCurrent != null && waterLast != null ? waterCurrent! - waterLast! : 0.0;
+      var waterTotal = waterPrice != null ? waterUsed * waterPrice! : 0.0;
+      var electricUsed = electricCurrent != null && electricLast != null ? electricCurrent! - electricLast! : 0.0;
+      var electricTotal = electricPrice != null ? electricUsed * electricPrice! : 0.0;
+      var total = roomPrice ?? 0.0 + waterTotal + electricTotal;
+      emit(BillFormChangeTextDone(total, electricUsed, waterUsed, electricTotal, waterTotal));
+    } on Exception catch (e) {}
   }
 }

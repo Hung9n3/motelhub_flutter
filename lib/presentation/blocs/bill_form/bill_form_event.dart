@@ -22,12 +22,12 @@ class BaseBillFormEvent {
       this.electricPrice,
       this.waterPrice,
       this.electricCurrent,
-      this.electricFrom,
       this.electricLast,
-      this.electricTo,
       this.waterCurrent,
-      this.waterFrom,
       this.waterLast,
+      this.electricFrom,
+      this.electricTo,
+      this.waterFrom,
       this.waterTo});
 }
 
@@ -67,4 +67,33 @@ class BillFormSubmitEvent extends BaseBillFormEvent {
             waterLast: waterLast,
             waterPrice: waterPrice,
             waterTo: waterTo);
+}
+
+class BillFormChangeDateEvent extends BaseBillFormEvent {
+  BillFormChangeDateEvent(DateTime? electricFrom, DateTime? electricTo,
+      DateTime? waterFrom, DateTime? waterTo)
+      : super(
+            electricFrom: electricFrom,
+            electricTo: electricTo,
+            waterFrom: waterFrom,
+            waterTo: waterTo);
+}
+
+class BillFormChangeTextEvent extends BaseBillFormEvent {
+  BillFormChangeTextEvent(
+      String? roomPrice,
+      String? electricPrice,
+      String? electricCurrent,
+      String? electricLast,
+      String? waterPrice,
+      String? waterCurrent,
+      String? waterLast)
+      : super(
+            roomPrice: roomPrice,
+            electricPrice: electricPrice,
+            electricCurrent: electricCurrent,
+            electricLast: electricLast,
+            waterPrice: waterPrice,
+            waterCurrent: waterCurrent,
+            waterLast: waterLast);
 }

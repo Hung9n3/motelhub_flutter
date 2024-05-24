@@ -16,6 +16,7 @@ class ContractRepository implements IContractRepository {
         .toList();
     var data = ContractEntity(
         id: contract?.id,
+        roomId: contract?.roomId,
         ownerId: contract?.ownerId,
         bills: bills,
         startDate: contract?.startDate,

@@ -5,6 +5,7 @@ import 'package:motelhub_flutter/core/token/token_handler.dart';
 import 'package:motelhub_flutter/data/repositories/appointment_repository.dart';
 import 'package:motelhub_flutter/data/repositories/auth_repository.dart';
 import 'package:motelhub_flutter/data/repositories/area_repository.dart';
+import 'package:motelhub_flutter/data/repositories/bill_repository.dart';
 import 'package:motelhub_flutter/data/repositories/contract_repository.dart';
 import 'package:motelhub_flutter/data/repositories/room_repository.dart';
 import 'package:motelhub_flutter/data/repositories/work_order_repository.dart';
@@ -12,6 +13,7 @@ import 'package:motelhub_flutter/domain/entities/area.dart';
 import 'package:motelhub_flutter/domain/repositories/appointment_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/auth_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/area_repository_interface.dart';
+import 'package:motelhub_flutter/domain/repositories/bill_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/contract_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/room_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/work_order_repository_interface.dart';
@@ -25,6 +27,7 @@ import 'package:motelhub_flutter/features/daily_news/presentation/bloc/article/r
 import 'package:motelhub_flutter/presentation/blocs/add_room/add_room_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/appointment_form/appointment_form_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/area_detail/area_detail_bloc.dart';
+import 'package:motelhub_flutter/presentation/blocs/bill_form/bill_form_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/contract_form/contract_form_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/login/login_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/my_appointment/my_appointment_bloc.dart';
@@ -65,6 +68,7 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<IRoomRepository>(() => RoomRepository());
   sl.registerFactory<IAppointmentRepository>(() => AppointmentRepository());
   sl.registerFactory<IContractRepository>(() => ContractRepository());
+  sl.registerFactory<IBillRepository>(() => BillRepository());
   sl.registerFactory<IWorkOrderRepository>(() => WorkOrderRepository());
 
   //UseCases
@@ -92,6 +96,7 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<MyAppointmentBloc>(() => MyAppointmentBloc(sl(),sl()));
   sl.registerFactory<AppointmentFormBloc>(() => AppointmentFormBloc(sl(),sl()));
   sl.registerFactory<WorkOrderFormBloc>(() => WorkOrderFormBloc(sl()));
+  sl.registerFactory<BillFormBloc>(() => BillFormBloc(sl(), sl(), sl()));
   // sl.registerFactory<LocalArticleBloc>(
   //   ()=> LocalArticleBloc(sl(),sl(),sl())
   // );

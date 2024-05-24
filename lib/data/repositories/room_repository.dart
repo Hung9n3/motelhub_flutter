@@ -40,6 +40,7 @@ class RoomRepository extends IRoomRepository {
       data = RoomEntity(
           id: data.id,
           name: data.name,
+          price: data.price,
           photos: data.photos,
           contracts: contracts,
           acreage: data.acreage,

@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:motelhub_flutter/core/enums/option_sets.dart';
-import 'package:motelhub_flutter/domain/entities/appointment.dart';
 import 'package:motelhub_flutter/domain/entities/user.dart';
 import 'package:motelhub_flutter/domain/entities/contract.dart';
 import 'package:motelhub_flutter/domain/entities/work_order.dart';
@@ -141,7 +139,7 @@ class RoomDetailPage extends StatelessWidget {
       return const SizedBox();
     }
     return ItemExpansion(
-        title: 'Contracts',
+        title: 'Work Orders',
         icon: Icons.report_gmailerrorred,
         itemCount: workOrders.length,
         children: [
