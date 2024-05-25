@@ -85,12 +85,18 @@ class WorkOrderForm extends StatelessWidget {
         )),
         BlocBuilder<WorkOrderFormBloc, WorkOrderFormState>(
             builder: (context, state) {
-          return Switch(
-              value: workOrderFormBloc.isCustomerPay,
-              onChanged: (value) {
-                workOrderFormBloc
-                    .add(WorkOrderFormIsCustomerPayChangedEvent(value));
-              });
+          return Row(
+            children: [
+              const Text('Opening'),
+              const SizedBox(width: 10,),
+              Switch(
+                  value: workOrderFormBloc.isCustomerPay,
+                  onChanged: (value) {
+                    workOrderFormBloc
+                        .add(WorkOrderFormIsCustomerPayChangedEvent(value));
+                  }),
+            ],
+          );
         }),
         BlocConsumer<PhotoSectionBloc, PhotoSectionState>(
             listener: (context, state) {

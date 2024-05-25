@@ -5,10 +5,10 @@ import 'package:dio/dio.dart';
 
 class BillRepository extends IBillRepository {
   @override
-  Future<DataState<BillEntity>> getById(int? workOrderId) async {
+  Future<DataState<BillEntity>> getById(int? id) async {
     // TODO: implement getById
     try {
-      var data = BillEntity.getFakeData().where((element) => element.id == workOrderId).firstOrNull;
+      var data = BillEntity.getFakeData().where((element) => element.id == id).firstOrNull;
       if(data != null) {
         return DataSuccess(data);
       }
@@ -19,9 +19,9 @@ class BillRepository extends IBillRepository {
   }
 
   @override
-  Future<DataState<BillEntity>> save(BillEntity workOrderEntity) {
+  Future<DataState<BillEntity>> save(BillEntity bill) async {
     // TODO: implement save
-    throw UnimplementedError();
+    return DataSuccess(bill);
   }
 
 }

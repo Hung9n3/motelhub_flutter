@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 class BaseBillFormState {
-  final String? errorMessage;
+  final String? message;
   final DateTime? electricFrom;
   final DateTime? electricTo;
   final DateTime? waterFrom;
@@ -13,7 +13,7 @@ class BaseBillFormState {
   final double? waterTotal;
   final double? oweing;
   const BaseBillFormState(
-      {this.errorMessage,
+      {this.message,
       this.electricFrom,
       this.electricTo,
       this.waterFrom,
@@ -35,7 +35,7 @@ class BillFormLoading extends BaseBillFormState {
 }
 
 class BillFormError extends BaseBillFormState {
-  const BillFormError(String? errorMessage) : super(errorMessage: errorMessage);
+  const BillFormError(String? errorMessage) : super(message: errorMessage);
 }
 
 class BillFormChangeDateDone extends BaseBillFormState {
@@ -61,4 +61,8 @@ class BillFormChangeTextDone extends BaseBillFormState {
             waterUsed: waterUsed,
             electricTotal: electricTotal,
             waterTotal: waterTotal);
+}
+
+class BillFormSaveDone extends BaseBillFormState {
+  const BillFormSaveDone(String? message) : super(message: message);
 }

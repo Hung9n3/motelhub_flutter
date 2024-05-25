@@ -1,3 +1,5 @@
+import 'package:motelhub_flutter/domain/entities/photo.dart';
+
 class BaseBillFormEvent {
   final int? billId;
   final int? contractId;
@@ -13,6 +15,7 @@ class BaseBillFormEvent {
   final DateTime? electricFrom;
   final DateTime? electricTo;
   final String? oweing;
+  final List<PhotoEntity>? photos;
 
   const BaseBillFormEvent(
       {this.billId,
@@ -28,7 +31,8 @@ class BaseBillFormEvent {
       this.electricFrom,
       this.electricTo,
       this.waterFrom,
-      this.waterTo});
+      this.waterTo,
+      this.photos});
 }
 
 class BillFormInitEvent extends BaseBillFormEvent {
@@ -40,33 +44,13 @@ class BillFormSubmitEvent extends BaseBillFormEvent {
   BillFormSubmitEvent(
       int? billId,
       int? contractId,
-      String? oweing,
       String? roomPrice,
-      String? electricPrice,
-      String? electricLast,
-      String? electricCurrent,
-      String? waterPrice,
-      String? waterLast,
-      String? waterCurrent,
-      DateTime? waterFrom,
-      DateTime? waterTo,
-      DateTime? electricFrom,
-      DateTime? electricTo)
+      List<PhotoEntity>? photos)
       : super(
             billId: billId,
             contractId: contractId,
-            oweing: oweing,
             roomPrice: roomPrice,
-            electricCurrent: electricCurrent,
-            electricFrom: electricFrom,
-            electricTo: electricTo,
-            electricLast: electricLast,
-            electricPrice: electricPrice,
-            waterCurrent: waterCurrent,
-            waterFrom: waterFrom,
-            waterLast: waterLast,
-            waterPrice: waterPrice,
-            waterTo: waterTo);
+            photos: photos);
 }
 
 class BillFormChangeDateEvent extends BaseBillFormEvent {

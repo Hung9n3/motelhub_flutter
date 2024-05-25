@@ -1,23 +1,28 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:motelhub_flutter/injection_container.dart';
 import 'package:motelhub_flutter/presentation/blocs/bill_form/bill_form_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/bill_form/bill_form_event.dart';
 import 'package:motelhub_flutter/presentation/blocs/bill_form/bill_form_state.dart';
 import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_bloc.dart';
+import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_event.dart';
 import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_state.dart';
 import 'package:motelhub_flutter/presentation/components/commons/alert_dialog.dart';
 import 'package:motelhub_flutter/presentation/components/commons/common_date_picker.dart';
 import 'package:motelhub_flutter/presentation/components/commons/form_container.dart';
 import 'package:motelhub_flutter/presentation/components/commons/horizontal_divider_with_text.dart';
+import 'package:motelhub_flutter/presentation/components/commons/photo_section.dart';
 import 'package:motelhub_flutter/presentation/components/commons/section_with_bottom_border.dart';
 
 class BillForm extends StatelessWidget {
   final int? contractId;
   final int? billId;
-  const BillForm({super.key, required this.contractId, this.billId});
+  bool isFirstBuild = true;
+
+  BillForm({super.key, required this.contractId, this.billId});
 
   @override
   Widget build(BuildContext context) {
@@ -31,21 +36,29 @@ class BillForm extends StatelessWidget {
         child: BlocConsumer<BillFormBloc, BaseBillFormState>(
             builder: (context, state) {
           if (state is BillFormLoading) {
-            return const CupertinoActivityIndicator();
+            return const Center(child: CupertinoActivityIndicator());
+          }
+          if (state is BillFormDone && isFirstBuild) {
+            var photoSectionBloc = context.read<PhotoSectionBloc>();
+            var billBloc = context.read<BillFormBloc>();
+            photoSectionBloc.add(UpdatePhotosEvent(billBloc.photos));
+            isFirstBuild = false;
           }
           return _buildBody(context);
         }, listener: (context, state) {
-          if (state is GetPhotoFailed) {
-            showAlertDialog(context, "Add photo fail");
+          if(state is BillFormSaveDone) {
+            showAlertDialog(context, state.message!);
           }
           if (state is BillFormError) {
-            showAlertDialog(context, state.errorMessage!);
+            showAlertDialog(context, state.message!);
           }
         }));
   }
 
   Widget _buildBody(BuildContext context) {
     var billBloc = context.read<BillFormBloc>();
+    var photoBloc = context.read<PhotoSectionBloc>();
+
     var roomPriceController =
         TextEditingController(text: '${billBloc.roomPrice}');
     var electricPriceController =
@@ -64,11 +77,15 @@ class BillForm extends StatelessWidget {
         TextEditingController(text: '${billBloc.electricCurrent}');
     var electricLastController =
         TextEditingController(text: '${billBloc.electricLast}');
+    var electricTotalPrice =
+        (billBloc.electricCurrent! - billBloc.electricLast!) *
+            billBloc.electricPrice!;
+    var waterTotalPrice =
+        (billBloc.waterCurrent! - billBloc.waterLast!) * billBloc.waterPrice!;
     var electricValueController = TextEditingController(
         text: '${billBloc.electricCurrent! - billBloc.electricLast!}');
-    var electricTotalController = TextEditingController(
-        text:
-            '${(billBloc.electricCurrent! - billBloc.electricLast!) * billBloc.electricPrice!}');
+    var electricTotalController =
+        TextEditingController(text: '${electricTotalPrice}');
     var waterFromController = TextEditingController(
         text: billBloc.waterFrom == null
             ? ''
@@ -83,19 +100,29 @@ class BillForm extends StatelessWidget {
         TextEditingController(text: '${billBloc.waterLast}');
     var waterValueController = TextEditingController(
         text: '${billBloc.waterCurrent! - billBloc.waterLast!}');
-    var waterTotalController = TextEditingController(
-        text:
-            '${(billBloc.waterCurrent! - billBloc.waterLast!) * billBloc.waterPrice!}');
+    var waterTotalController =
+        TextEditingController(text: '${waterTotalPrice}');
+    var totalController = TextEditingController(
+        text: '${electricTotalPrice + waterTotalPrice + billBloc.roomPrice!}');
     return Scaffold(
       appBar: AppBar(
         actions: [
           IconButton(
               onPressed: () {
-                //billBloc.add()
+                var photos = context.read<PhotoSectionBloc>().state.photos;
+                billBloc.add(BillFormSubmitEvent(billId, contractId, roomPriceController.text, photos));
               },
               icon: const Icon(Icons.check))
         ],
         title: const Text('Bill'),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          context
+              .read<PhotoSectionBloc>()
+              .add(const AddPhotoEvent(ImageSource.camera));
+        },
+        child: const Icon(Icons.add_a_photo),
       ),
       body: FormContainer(
         child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
@@ -118,6 +145,17 @@ class BillForm extends StatelessWidget {
           ),
           _waterSection(context, billBloc, waterFromController,
               waterToController, waterValueController, waterTotalController),
+          HorizontalDivider(
+            text: 'Total',
+          ),
+          SectionWithBottomBorder(
+              child: TextFormField(
+                  controller: totalController,
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                    label: Text('Total fee'),
+                  ))),
+          const PhotoSection(),
         ]),
       ),
     );
@@ -153,7 +191,7 @@ class BillForm extends StatelessWidget {
                     billBloc.electricTo, billBloc.waterFrom, billBloc.waterTo));
               },
               decoration: const InputDecoration(
-                  label: Text("Electric from date"),
+                  label: Text("From date"),
                   suffixIcon: Icon(Icons.calendar_month)),
             )),
           ),
@@ -206,7 +244,7 @@ class BillForm extends StatelessWidget {
                           billBloc.waterLast?.toString()));
                     },
                     decoration: const InputDecoration(
-                      label: Text("Electric previous value"),
+                      label: Text("Previous value"),
                     ))),
           ),
           const SizedBox(
@@ -230,7 +268,7 @@ class BillForm extends StatelessWidget {
                           billBloc.waterLast?.toString()));
                     },
                     decoration: const InputDecoration(
-                      label: Text("Electric current value"),
+                      label: Text("Current value"),
                     ))),
           ),
         ],
@@ -243,7 +281,7 @@ class BillForm extends StatelessWidget {
                     controller: electricValueController,
                     readOnly: true,
                     decoration: const InputDecoration(
-                      label: Text("Electric used"),
+                      label: Text("Used"),
                     ))),
           ),
           const SizedBox(
@@ -271,7 +309,7 @@ class BillForm extends StatelessWidget {
                           billBloc.waterLast?.toString()));
                     },
                     decoration: const InputDecoration(
-                      label: Text("Electric price"),
+                      label: Text("Price"),
                     ))),
           ),
           const SizedBox(
@@ -287,7 +325,7 @@ class BillForm extends StatelessWidget {
                     controller: electricTotalController,
                     readOnly: true,
                     decoration: const InputDecoration(
-                      label: Text("Electric total price"),
+                      label: Text("Total price"),
                     ))),
           ),
         ],
@@ -321,11 +359,14 @@ class BillForm extends StatelessWidget {
                     billBloc.waterFrom ??
                         DateTime(
                             DateTime.now().year, DateTime.now().month - 1));
-                billBloc.add(BillFormChangeDateEvent(selectedDate,
-                    billBloc.waterTo, billBloc.waterFrom, billBloc.waterTo));
+                            if(selectedDate == null) {
+                              return;
+                            }
+                billBloc.add(BillFormChangeDateEvent(billBloc.electricFrom,
+                    billBloc.electricTo, selectedDate, billBloc.waterTo));
               },
               decoration: const InputDecoration(
-                  label: Text("Water from date"),
+                  label: Text("From date"),
                   suffixIcon: Icon(Icons.calendar_month)),
             )),
           ),
@@ -348,8 +389,11 @@ class BillForm extends StatelessWidget {
                       ? DateTime.now()
                       : billBloc.waterFrom!.add(const Duration(days: 1)),
                 );
-                billBloc.add(BillFormChangeDateEvent(billBloc.waterFrom,
-                    selectedDate, billBloc.waterFrom, billBloc.waterTo));
+                if(selectedDate == null) {
+                              return;
+                            }
+                billBloc.add(BillFormChangeDateEvent(billBloc.electricFrom,
+                    billBloc.electricTo, billBloc.waterFrom, selectedDate));
               },
               decoration: const InputDecoration(
                   label: Text("To date"),
@@ -379,7 +423,7 @@ class BillForm extends StatelessWidget {
                           value));
                     },
                     decoration: const InputDecoration(
-                      label: Text("Water previous value"),
+                      label: Text("Previous value"),
                     ))),
           ),
           const SizedBox(
@@ -404,7 +448,7 @@ class BillForm extends StatelessWidget {
                           billBloc.waterLast?.toString()));
                     },
                     decoration: const InputDecoration(
-                      label: Text("Water current value"),
+                      label: Text("Current value"),
                     ))),
           ),
         ],
@@ -417,7 +461,7 @@ class BillForm extends StatelessWidget {
                     controller: waterValueController,
                     readOnly: true,
                     decoration: const InputDecoration(
-                      label: Text("Water used"),
+                      label: Text("Used"),
                     ))),
           ),
           const SizedBox(
@@ -446,7 +490,7 @@ class BillForm extends StatelessWidget {
                           billBloc.waterLast?.toString()));
                     },
                     decoration: const InputDecoration(
-                      label: Text("Water price"),
+                      label: Text("Price"),
                     ))),
           ),
           const SizedBox(
@@ -462,7 +506,7 @@ class BillForm extends StatelessWidget {
                     controller: waterTotalController,
                     readOnly: true,
                     decoration: const InputDecoration(
-                      label: Text("Water total price"),
+                      label: Text("Total price"),
                     ))),
           ),
         ],

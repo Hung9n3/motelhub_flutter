@@ -1,5 +1,8 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motelhub_flutter/core/resources/data_state.dart';
+import 'package:motelhub_flutter/domain/entities/photo.dart';
+import 'package:motelhub_flutter/domain/entities/room_bill.dart';
 import 'package:motelhub_flutter/domain/repositories/bill_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/contract_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/room_repository_interface.dart';
@@ -17,12 +20,14 @@ class BillFormBloc extends Bloc<BaseBillFormEvent, BaseBillFormState> {
     on<BillFormInitEvent>(_getData);
     on<BillFormChangeDateEvent>(_changeDate);
     on<BillFormChangeTextEvent>(_changeText);
+    on<BillFormSubmitEvent>(_submit);
   }
 
   int? billId = 0;
   int? contractId = 0;
   String? roomName = '';
   double? oweing = 0;
+  double? otherPrice = 0;
   double? roomPrice = 0;
   double? electricPrice = 0;
   double? electricLast = 0;
@@ -34,6 +39,7 @@ class BillFormBloc extends Bloc<BaseBillFormEvent, BaseBillFormState> {
   DateTime? waterTo;
   DateTime? electricFrom;
   DateTime? electricTo;
+  List<PhotoEntity>? photos = [];
 
   _getData(BaseBillFormEvent event, Emitter<BaseBillFormState> emit) async {
     try {
@@ -47,21 +53,30 @@ class BillFormBloc extends Bloc<BaseBillFormEvent, BaseBillFormState> {
         emit(const BillFormDone());
         return;
       }
+      billId = event.billId;
       var dataState = await _billRepository.getById(billId);
-      if (dataState is DataSuccess && dataState.data != null) {
+      if (dataState is DataSuccess) {
+        if (dataState.data == null) {
+          emit(const BillFormError('Not found bill'));
+        }
         billId = billId;
-        roomPrice = dataState.data!.rentPrice;
-        waterPrice = dataState.data!.waterPrice;
-        electricPrice = dataState.data!.electricPrice;
-        oweing = dataState.data!.oweing;
+        roomPrice = dataState.data!.rentPrice ?? 0;
+        waterPrice = dataState.data!.waterPrice ?? 0;
+        electricPrice = dataState.data!.electricPrice ?? 0;
+        oweing = dataState.data!.oweing ?? 0;
         waterFrom = dataState.data!.waterFrom;
         waterTo = dataState.data!.waterTo;
         electricFrom = dataState.data!.electricFrom;
         electricTo = dataState.data!.electricTo;
-        waterCurrent = dataState.data!.waterCurrent;
-        waterLast = dataState.data!.waterLast;
-        electricLast = dataState.data!.electricLast;
-        electricCurrent = dataState.data!.electricCurrent;
+        waterCurrent = dataState.data!.waterCurrent ?? 0;
+        waterLast = dataState.data!.waterLast ?? 0;
+        electricLast = dataState.data!.electricLast ?? 0;
+        electricCurrent = dataState.data!.electricCurrent ?? 0;
+        photos = dataState.data!.photos ??
+            [];
+        emit(const BillFormDone());
+      } else {
+        emit(BillFormError(dataState.error!.message));
       }
     } on DioError catch (e) {
       emit(BillFormError(e.message));
@@ -93,12 +108,43 @@ class BillFormBloc extends Bloc<BaseBillFormEvent, BaseBillFormState> {
       waterLast = double.tryParse(event.waterLast ?? '0');
       waterCurrent = double.tryParse(event.waterCurrent ?? '0');
 
-      var waterUsed = waterCurrent != null && waterLast != null ? waterCurrent! - waterLast! : 0.0;
+      var waterUsed = waterCurrent != null && waterLast != null
+          ? waterCurrent! - waterLast!
+          : 0.0;
       var waterTotal = waterPrice != null ? waterUsed * waterPrice! : 0.0;
-      var electricUsed = electricCurrent != null && electricLast != null ? electricCurrent! - electricLast! : 0.0;
-      var electricTotal = electricPrice != null ? electricUsed * electricPrice! : 0.0;
+      var electricUsed = electricCurrent != null && electricLast != null
+          ? electricCurrent! - electricLast!
+          : 0.0;
+      var electricTotal =
+          electricPrice != null ? electricUsed * electricPrice! : 0.0;
       var total = roomPrice ?? 0.0 + waterTotal + electricTotal;
-      emit(BillFormChangeTextDone(total, electricUsed, waterUsed, electricTotal, waterTotal));
+      emit(BillFormChangeTextDone(
+          total, electricUsed, waterUsed, electricTotal, waterTotal));
     } on Exception catch (e) {}
+  }
+
+  _submit(BillFormSubmitEvent event, Emitter<BaseBillFormState> emit) async {
+    try {
+      roomPrice = double.tryParse(event.roomPrice ?? '0');
+      photos = event.photos ?? [];
+      var bill = BillEntity(
+          id: billId,
+          contractId: contractId,
+          rentPrice: roomPrice,
+          electricPrice: electricPrice,
+          waterPrice: waterPrice,
+          electricCurrent: electricCurrent,
+          electricLast: electricLast,
+          waterCurrent: waterCurrent,
+          waterLast: waterLast,
+          electricFrom: electricFrom,
+          electricTo: electricTo,
+          waterFrom: waterFrom,
+          waterTo: waterTo,
+          photos: photos);
+      await _billRepository.save(bill);
+      print(photos);
+      emit(const BillFormSaveDone("Save done"));
+    } catch (e) {}
   }
 }

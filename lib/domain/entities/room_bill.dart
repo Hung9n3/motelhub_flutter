@@ -1,13 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:intl/intl.dart';
+import 'package:motelhub_flutter/domain/entities/photo.dart';
 import 'package:motelhub_flutter/domain/entities/room.dart';
 
 class BillEntity extends Equatable {
   final int? id;
-  final int? hostId;
   final int? contractId;
-  final int? waterId;
-  final int? electricId;
   final double? total;
   final String? title;
   final double? oweing;
@@ -25,13 +23,11 @@ class BillEntity extends Equatable {
   final DateTime? electricFrom;
   final DateTime? electricTo;
   final RoomEntity? room;
+  final List<PhotoEntity>? photos;
 
   const BillEntity(
       {this.id,
-      this.hostId,
       this.contractId,
-      this.waterId,
-      this.electricId,
       this.total,
       this.title,
       this.oweing,
@@ -48,17 +44,15 @@ class BillEntity extends Equatable {
       this.waterFrom,
       this.waterLast,
       this.waterTo,
-      this.room})
+      this.room,
+      this.photos})
       : super();
 
   @override
   // TODO: implement props
   List<Object?> get props => [
         id,
-        hostId,
         contractId,
-        waterId,
-        electricId,
         total,
         title,
         oweing,
@@ -85,10 +79,7 @@ class BillEntity extends Equatable {
       electric}) {
     return BillEntity(
         id: id ?? this.id,
-        hostId: hostId ?? this.hostId,
         contractId: contractId ?? this.contractId,
-        waterId: water ?? this.waterId,
-        electricId: electricId ?? this.electricId,
         total: total ?? this.total,
         title: title ?? this.title,
         oweing: owneing ?? this.oweing,
@@ -103,14 +94,17 @@ class BillEntity extends Equatable {
     for (int i = 1; i <= 5; i++) {
       result.add(BillEntity(
           id: i,
-          hostId: 1,
           title:
               '${DateFormat('MMM y').format(DateTime.now().subtract(const Duration(days: 30)))} Bill',
-          oweing: 0,
+          oweing: 240000,
           contractId: i,
           rentPrice: 1000,
-          waterId: i,
-          electricId: i,
+          waterCurrent: 2300,
+          waterLast: 1000,
+          electricCurrent: 2300,
+          electricLast: 2100,
+          waterPrice: 1000,
+          electricPrice: 4000,
           startDate: DateTime.now().subtract(const Duration(days: 31)),
           endDate: DateTime.now()));
     }
