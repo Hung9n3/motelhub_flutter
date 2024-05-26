@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:motelhub_flutter/features/daily_news/domain/token/token_handler_interface.dart';
+import 'package:motelhub_flutter/domain/token/token_handler_interface.dart';
 
 class TokenHandler extends ITokenHandler{
 

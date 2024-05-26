@@ -3,7 +3,7 @@ import 'package:motelhub_flutter/core/resources/data_state.dart';
 import 'package:motelhub_flutter/domain/entities/area.dart';
 import 'package:motelhub_flutter/domain/entities/room.dart';
 import 'package:motelhub_flutter/domain/repositories/area_repository_interface.dart';
-import 'package:motelhub_flutter/features/daily_news/domain/token/token_handler_interface.dart';
+import 'package:motelhub_flutter/domain/token/token_handler_interface.dart';
 import 'package:motelhub_flutter/presentation/blocs/add_room/add_room_event.dart';
 import 'package:motelhub_flutter/presentation/blocs/add_room/add_room_state.dart';
 
@@ -24,8 +24,8 @@ class AddRoomBloc extends Bloc<AddRoomEvent, AddRoomState> {
   double? acreage;
 
   _loadingForm(LoadingFormEvent event, Emitter<AddRoomState> emit) async {
-      var username = await _tokenHandler.getByKey('username');
-      var areaDataState = await _areaRepository.getByUser(username);
+      var userId = int.tryParse(await _tokenHandler.getByKey('userId'));
+      var areaDataState = await _areaRepository.getByUser(userId);
       var areaList = List<AreaEntity>.empty();
       if (areaDataState is DataSuccess) {
         areaList = areaDataState.data!;

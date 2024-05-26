@@ -35,7 +35,6 @@ class WorkOrderFormBloc extends Bloc<WorkOrderFormEvent, WorkOrderFormState> {
       if (dataState is DataSuccess && dataState.data != null) {
         workOrderId = dataState.data!.roomId ?? 0;
         roomId = dataState.data!.roomId ?? 0;
-        contractId = dataState.data!.contractId ?? 0;
         price = dataState.data!.price ?? 0;
         name = dataState.data!.name ?? '';
         roomName = dataState.data!.roomName ?? '';
@@ -58,7 +57,6 @@ class WorkOrderFormBloc extends Bloc<WorkOrderFormEvent, WorkOrderFormState> {
       var workOrderEntity = WorkOrderEntity(
           id: workOrderId,
           roomId: roomId,
-          contractId: contractId,
           name: name,
           price: price,
           isCustomerPay: isCustomerPay,

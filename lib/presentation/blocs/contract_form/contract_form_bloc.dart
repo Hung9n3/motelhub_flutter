@@ -3,7 +3,7 @@ import 'package:motelhub_flutter/core/resources/data_state.dart';
 import 'package:motelhub_flutter/domain/entities/room_bill.dart';
 import 'package:motelhub_flutter/domain/entities/user.dart';
 import 'package:motelhub_flutter/domain/repositories/contract_repository_interface.dart';
-import 'package:motelhub_flutter/features/daily_news/domain/token/token_handler_interface.dart';
+import 'package:motelhub_flutter/domain/token/token_handler_interface.dart';
 import 'package:motelhub_flutter/presentation/blocs/contract_form/contract_form_event.dart';
 import 'package:motelhub_flutter/presentation/blocs/contract_form/contract_form_state.dart';
 

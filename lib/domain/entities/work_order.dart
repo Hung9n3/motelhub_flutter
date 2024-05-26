@@ -6,9 +6,8 @@ import 'package:motelhub_flutter/domain/entities/user.dart';
 class WorkOrderEntity extends Equatable {
   final int? id;
   final int? customerId;
-  final String? customerName;
   final int? roomId;
-  final int? contractId;
+  final String? customerName;
   final String? name;
   final String? roomName;
   final bool? isCustomerPay;
@@ -19,7 +18,6 @@ class WorkOrderEntity extends Equatable {
 
   WorkOrderEntity(
       {this.id,
-      this.contractId,
       this.roomId,
       this.name,
       this.roomName,
@@ -33,7 +31,6 @@ class WorkOrderEntity extends Equatable {
 
   @override
   List<Object?> get props => [id,
-      contractId,
       roomId,
       name,
       roomName,
@@ -50,7 +47,6 @@ class WorkOrderEntity extends Equatable {
     for(int i = 1; i < 10; i++) {
       var workOrder = WorkOrderEntity(
         id: i, 
-        contractId: i,
         roomId: i,
         name: 'Work Order $i',
         roomName: RoomEntity.getFakeData().where((room) => room.id == i).firstOrNull?.name,

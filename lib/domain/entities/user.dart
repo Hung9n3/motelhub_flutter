@@ -23,6 +23,26 @@ class UserEntity extends Equatable {
   List<Object?> get props =>
       [id, username, password, name, phoneNumber, roomId, contracts];
 
+  factory UserEntity.fromJson(Map < String, dynamic > map) {
+    return UserEntity(
+      id: map['id'] ?? "",
+      username: map['username'] ?? "",
+      password: map['password'] ?? "",
+      name: map['name'] ?? "",
+      phoneNumber: map['phoneNumber'] ?? "",
+      roomId: map['roomId'] ?? "",
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'id' : id ?? '0',
+    'username': username ?? '',
+    'password': password ?? '',
+    'name': name ?? '',
+    'phoneNumber': phoneNumber ?? '',
+    'roomId': roomId ?? '0'
+  };
+
   static List<UserEntity> getFakeData() {
     List<UserEntity> result = [];
     for (int i = 1; i <= 20; i++) {

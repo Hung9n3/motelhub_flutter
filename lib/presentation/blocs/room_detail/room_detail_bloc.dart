@@ -7,7 +7,7 @@ import 'package:motelhub_flutter/domain/entities/user.dart';
 import 'package:motelhub_flutter/domain/entities/contract.dart';
 import 'package:motelhub_flutter/domain/entities/work_order.dart';
 import 'package:motelhub_flutter/domain/repositories/room_repository_interface.dart';
-import 'package:motelhub_flutter/features/daily_news/domain/token/token_handler_interface.dart';
+import 'package:motelhub_flutter/domain/token/token_handler_interface.dart';
 import 'package:motelhub_flutter/presentation/blocs/base/base_state.dart';
 import 'package:motelhub_flutter/presentation/blocs/room_detail/room_detail_event.dart';
 import 'package:motelhub_flutter/presentation/blocs/room_detail/room_detail_state.dart';

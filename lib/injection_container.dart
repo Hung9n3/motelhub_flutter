@@ -2,6 +2,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
 import 'package:motelhub_flutter/core/token/token_handler.dart';
+import 'package:motelhub_flutter/data/api_service/area/area_api_service.dart';
+import 'package:motelhub_flutter/data/api_service/auth/auth_api_service.dart';
+import 'package:motelhub_flutter/data/context/api_service_context.dart';
 import 'package:motelhub_flutter/data/repositories/appointment_repository.dart';
 import 'package:motelhub_flutter/data/repositories/auth_repository.dart';
 import 'package:motelhub_flutter/data/repositories/area_repository.dart';
@@ -21,7 +24,7 @@ import 'package:motelhub_flutter/domain/usecases/area_detail/get_area_detail_use
 import 'package:motelhub_flutter/features/daily_news/data/data_sources/remote/news_api_service.dart';
 import 'package:motelhub_flutter/features/daily_news/data/repositories/article_repository.dart';
 import 'package:motelhub_flutter/features/daily_news/domain/repositories/article_repository_interface';
-import 'package:motelhub_flutter/features/daily_news/domain/token/token_handler_interface.dart';
+import 'package:motelhub_flutter/domain/token/token_handler_interface.dart';
 import 'package:motelhub_flutter/features/daily_news/domain/usecases/get_article.dart';
 import 'package:motelhub_flutter/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/add_room/add_room_bloc.dart';
@@ -52,8 +55,13 @@ Future<void> initializeDependencies() async {
   // Dio
   sl.registerSingleton<Dio>(Dio());
 
-  // Dependencies
+  // Api Service
   sl.registerSingleton<NewsApiService>(NewsApiService(sl()));
+  sl.registerSingleton<AreaApiService>(AreaApiService(sl()));
+  sl.registerSingleton<AuthApiService>(AuthApiService(sl()));
+
+  //Api Service Context
+    sl.registerSingleton<ApiServiceContext>(ApiServiceContext(sl(), sl()));
 
   //token
   sl.registerFactory<FlutterSecureStorage>(() => const FlutterSecureStorage());
@@ -63,8 +71,8 @@ Future<void> initializeDependencies() async {
   //repository
   sl.registerSingleton<IArticleRepository>(ArticleRepositoryImpl(sl(), sl()));
 
-  sl.registerFactory<IAuthRepository>(() => AuthRepository());
-  sl.registerFactory<IAreaRepository>(() => AreaRepository());
+  sl.registerFactory<IAuthRepository>(() => AuthRepository(sl()));
+  sl.registerFactory<IAreaRepository>(() => AreaRepository(sl()));
   sl.registerFactory<IRoomRepository>(() => RoomRepository());
   sl.registerFactory<IAppointmentRepository>(() => AppointmentRepository());
   sl.registerFactory<IContractRepository>(() => ContractRepository());

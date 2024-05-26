@@ -4,14 +4,24 @@ import 'package:motelhub_flutter/domain/entities/room.dart';
 // ignore: must_be_immutable
 class AreaEntity extends Equatable {
   final int? id;
+  final int? hostId;
   final String? name;
   final String? address;
   final String? owner;
   List<RoomEntity> rooms;
-  AreaEntity({this.id, this.address, this.name, this.owner, this.rooms = const []});
+  AreaEntity({this.id, this.hostId, this.address, this.name, this.owner, this.rooms = const []});
 
   @override
   List<Object?> get props => [id, name, address, owner, rooms];
+
+  factory AreaEntity.fromJson(Map < String, dynamic > map) {
+    return AreaEntity(
+      id: map['id'] ?? 0,
+      name: map['name'] ?? "",
+      address: map['address'] ?? "",
+      owner: map['owner'] ?? "",
+    );
+  }
 
   static List<AreaEntity> getFakeData() {
     List<AreaEntity> boardingHouseAreas = [
