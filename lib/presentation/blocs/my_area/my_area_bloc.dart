@@ -16,10 +16,11 @@ class MyAreaBloc extends Bloc<MyAreaEvent, MyAreaState>{
 
   getAreaList(GetMyAreaEvent event, Emitter<MyAreaState> emit) async {
     final userId = int.tryParse(await _tokenHandler.getByKey('userId'));
-    final dataState = await _areaRepository.getByUser(userId);
+    final dataState = await _areaRepository.getByHost(userId);
+    final customerDataState = await _areaRepository.getByCustomer(userId);
 
     if(dataState is DataSuccess){
-      emit(MyAreaDoneState(dataState.data!));
+      emit(MyAreaDoneState(dataState.data!, customerDataState.data!));
     }
     if(dataState is DataFailed){
       emit(MyAreaError(dataState.error!));

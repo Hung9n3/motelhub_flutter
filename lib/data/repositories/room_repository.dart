@@ -1,5 +1,6 @@
 import 'package:motelhub_flutter/core/resources/data_state.dart';
 import 'package:motelhub_flutter/core/resources/search/search_model.dart';
+import 'package:motelhub_flutter/data/api_service/api.dart';
 import 'package:motelhub_flutter/domain/entities/area.dart';
 import 'package:motelhub_flutter/domain/entities/room.dart';
 import 'package:dio/dio.dart';
@@ -11,10 +12,9 @@ class RoomRepository extends IRoomRepository {
   @override
   Future<DataState<List<RoomEntity>>> getByArea(int areaId) async {
     try {
-      // TODO: implement getByArea api
-      var list = RoomEntity.getFakeData();
-      var data = list.where((element) => element.areaId == areaId).toList();
-      return DataSuccess(data);
+      var rooms = await Api.getRooms();
+      var result = rooms.where((element) => element.areaId == areaId).toList();
+      return DataSuccess(result);
     } on DioError catch (err) {
       return DataFailed(err);
     }
@@ -64,5 +64,11 @@ class RoomRepository extends IRoomRepository {
     } on DioError catch (err) {
       return DataFailed(err);
     }
+  }
+  
+  @override
+  Future<List<RoomEntity>> getAll() async {
+    var result = await Api.getRooms();
+    return result;
   }
 }

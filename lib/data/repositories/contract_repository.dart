@@ -1,6 +1,6 @@
 import 'package:motelhub_flutter/core/resources/data_state.dart';
 import 'package:motelhub_flutter/domain/entities/contract.dart';
-import 'package:motelhub_flutter/domain/entities/room_bill.dart';
+import 'package:motelhub_flutter/domain/entities/bill.dart';
 import 'package:motelhub_flutter/domain/repositories/contract_repository_interface.dart';
 
 class ContractRepository implements IContractRepository {
@@ -16,7 +16,7 @@ class ContractRepository implements IContractRepository {
     var data = ContractEntity(
         id: contract?.id,
         roomId: contract?.roomId,
-        ownerId: contract?.ownerId,
+        customerId: contract?.customerId,
         bills: bills,
         startDate: contract?.startDate,
         endDate: contract?.endDate,

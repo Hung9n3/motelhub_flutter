@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:motelhub_flutter/domain/entities/room_bill.dart';
+import 'package:motelhub_flutter/domain/entities/bill.dart';
 import 'package:motelhub_flutter/domain/entities/user.dart';
 import 'package:motelhub_flutter/injection_container.dart';
 import 'package:motelhub_flutter/presentation/blocs/contract_form/contract_form_bloc.dart';

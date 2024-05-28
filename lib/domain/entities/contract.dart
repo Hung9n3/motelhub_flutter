@@ -1,13 +1,15 @@
 import 'package:equatable/equatable.dart';
 import 'package:motelhub_flutter/domain/entities/room.dart';
-import 'package:motelhub_flutter/domain/entities/room_bill.dart';
+import 'package:motelhub_flutter/domain/entities/bill.dart';
 import 'package:motelhub_flutter/domain/entities/user.dart';
 
 class ContractEntity extends Equatable {
   final int? id;
-  final int? ownerId;
+  final int? customerId;
+  final String? name;
   final int? roomId;
-  final hostId;
+  final int? hostId;
+  final double? roomPrice;
   final DateTime? startDate;
   final DateTime? endDate;
   final DateTime? cancelDate;
@@ -18,8 +20,10 @@ class ContractEntity extends Equatable {
   const ContractEntity(
       {this.id,
       this.hostId,
-      this.ownerId,
+      this.customerId,
       this.roomId,
+      this.name,
+      this.roomPrice,
       this.bills = const [],
       this.owner,
       this.roomEntity,
@@ -30,7 +34,7 @@ class ContractEntity extends Equatable {
   // TODO: implement props
   List<Object?> get props => [
         id,
-        ownerId,
+        customerId,
         roomId,
         bills,
         owner,
@@ -40,13 +44,25 @@ class ContractEntity extends Equatable {
         cancelDate
       ];
 
+  factory ContractEntity.fromJson(Map<String, dynamic> map) {
+    return ContractEntity(
+      id: map['id'] ?? 0,
+      roomId: map['roomId'] ?? 0,
+      customerId: map['customerId'] ?? 0,
+      roomPrice: map['roomPrice'] ?? 0.0,
+      name: map['name'] ?? '',
+      startDate: map['startDate'],
+      endDate: map['endDate'],
+      cancelDate: map['cancelDate'],
+    );
+  }
   static List<ContractEntity> getFakeData() {
     var result = <ContractEntity>[];
     for (int i = 1; i <= 5; i++) {
       result.add(ContractEntity(
           id: i,
           roomId: i,
-          ownerId: i,
+          customerId: i,
           owner: UserEntity.getFakeData()
               .where((element) => element.id == i)
               .firstOrNull,

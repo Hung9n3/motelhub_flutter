@@ -4,9 +4,10 @@ import 'package:dio/dio.dart';
 
 abstract class MyAreaState extends Equatable{
   final List<AreaEntity>? data;
+  final List<AreaEntity>? customerData;
   final DioError? error;
 
-  const MyAreaState({this.data, this.error});
+  const MyAreaState({this.data, this.error, this.customerData});
 
   @override
   List<Object> get props => [data!, error!];
@@ -17,7 +18,7 @@ class MyAreaLoadingState extends MyAreaState{
 }
 
 class MyAreaDoneState extends MyAreaState{
-  const MyAreaDoneState(List<AreaEntity> data) : super(data: data);
+  const MyAreaDoneState(List<AreaEntity> data, List<AreaEntity> customerData) : super(data: data, customerData: customerData);
 }
 
 class MyAreaError extends MyAreaState {

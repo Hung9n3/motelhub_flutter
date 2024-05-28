@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motelhub_flutter/core/resources/data_state.dart';
-import 'package:motelhub_flutter/domain/entities/room_bill.dart';
+import 'package:motelhub_flutter/domain/entities/bill.dart';
 import 'package:motelhub_flutter/domain/entities/user.dart';
 import 'package:motelhub_flutter/domain/repositories/contract_repository_interface.dart';
 import 'package:motelhub_flutter/domain/token/token_handler_interface.dart';
@@ -40,7 +40,7 @@ class ContractFormBloc extends Bloc<ContractFormEvent, ContractFormState> {
         startDate = data.startDate;
         endDate = data.endDate;
         cancelDate = data.cancelDate;
-        selectOwnerId = data.ownerId;
+        selectOwnerId = data.customerId;
         var selectedOwner =
             users.where((element) => element.id == selectOwnerId).firstOrNull;
         emit(ContractFormLoadDone(selectedOwner));

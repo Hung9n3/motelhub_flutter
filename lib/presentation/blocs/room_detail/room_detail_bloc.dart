@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motelhub_flutter/core/resources/data_state.dart';
 import 'package:motelhub_flutter/domain/entities/photo.dart';
 import 'package:motelhub_flutter/domain/entities/room.dart';
-import 'package:motelhub_flutter/domain/entities/room_bill.dart';
+import 'package:motelhub_flutter/domain/entities/bill.dart';
 import 'package:motelhub_flutter/domain/entities/user.dart';
 import 'package:motelhub_flutter/domain/entities/contract.dart';
 import 'package:motelhub_flutter/domain/entities/work_order.dart';

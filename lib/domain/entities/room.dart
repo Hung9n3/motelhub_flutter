@@ -47,6 +47,16 @@ class RoomEntity extends Equatable {
     return [id, name, areaId, isEmpty, acreage, photos, workOrders, areaName, members, ownerName, ownerId];
   }
 
+  factory RoomEntity.fromJson(Map<String, dynamic> map){
+    return RoomEntity(
+      id: map['id'] ?? 0,
+      areaId: map['areaId'] ?? 0,
+      name: map['name'] ?? 0,
+      acreage: map['acreage'] ?? 0.0,
+      price: map['price'] ?? 0.0,
+    );
+  }
+
   static List<RoomEntity> getFakeData() {
     List<RoomEntity> roomList = [];
 

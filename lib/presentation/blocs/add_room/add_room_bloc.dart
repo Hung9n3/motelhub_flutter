@@ -25,7 +25,7 @@ class AddRoomBloc extends Bloc<AddRoomEvent, AddRoomState> {
 
   _loadingForm(LoadingFormEvent event, Emitter<AddRoomState> emit) async {
       var userId = int.tryParse(await _tokenHandler.getByKey('userId'));
-      var areaDataState = await _areaRepository.getByUser(userId);
+      var areaDataState = await _areaRepository.getByHost(userId);
       var areaList = List<AreaEntity>.empty();
       if (areaDataState is DataSuccess) {
         areaList = areaDataState.data!;

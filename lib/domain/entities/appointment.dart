@@ -16,24 +16,24 @@ class AppointmentEntity extends BaseEntity {
   final UserEntity? participant;
   final RoomEntity? room;
 
-  const AppointmentEntity(
-      {super.id,
-      super.createdAt,
-      super.isActive,
-      super.modifiedAt,
-      this.title,
-      this.isCanceled,
-      this.startTime,
-      this.endTime,
-      this.duration,
-      this.creator,
-      this.participant,
-      this.creatorId,
-      this.participantId,
-      this.isAccepted,
-      this.room,
-      this.roomId})
-      : super();
+  const AppointmentEntity({
+    super.id,
+    super.createdAt,
+    super.isActive,
+    super.modifiedAt,
+    this.title,
+    this.isCanceled,
+    this.startTime,
+    this.endTime,
+    this.duration,
+    this.creatorId,
+    this.participantId,
+    this.isAccepted,
+    this.roomId,
+    this.creator,
+    this.participant,
+    this.room,
+  }) : super();
   @override
   // TODO: implement props
   List<Object?> get props => [
@@ -55,6 +55,20 @@ class AppointmentEntity extends BaseEntity {
         roomId
       ];
 
+  factory AppointmentEntity.fromJson(Map<String, dynamic> map) {
+    return AppointmentEntity(
+      id: map['id'] ?? 0,
+      roomId: map['roomId'] ?? 0,
+      title: map['title'] ?? '',
+      isCanceled: map['isCanceled'] ?? false,
+      startTime: map['startTime'],
+      endTime: map['endTime'],
+      duration: map['duration'] ?? 0,
+      creatorId: map['creatorId'] ?? 0,
+      participantId: map['participantId'] ?? 0,
+      isAccepted: map['isAccepted'] ?? false,
+    );
+  }
   static List<AppointmentEntity> getFakeData() {
     List<AppointmentEntity> result = [];
     for (int i = 1; i <= 10; i++) {

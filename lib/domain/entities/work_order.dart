@@ -42,6 +42,18 @@ class WorkOrderEntity extends Equatable {
       createdOn,
       photos];
 
+  factory WorkOrderEntity.fromJson(Map<String, dynamic> map) {
+    return WorkOrderEntity(
+      id: map['id'] ?? 0,
+      roomId: map['roomId'] ?? 0,
+      customerId: map['customerId'] ?? 0,
+      isCustomerPay: map['isCustomerPay'] ?? false,
+      price: map['price'] ?? 0.0,
+      name: map['name'] ?? '',
+      createdOn: map['createdOn'],
+    );
+  }
+
   static List<WorkOrderEntity> getFakeData() {
     List<WorkOrderEntity> workOrders = [];
     for(int i = 1; i < 10; i++) {

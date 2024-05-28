@@ -5,6 +5,7 @@ class UserEntity extends Equatable {
   final int? id;
   final String? username;
   final String? password;
+  final String? email;
   final String? name;
   final String? phoneNumber;
   final int? roomId;
@@ -14,6 +15,7 @@ class UserEntity extends Equatable {
       {this.id,
       this.password,
       this.username,
+      this.email,
       this.name,
       this.phoneNumber,
       this.roomId,
@@ -28,6 +30,7 @@ class UserEntity extends Equatable {
       id: map['id'] ?? "",
       username: map['username'] ?? "",
       password: map['password'] ?? "",
+      email: map['email'] ?? "",
       name: map['name'] ?? "",
       phoneNumber: map['phoneNumber'] ?? "",
       roomId: map['roomId'] ?? "",

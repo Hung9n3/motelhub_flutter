@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:motelhub_flutter/domain/entities/photo.dart';
 import 'package:motelhub_flutter/domain/entities/room.dart';
@@ -28,9 +29,7 @@ class BillEntity extends Equatable {
   const BillEntity(
       {this.id,
       this.contractId,
-      this.total,
       this.title,
-      this.oweing,
       this.startDate,
       this.endDate,
       this.rentPrice,
@@ -44,6 +43,8 @@ class BillEntity extends Equatable {
       this.waterFrom,
       this.waterLast,
       this.waterTo,
+      this.total,
+      this.oweing,
       this.room,
       this.photos})
       : super();
@@ -87,6 +88,27 @@ class BillEntity extends Equatable {
         endDate: endDate ?? this.endDate,
         rentPrice: rentPrice ?? this.rentPrice,
         room: room ?? this.room);
+  }
+
+  factory BillEntity.fromJson(Map<String, dynamic> map) {
+    return BillEntity(
+      id: map['id'] ?? 0,
+      contractId: map['contractId'] ?? 0,
+      title: map['title'] ?? '',
+      startDate: map['startDate'],
+      endDate: map['endDate'],
+      rentPrice: map['rentPrice'] ?? 0.0,
+      electricPrice: map['electricPrice'] ?? 0.0,
+      waterPrice: map['waterPrice'] ?? 0.0,
+      electricCurrent: map['electricCurrent'] ?? 0,
+      electricLast: map['electricLast'] ?? 0,
+      electricFrom: map['electricFrom'],
+      electricTo: map['electricTo'],
+      waterCurrent: map['waterCurrent'] ?? 0,
+      waterLast: map['waterLast'] ?? 0,
+      waterFrom: map['waterFrom'],
+      waterTo: map['waterTo'],
+    );
   }
 
   static List<BillEntity> getFakeData() {
