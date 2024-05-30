@@ -10,4 +10,5 @@ const String api = 'https://10.0.2.2:7128/api';
 const String authApi = '$api/Authentication';
 const String areaApi = '$api/Area';
 const String roomApi = '$api/Room';
+const String userApi = '$api/User';
 

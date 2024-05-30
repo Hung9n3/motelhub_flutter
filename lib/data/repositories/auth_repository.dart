@@ -11,9 +11,7 @@ class AuthRepository extends IAuthRepository {
   AuthRepository();
   @override
   Future<DataState> login(String username, String password) async {
-    final httpResponse = await Api.login(
-      username, password
-    );
+    final httpResponse = await Api.login(username, password);
 
     if (httpResponse.response.statusCode == HttpStatus.ok) {
       return DataSuccess(httpResponse.data);
@@ -43,5 +41,20 @@ class AuthRepository extends IAuthRepository {
   @override
   void logout() {
     // TODO: implement logout
+  }
+
+  @override
+  Future<List<UserEntity>> getAll() async {
+    // TODO: implement getAll
+    final result = await Api.getUsers();
+    return result;
+  }
+
+  @override
+  Future<UserEntity?> getById(int id) async {
+    // TODO: implement getById
+    final result =
+        (await Api.getUsers()).where((element) => element.id == id).firstOrNull;
+    return result;
   }
 }

@@ -6,12 +6,12 @@ import 'package:motelhub_flutter/domain/entities/work_order.dart';
 
 class RoomEntity extends Equatable {
   final int? id;
-  final String? name;
-  final String? address;
   final int? areaId;
   final int? customerId;
-  final bool isEmpty;
+  final String? name;
   final double? acreage;
+  final bool isEmpty;
+  final String? address;
   final String? areaName;
   final String? ownerName;
   final String? ownerPhone;

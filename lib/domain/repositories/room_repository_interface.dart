@@ -7,4 +7,5 @@ abstract class IRoomRepository {
   Future<DataState<RoomEntity>> getById(int roomId);
   Future<List<RoomEntity>> getAll();
   Future<DataState<List<RoomEntity>>> Search(SearchModel searchModel);
+  Future<DataState> save(RoomEntity room);
 }

@@ -146,6 +146,17 @@ class Api {
     }
     return result;
   }
+
+  static Future<List<UserEntity>> getUsers() async {
+    final response = await get('User');
+    var data = jsonDecode(response.body);
+    List<UserEntity> result = [];
+    for (var item in data) {
+      UserEntity entity = UserEntity.fromJson(item);
+      result.add(entity);
+    }
+    return result;
+  }
   
   static DataState<T> getResult<T>(dynamic httpResponse) {
     if (httpResponse.response.statusCode == HttpStatus.ok) {

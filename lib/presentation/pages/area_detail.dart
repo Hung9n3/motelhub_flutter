@@ -44,54 +44,71 @@ class AreaDetail extends StatelessWidget {
           textAlign: TextAlign.center,
         ),
         actions: [
-          IconButton(onPressed: () {bloc.add(SubmitAreaEvent(addressController.text, nameController.text));}, icon: const Icon(Icons.check))
+          Visibility(
+              visible: bloc.isEditable,
+              child: IconButton(
+                  onPressed: () {
+                    bloc.add(SubmitAreaEvent(
+                        addressController.text, nameController.text));
+                  },
+                  icon: const Icon(Icons.check)))
         ],
       ),
-      floatingActionButton: IconButton(
-        icon: const Icon(Icons.add),
-        onPressed: () {
-          Navigator.pushNamed(context, '/add-room',
-              arguments: {'mode': FormMode.add, 'selectedAreaId': data.id});
-        },
+      floatingActionButton: Visibility(
+        visible: bloc.isEditable,
+        child: IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () {
+            Navigator.pushNamed(context, '/add-room',
+                arguments: {'mode': FormMode.add, 'selectedAreaId': data.id});
+          },
+        ),
       ),
       body: FormContainer(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Wrap(
-                children: [
-                  SectionWithBottomBorder(
-                    child: TextField(
-                      controller: nameController,
-                      decoration: const InputDecoration(
-                        hintText: 'Area name',
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Wrap(
+              children: [
+                SectionWithBottomBorder(
+                  child: TextField(
+                    readOnly: bloc.isEditable,
+                    controller: nameController,
+                    decoration: const InputDecoration(
+                      hintText: 'Area name',
                       prefixIcon: Icon(Icons.holiday_village),
-                      ),
                     ),
                   ),
-                  SectionWithBottomBorder(
-                    child: TextField(
-                      controller: addressController,
-                      decoration: const InputDecoration(
+                ),
+                SectionWithBottomBorder(
+                  child: TextField(
+                    readOnly: bloc.isEditable,
+                    controller: addressController,
+                    decoration: const InputDecoration(
                         hintText: 'Address',
-                      prefixIcon: Icon(Icons.location_on),
-                      suffixIcon: Icon(Icons.map)
-                      ),
-                    ),
+                        prefixIcon: Icon(Icons.location_on),
+                        suffixIcon: Icon(Icons.map)),
                   ),
-                  SectionWithBottomBorder(
-                    child: ListTile(
-                      leading: const Icon(Icons.person),
-                      title: Text('${data.owner}'),
-                    ),
+                ),
+                SectionWithBottomBorder(
+                  child: ListTile(
+                    leading: const Icon(Icons.person),
+                    title: Text('${bloc.hostName}'),
                   ),
-                ],
-              ),
-              _buildExpansion(bloc.rentingRooms, 'Renting rooms'),
-              _buildExpansion(bloc.emptyRooms, 'Empty rooms')
-            ],
-          ),
+                ),
+                SectionWithBottomBorder(
+                  child: ListTile(
+                    leading: const Icon(Icons.phone_android),
+                    title: Text('${bloc.hostPhone}'),
+                  ),
+                ),
+              ],
+            ),
+            _buildExpansion(bloc.rentingRooms, 'Renting rooms'),
+            _buildExpansion(bloc.emptyRooms, 'Empty rooms')
+          ],
         ),
+      ),
     );
   }
 
@@ -106,7 +123,11 @@ class AreaDetail extends StatelessWidget {
             itemCount: rooms.length,
             itemBuilder: (context, index) {
               return GestureDetector(
-                onTap: () => Navigator.pushNamed(context, '/room-detail',arguments: {'mode': FormMode.update, 'roomId': rooms[index].id}),
+                onTap: () => Navigator.pushNamed(context, '/room-detail',
+                    arguments: {
+                      'mode': FormMode.update,
+                      'roomId': rooms[index].id
+                    }),
                 child: Card(
                   margin: const EdgeInsets.symmetric(vertical: 5),
                   child: Container(

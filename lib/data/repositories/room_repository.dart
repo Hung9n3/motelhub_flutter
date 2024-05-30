@@ -70,4 +70,11 @@ class RoomRepository extends IRoomRepository {
     var result = await Api.getRooms();
     return result;
   }
+  
+  @override
+  Future<DataState> save(RoomEntity room) async {
+    var response = await Api.post(room.toJson(), 'Room');
+    var result = Api.getResult(response);
+    return result;
+  }
 }

@@ -44,14 +44,14 @@ class AddAreaPage extends StatelessWidget {
                       icon: const Icon(Icons.check))
                 ],
               ),
-              floatingActionButton: FloatingActionButton(
-                onPressed: () {
-                  context
-                      .read<PhotoSectionBloc>()
-                      .add(const AddPhotoEvent(ImageSource.gallery));
-                },
-                child: const Icon(Icons.add_a_photo),
-              ),
+              // floatingActionButton: FloatingActionButton(
+              //   onPressed: () {
+              //     context
+              //         .read<PhotoSectionBloc>()
+              //         .add(const AddPhotoEvent(ImageSource.gallery));
+              //   },
+              //   child: const Icon(Icons.add_a_photo),
+              // ),
               body: _buildBody(context),
             );
           },
@@ -79,7 +79,7 @@ class AddAreaPage extends StatelessWidget {
             context.read<AddAreaBloc>().add(ChangeAreaAddressEvent(value));
           },
         ),
-        const PhotoSection(),
+        //const PhotoSection(),
       ]),
     );
   }

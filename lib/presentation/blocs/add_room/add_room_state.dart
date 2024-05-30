@@ -2,13 +2,12 @@ import 'package:equatable/equatable.dart';
 import 'package:motelhub_flutter/domain/entities/area.dart';
 
 class AddRoomState extends Equatable{
-  final List<AreaEntity>? areas;
   final String? areaName;
-  final int? selectedAreaId;
-  const AddRoomState({this.areas, this.areaName, this.selectedAreaId});
+  final String? message;
+  const AddRoomState({ this.areaName, this.message});
   
   @override
-  List<Object?> get props => [areas, areaName];
+  List<Object?> get props => [areaName];
 }
 
 class LoadingFormState extends AddRoomState {
@@ -16,6 +15,14 @@ class LoadingFormState extends AddRoomState {
 }
 
 class LoadingFormStateDone extends AddRoomState{
-  const LoadingFormStateDone(List<AreaEntity>? areas, String? areaName, int? selectedAreaId) 
-  : super(areas: areas, areaName: areaName, selectedAreaId: selectedAreaId);
+  const LoadingFormStateDone(String? areaName) 
+  : super(areaName: areaName);
+}
+
+class AddRoomError extends AddRoomState {
+  const AddRoomError(String? message) : super(message: message);
+}
+
+class AddRoomSuccess extends AddRoomState {
+  const AddRoomSuccess() : super();
 }
