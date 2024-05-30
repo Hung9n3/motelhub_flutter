@@ -9,7 +9,6 @@ import 'package:motelhub_flutter/data/repositories/bill_repository.dart';
 import 'package:motelhub_flutter/data/repositories/contract_repository.dart';
 import 'package:motelhub_flutter/data/repositories/room_repository.dart';
 import 'package:motelhub_flutter/data/repositories/work_order_repository.dart';
-import 'package:motelhub_flutter/domain/entities/area.dart';
 import 'package:motelhub_flutter/domain/repositories/appointment_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/auth_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/area_repository_interface.dart';
@@ -17,8 +16,6 @@ import 'package:motelhub_flutter/domain/repositories/bill_repository_interface.d
 import 'package:motelhub_flutter/domain/repositories/contract_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/room_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/work_order_repository_interface.dart';
-import 'package:motelhub_flutter/domain/usecases/area_detail/get_area_detail_usecases.dart';
-import 'package:motelhub_flutter/features/daily_news/domain/repositories/article_repository_interface';
 import 'package:motelhub_flutter/domain/token/token_handler_interface.dart';
 import 'package:motelhub_flutter/presentation/blocs/add_room/add_room_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/appointment_form/appointment_form_bloc.dart';
@@ -55,15 +52,10 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<IBillRepository>(() => BillRepository());
   sl.registerFactory<IWorkOrderRepository>(() => WorkOrderRepository());
 
-  //UseCases
-
-  sl.registerFactory<GetAreaDetailUseCase>(
-      () => GetAreaDetailUseCase(sl(), sl()));
-
   //Blocs
   sl.registerFactory<LoginBloc>(() => LoginBloc(sl(), sl()));
   sl.registerFactory<MyAreaBloc>(() => MyAreaBloc(sl(), sl()));
-  sl.registerFactory<AreaDetailBloc>(() => AreaDetailBloc(sl(), sl()));
+  sl.registerFactory<AreaDetailBloc>(() => AreaDetailBloc(sl(), sl(), sl()));
   sl.registerFactory<AddRoomBloc>(() => AddRoomBloc(sl(), sl()));
   sl.registerFactory<RoomDetailBloc>(() => RoomDetailBloc(sl(), sl()));
   sl.registerFactory<ContractFormBloc>(() => ContractFormBloc(sl(), sl()));

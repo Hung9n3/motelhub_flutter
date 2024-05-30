@@ -4,9 +4,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:motelhub_flutter/injection_container.dart';
 import 'package:motelhub_flutter/presentation/blocs/add_area/add_area_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/add_area/add_area_event.dart';
+import 'package:motelhub_flutter/presentation/blocs/add_area/add_area_state.dart';
 import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_event.dart';
-import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_state.dart';
 import 'package:motelhub_flutter/presentation/components/commons/alert_dialog.dart';
 import 'package:motelhub_flutter/presentation/components/commons/form_container.dart';
 import 'package:motelhub_flutter/presentation/components/commons/photo_section.dart';
@@ -21,8 +21,16 @@ class AddAreaPage extends StatelessWidget {
           BlocProvider<AddAreaBloc>(create: (context) => sl()),
           BlocProvider<PhotoSectionBloc>(create: (context) => sl()),
         ],
-        child: Builder(
-          builder: (context) {
+        child: BlocConsumer<AddAreaBloc, AddAreaState>(
+          listener: (context, state) {
+            if(state is AddAreaSaveSuccess) {
+              showAlertDialog(context, 'Save success');
+            }
+            if(state is AddAreaError) {
+              showAlertDialog(context, 'Save failed');
+            }
+          },
+          builder: (context, state) {
             return Scaffold(
               appBar: AppBar(
                 title: const Text('Area'),
@@ -55,8 +63,8 @@ class AddAreaPage extends StatelessWidget {
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         TextField(
           decoration: const InputDecoration(
-            hintText: 'Room Name',
-            prefixIcon: Icon(Icons.meeting_room),
+            hintText: 'Area name',
+            prefixIcon: Icon(Icons.holiday_village),
           ),
           onChanged: (value) {
             context.read<AddAreaBloc>().add(ChangeAreaNameEvent(value));

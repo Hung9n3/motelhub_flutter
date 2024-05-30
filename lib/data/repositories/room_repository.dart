@@ -10,13 +10,12 @@ import 'package:motelhub_flutter/domain/repositories/room_repository_interface.d
 
 class RoomRepository extends IRoomRepository {
   @override
-  Future<DataState<List<RoomEntity>>> getByArea(int areaId) async {
+  Future<List<RoomEntity>> getByArea(int areaId) async {
     try {
       var rooms = await Api.getRooms();
-      var result = rooms.where((element) => element.areaId == areaId).toList();
-      return DataSuccess(result);
-    } on DioError catch (err) {
-      return DataFailed(err);
+      return rooms;
+    } on Exception catch (err) {
+      rethrow;
     }
   }
 
@@ -34,7 +33,7 @@ class RoomRepository extends IRoomRepository {
             ?.name;
       }
       var owner = UserEntity.getFakeData()
-          .where((element) => element.id == data.ownerId)
+          .where((element) => element.id == data.customerId)
           .firstOrNull;
       var contracts = ContractEntity.getFakeData().where((element) => element.roomId == data.id).toList();   
       data = RoomEntity(
@@ -46,7 +45,7 @@ class RoomRepository extends IRoomRepository {
           acreage: data.acreage,
           areaId: data.areaId,
           ownerName: owner?.name,
-          ownerId: owner?.id,
+          customerId: owner?.id,
           areaName: areaName);
       return DataSuccess(data);
     } on DioError catch (err) {

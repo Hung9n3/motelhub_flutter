@@ -6,4 +6,5 @@ abstract class IAreaRepository {
   Future<DataState<List<AreaEntity>>> getByCustomer(int? userId);
   Future<DataState<List<AreaEntity>>> getAll();
   Future<DataState<AreaEntity>> getById(int id);
+  Future<DataState> save(AreaEntity entity);
 }

@@ -13,7 +13,6 @@ class AddRoomBloc extends Bloc<AddRoomEvent, AddRoomState> {
   AddRoomBloc(this._areaRepository, this._tokenHandler)
       : super(const LoadingFormState()) {
     on<LoadingFormEvent>(_loadingForm);
-    on<ChangeAreaEvent>(_changeArea);
     on<ChangeRoomNameEvent>(_changeRoomName);
     on<ChangeAcreageEvent>(_changeAcreage);
     on<AddRoomOnSubmitButtonPressed>(_submit);
@@ -22,6 +21,7 @@ class AddRoomBloc extends Bloc<AddRoomEvent, AddRoomState> {
   List<AreaEntity>? areas;
   String? roomName;
   double? acreage;
+  String? areaName;
 
   _loadingForm(LoadingFormEvent event, Emitter<AddRoomState> emit) async {
       var userId = int.tryParse(await _tokenHandler.getByKey('userId'));
@@ -31,10 +31,6 @@ class AddRoomBloc extends Bloc<AddRoomEvent, AddRoomState> {
         areaList = areaDataState.data!;
       }
       emit(LoadingFormStateDone(areaList, null, event.selectedAreaId));
-  }
-
-  _changeArea(ChangeAreaEvent event, Emitter<AddRoomState> emit) async {
-    emit(LoadingFormStateDone(state.areas, event.selectedArea!.name, event.selectedArea!.id));
   }
 
   _changeRoomName(ChangeRoomNameEvent event, Emitter<AddRoomState> emit) async {

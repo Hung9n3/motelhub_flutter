@@ -9,7 +9,7 @@ class RoomEntity extends Equatable {
   final String? name;
   final String? address;
   final int? areaId;
-  final int? ownerId;
+  final int? customerId;
   final bool isEmpty;
   final double? acreage;
   final String? areaName;
@@ -37,17 +37,29 @@ class RoomEntity extends Equatable {
       this.workOrders = const [],
       this.areaName,
       this.owner,
-      this.ownerId,
+      this.customerId,
       this.ownerEmail,
       this.ownerName,
       this.ownerPhone});
 
   @override
   List<Object?> get props {
-    return [id, name, areaId, isEmpty, acreage, photos, workOrders, areaName, members, ownerName, ownerId];
+    return [
+      id,
+      name,
+      areaId,
+      isEmpty,
+      acreage,
+      photos,
+      workOrders,
+      areaName,
+      members,
+      ownerName,
+      customerId
+    ];
   }
 
-  factory RoomEntity.fromJson(Map<String, dynamic> map){
+  factory RoomEntity.fromJson(Map<String, dynamic> map) {
     return RoomEntity(
       id: map['id'] ?? 0,
       areaId: map['areaId'] ?? 0,
@@ -56,6 +68,14 @@ class RoomEntity extends Equatable {
       price: map['price'] ?? 0.0,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'id': id ?? '0',
+        'areaId': areaId ?? '0',
+        'name': name ?? '0',
+        'acreage': acreage ?? '0.0',
+        'price': price ?? '0.0',
+      };
 
   static List<RoomEntity> getFakeData() {
     List<RoomEntity> roomList = [];
@@ -67,7 +87,7 @@ class RoomEntity extends Equatable {
         name: 'Room $i',
         areaId: 1,
         isEmpty: false,
-        ownerId: i,
+        customerId: i,
         price: 1000000,
         acreage: 12.0,
       );

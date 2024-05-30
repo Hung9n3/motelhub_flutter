@@ -56,4 +56,15 @@ class AreaRepository extends IAreaRepository {
       return DataFailed.onEx(e.toString());
     }
   }
+  
+  @override
+  Future<DataState> save(AreaEntity entity) async {
+    try {
+      var response = await Api.post(entity.toJson(), 'Area');
+      var result = Api.getResult<bool>(response);
+      return result;
+    } on Exception catch (e) {
+      return DataFailed.onEx(e.toString());
+    }
+  }
 }

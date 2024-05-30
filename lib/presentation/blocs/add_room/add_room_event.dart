@@ -17,11 +17,6 @@ class ChangeRoomNameEvent extends AddRoomEvent{
   ChangeRoomNameEvent(String roomName) : super(textValue: roomName);
 }
 
-class ChangeAreaEvent extends AddRoomEvent{
-  AreaEntity? selectedArea;
-  ChangeAreaEvent(this.selectedArea);
-}
-
 class ChangeAcreageEvent extends AddRoomEvent{
   ChangeAcreageEvent(String acreage) : super(textValue: acreage);
 }

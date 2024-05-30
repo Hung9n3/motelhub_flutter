@@ -11,9 +11,9 @@ import 'package:motelhub_flutter/presentation/blocs/area_detail/area_detail_stat
 import 'package:motelhub_flutter/presentation/components/commons/form_container.dart';
 import 'package:motelhub_flutter/presentation/components/commons/section_with_bottom_border.dart';
 
-class AreaDetailPage extends StatelessWidget {
+class AreaDetail extends StatelessWidget {
   final int areaId;
-  const AreaDetailPage({super.key, required this.areaId});
+  const AreaDetail({super.key, required this.areaId});
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +34,18 @@ class AreaDetailPage extends StatelessWidget {
   }
 
   Widget _buildAreaDetail(AreaEntity data, BuildContext context) {
+    var bloc = context.read<AreaDetailBloc>();
+    var addressController = TextEditingController(text: data.address);
+    var nameController = TextEditingController(text: data.name);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
           'Area Detail',
           textAlign: TextAlign.center,
         ),
+        actions: [
+          IconButton(onPressed: () {bloc.add(SubmitAreaEvent(addressController.text, nameController.text));}, icon: const Icon(Icons.check))
+        ],
       ),
       floatingActionButton: IconButton(
         icon: const Icon(Icons.add),
@@ -55,15 +61,22 @@ class AreaDetailPage extends StatelessWidget {
               Wrap(
                 children: [
                   SectionWithBottomBorder(
-                    child: ListTile(
-                      leading: const Icon(Icons.holiday_village),
-                      title: Text('${data.name}'),
+                    child: TextField(
+                      controller: nameController,
+                      decoration: const InputDecoration(
+                        hintText: 'Area name',
+                      prefixIcon: Icon(Icons.holiday_village),
+                      ),
                     ),
                   ),
                   SectionWithBottomBorder(
-                    child: ListTile(
-                      leading: const Icon(Icons.location_on),
-                      title: Text('${data.name}'),
+                    child: TextField(
+                      controller: addressController,
+                      decoration: const InputDecoration(
+                        hintText: 'Address',
+                      prefixIcon: Icon(Icons.location_on),
+                      suffixIcon: Icon(Icons.map)
+                      ),
                     ),
                   ),
                   SectionWithBottomBorder(
@@ -74,16 +87,17 @@ class AreaDetailPage extends StatelessWidget {
                   ),
                 ],
               ),
-              _buildExpansion(data.rooms)
+              _buildExpansion(bloc.rentingRooms, 'Renting rooms'),
+              _buildExpansion(bloc.emptyRooms, 'Empty rooms')
             ],
           ),
         ),
     );
   }
 
-  Widget _buildExpansion(List<RoomEntity> rooms) {
+  Widget _buildExpansion(List<RoomEntity> rooms, String? title) {
     return ExpansionTile(
-      title: const Text('Rooms'),
+      title: Text(title ?? ''),
       leading: const Icon(Icons.meeting_room),
       children: [
         ListView.builder(
@@ -101,15 +115,15 @@ class AreaDetailPage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Name: ${rooms[index].name}'),
+                        Text('Name: ${rooms[index].name ?? ''}'),
                         const SizedBox(
                           height: 10,
                         ),
-                        Text('Acreage: ${rooms[index].acreage}'),
+                        Text('Acreage: ${rooms[index].acreage ?? 0}'),
                         const SizedBox(
                           height: 10,
                         ),
-                        Text('Availabel: ${rooms[index].isEmpty}')
+                        Text('Price: ${rooms[index].price ?? 0}'),
                       ],
                     ),
                   ),

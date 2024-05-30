@@ -8,8 +8,10 @@ class AreaEntity extends Equatable {
   final String? name;
   final String? address;
   final String? owner;
+  final double? longitude;
+  final double? latitude;
   List<RoomEntity> rooms;
-  AreaEntity({this.id, this.hostId, this.address, this.name, this.owner, this.rooms = const []});
+  AreaEntity({this.id, this.hostId, this.address, this.name, this.owner, this.latitude, this.longitude, this.rooms = const []});
 
   @override
   List<Object?> get props => [id, name, address, owner, rooms];
@@ -22,6 +24,13 @@ class AreaEntity extends Equatable {
       owner: map['owner'] ?? "",
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'id' : id ?? '0',
+    'name': name ?? '',
+    'hostId': hostId ?? '0',
+    'address' : address ?? '',
+  };
 
   static List<AreaEntity> getFakeData() {
     List<AreaEntity> boardingHouseAreas = [

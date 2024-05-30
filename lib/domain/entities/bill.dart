@@ -111,6 +111,25 @@ class BillEntity extends Equatable {
     );
   }
 
+  Map<String, dynamic> toJson() => {
+    'id': id ?? '0',
+      'contractId': contractId ?? '0',
+      'title': title ?? '',
+      'startDate': startDate?.toUtc(),
+      'endDate': endDate?.toUtc(),
+      'rentPrice': rentPrice ?? '0.0',
+      'electricPrice': electricPrice ?? '0.0',
+      'waterPrice': waterPrice ?? '0.0',
+      'electricCurrent': electricCurrent ?? '0',
+      'electricLast': electricLast ?? '0',
+      'electricFrom': electricFrom?.toUtc(),
+      'electricTo': electricTo?.toUtc(),
+      'waterCurrent': waterCurrent ?? '0',
+      'waterLast': waterLast ?? '0',
+      'waterFrom': waterFrom?.toUtc(),
+      'waterTo': waterTo?.toUtc(),
+  };
+
   static List<BillEntity> getFakeData() {
     var result = <BillEntity>[];
     for (int i = 1; i <= 5; i++) {

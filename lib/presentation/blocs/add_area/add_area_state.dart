@@ -13,3 +13,11 @@ class AddAreaInitState extends AddAreaState {
 class AddAreaLoadFormDoneState extends AddAreaState {
   AddAreaLoadFormDoneState();
 }
+
+class AddAreaSaveSuccess extends AddAreaState {
+  AddAreaSaveSuccess():super();
+}
+
+class AddAreaError extends AddAreaState {
+  AddAreaError():super();
+}

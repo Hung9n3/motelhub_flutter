@@ -14,15 +14,18 @@ class PhotoEntity extends Equatable {
   final String? url;
   final File? data;
 
-  const PhotoEntity(
-      {this.id,
-      this.name,
-      this.data,
-      this.url,
-      this.areaId,
-      this.roomId,
-      this.userId,
-      this.workOrderId, this.contractId, this.billId,});
+  const PhotoEntity({
+    this.id,
+    this.name,
+    this.data,
+    this.url,
+    this.areaId,
+    this.roomId,
+    this.userId,
+    this.workOrderId,
+    this.contractId,
+    this.billId,
+  });
 
   factory PhotoEntity.fromJson(Map<String, dynamic> map) {
     return PhotoEntity(
@@ -34,6 +37,16 @@ class PhotoEntity extends Equatable {
       contractId: map['contractId'] ?? 0,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'id': id ?? '0',
+        'roomId': roomId ?? '0',
+        'userId': userId ?? '0',
+        'areaId': areaId ?? '0',
+        'billId': billId ?? '0',
+        'contractId': contractId ?? '0',
+      };
+
   @override
   // TODO: implement props
   List<Object?> get props => [id, name, data, url];

@@ -14,6 +14,7 @@ import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_sec
 import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_state.dart';
 import 'package:motelhub_flutter/presentation/components/commons/alert_dialog.dart';
 import 'package:motelhub_flutter/presentation/components/commons/form_container.dart';
+import 'package:motelhub_flutter/presentation/components/commons/section_with_bottom_border.dart';
 
 class AddRoomPage extends StatelessWidget {
   final FormMode mode;
@@ -64,43 +65,16 @@ class AddRoomPage extends StatelessWidget {
     return FormContainer(
       child: Column(
         children: [
-          ButtonTheme(
-            alignedDropdown: true,
-            child: BlocBuilder<AddRoomBloc, AddRoomState>(
-              builder: (context, state) {
-                if (state is LoadingFormStateDone) {
-                  return DropdownMenu<AreaEntity>(
-                      width: MediaQuery.of(context).size.width >= 800
-                          ? 740
-                          : MediaQuery.of(context).size.width - 60,
-                      leadingIcon: const Icon(Icons.holiday_village),
-                      initialSelection: selectedAreaId != null
-                          ? state.areas!
-                              .where((element) => element.id == selectedAreaId)
-                              .firstOrNull
-                          : state.areas!.firstOrNull,
-                      requestFocusOnTap: true,
-                      label: const Text('Select area'),
-                      dropdownMenuEntries: state.areas!
-                          .map((value) => DropdownMenuEntry<AreaEntity>(
-                                value: value,
-                                label: "${value.name} - ${value.address}",
-                              ))
-                          .toList(),
-                      onSelected: (value) {
-                        context.read<AddRoomBloc>().add(ChangeAreaEvent(value));
-                      });
-                }
-                if (state is LoadingFormState) {
-                  return const Center(child: CupertinoActivityIndicator());
-                }
-                return const SizedBox();
-              },
+          SectionWithBottomBorder(child: TextFormField(
+            initialValue: context.read<AddRoomBloc>().areaName,
+            decoration: const InputDecoration(
+              hintText: 'Area name',
+              prefixIcon: Icon(Icons.holiday_village),
             ),
-          ),
+          )),
           TextField(
             decoration: const InputDecoration(
-              hintText: 'Room Name',
+              hintText: 'Room name',
               prefixIcon: Icon(Icons.meeting_room),
             ),
             onChanged: (value) {

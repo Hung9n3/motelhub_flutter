@@ -4,9 +4,8 @@ import 'package:dio/dio.dart';
 
 abstract class AreaDetailState {
   final AreaEntity? area;
-  final List<RoomEntity>? rooms;
   final DioError? error;
-  const AreaDetailState({this.area, this.rooms, this.error});
+  const AreaDetailState({this.area, this.error});
 }
 
 class AreaDetailLoadingState extends AreaDetailState{
@@ -14,7 +13,7 @@ class AreaDetailLoadingState extends AreaDetailState{
 }
 
 class AreaDetailDoneState extends AreaDetailState{
-  const AreaDetailDoneState(AreaEntity area, List<RoomEntity> rooms) : super(area: area, rooms: rooms);
+  const AreaDetailDoneState(AreaEntity area) : super(area: area);
 }
 
 class AreaDetailErrorState extends AreaDetailState{

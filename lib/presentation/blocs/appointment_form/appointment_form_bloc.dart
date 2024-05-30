@@ -42,7 +42,7 @@ class AppointmentFormBloc
       var room = (await _roomRepository.getById(roomId!)).data;
       roomName = room!.name;
       participantName = room.ownerName;
-      participantId = room.ownerId;
+      participantId = room.customerId;
 
       if (event.appointmentId == null) {
         creatorId = currentUserId;

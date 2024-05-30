@@ -30,17 +30,19 @@ class WorkOrderEntity extends Equatable {
       this.photos});
 
   @override
-  List<Object?> get props => [id,
-      roomId,
-      name,
-      roomName,
-      isCustomerPay,
-      isOpen,
-      price,
-      customerId,
-      customerName,
-      createdOn,
-      photos];
+  List<Object?> get props => [
+        id,
+        roomId,
+        name,
+        roomName,
+        isCustomerPay,
+        isOpen,
+        price,
+        customerId,
+        customerName,
+        createdOn,
+        photos
+      ];
 
   factory WorkOrderEntity.fromJson(Map<String, dynamic> map) {
     return WorkOrderEntity(
@@ -54,20 +56,35 @@ class WorkOrderEntity extends Equatable {
     );
   }
 
+  Map<String, dynamic> toJson() => {
+        'id': id ?? '0',
+        'roomId': roomId ?? '0',
+        'customerId': customerId ?? '0',
+        'isCustomerPay': isCustomerPay ?? 'false',
+        'price': price ?? '0.0',
+        'name': name ?? '',
+        'createdOn': createdOn?.toUtc(),
+      };
+
   static List<WorkOrderEntity> getFakeData() {
     List<WorkOrderEntity> workOrders = [];
-    for(int i = 1; i < 10; i++) {
+    for (int i = 1; i < 10; i++) {
       var workOrder = WorkOrderEntity(
-        id: i, 
-        roomId: i,
-        name: 'Work Order $i',
-        roomName: RoomEntity.getFakeData().where((room) => room.id == i).firstOrNull?.name,
-        customerId: i,
-        customerName: UserEntity.getFakeData().where((room) => room.id == i).firstOrNull?.name,
-        isOpen: i%2 == 0,
-        isCustomerPay: i%2 == 0,
-        createdOn: DateTime.now()
-      );
+          id: i,
+          roomId: i,
+          name: 'Work Order $i',
+          roomName: RoomEntity.getFakeData()
+              .where((room) => room.id == i)
+              .firstOrNull
+              ?.name,
+          customerId: i,
+          customerName: UserEntity.getFakeData()
+              .where((room) => room.id == i)
+              .firstOrNull
+              ?.name,
+          isOpen: i % 2 == 0,
+          isCustomerPay: i % 2 == 0,
+          createdOn: DateTime.now());
       workOrders.add(workOrder);
     }
     return workOrders;

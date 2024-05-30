@@ -51,7 +51,7 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
       name = room.name;
       areaName = room.areaName;
       members = room.members;
-      ownerId = room.ownerId;
+      ownerId = room.customerId;
       contracts = room.contracts;
       workOrders = room.workOrders;
 
@@ -81,7 +81,7 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
           name: name,
           acreage: acreage,
           photos: event.photos,
-          ownerId: ownerId,
+          customerId: ownerId,
           isEmpty: isEmpty,
           areaId: areaId);
       emit(const SubmitFormSuccess());

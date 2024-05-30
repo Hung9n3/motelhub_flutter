@@ -69,6 +69,20 @@ class AppointmentEntity extends BaseEntity {
       isAccepted: map['isAccepted'] ?? false,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'id': id ?? '0',
+        'roomId': roomId ?? '0',
+        'title': title ?? '',
+        'isCanceled': isCanceled ?? 'false',
+        'startTime': startTime,
+        'endTime': endTime,
+        'duration': duration ?? '0',
+        'creatorId': creatorId ?? '0',
+        'participantId': participantId ?? '0',
+        'isAccepted': isAccepted ?? 'false',
+      };
+
   static List<AppointmentEntity> getFakeData() {
     List<AppointmentEntity> result = [];
     for (int i = 1; i <= 10; i++) {

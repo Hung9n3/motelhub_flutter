@@ -8,7 +8,7 @@ import 'package:motelhub_flutter/presentation/blocs/login/login_bloc.dart';
 import 'package:motelhub_flutter/presentation/pages/add_area.dart';
 import 'package:motelhub_flutter/presentation/pages/add_room.dart';
 import 'package:motelhub_flutter/presentation/pages/appointment_form.dart';
-import 'package:motelhub_flutter/presentation/pages/area_detail_page.dart';
+import 'package:motelhub_flutter/presentation/pages/area_detail.dart';
 import 'package:motelhub_flutter/presentation/pages/home_page.dart';
 import 'package:motelhub_flutter/presentation/pages/login_page.dart';
 import 'package:motelhub_flutter/presentation/pages/room_detail.dart';
@@ -45,7 +45,7 @@ class MyApp extends StatelessWidget {
             final args = settings.arguments as Map<String, dynamic>;
             final areaId = args['areaId'] as int;
             return MaterialPageRoute(
-              builder: (context) => AreaDetailPage(areaId: areaId),
+              builder: (context) => AreaDetail(areaId: areaId),
             );
           }
           if (settings.name == '/room-detail') {

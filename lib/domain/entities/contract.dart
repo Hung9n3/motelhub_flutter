@@ -56,6 +56,18 @@ class ContractEntity extends Equatable {
       cancelDate: map['cancelDate'],
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'id': id ?? '0',
+      'roomId': roomId ?? '0',
+      'customerId': customerId ?? 0,
+      'roomPrice': roomPrice ?? '0.0',
+      'name': name ?? '',
+      'startDate': startDate?.toUtc(),
+      'endDate': endDate?.toUtc(),
+      'cancelDate': cancelDate?.toUtc(),
+  };
+
   static List<ContractEntity> getFakeData() {
     var result = <ContractEntity>[];
     for (int i = 1; i <= 5; i++) {
