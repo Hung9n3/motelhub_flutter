@@ -50,7 +50,7 @@ class AreaDetailBloc extends Bloc<AreaDetailEvent, AreaDetailState> {
           .toList();
       emit(AreaDetailDoneState(dataState.data!));
     } else {
-      emit(AreaDetailErrorState(dataState.error!));
+      emit(AreaDetailErrorState(dataState.message!));
     }
   }
 }

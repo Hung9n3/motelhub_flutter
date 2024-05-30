@@ -32,7 +32,7 @@ class SearchRoomBloc extends Bloc<SearchRoomEvent, SearchRoomState> {
       if (dataState is DataSuccess) {
         emit(SearchRoomDoneState(dataState.data ?? []));
       } else {
-        emit(SearchRoomErrorState(dataState.error!));
+        emit(SearchRoomErrorState(dataState.message!));
       }
     }
   }
@@ -67,7 +67,7 @@ class SearchRoomBloc extends Bloc<SearchRoomEvent, SearchRoomState> {
     if (dataState is DataSuccess) {
       emit(SearchRoomDoneState(dataState.data ?? []));
     } else {
-      emit(SearchRoomErrorState(dataState.error!));
+      emit(SearchRoomErrorState(dataState.message));
     }
   }
 

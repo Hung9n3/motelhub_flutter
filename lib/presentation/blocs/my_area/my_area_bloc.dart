@@ -23,7 +23,7 @@ class MyAreaBloc extends Bloc<MyAreaEvent, MyAreaState>{
       emit(MyAreaDoneState(dataState.data!, customerDataState.data!));
     }
     if(dataState is DataFailed){
-      emit(MyAreaError(dataState.error!));
+      emit(MyAreaError(dataState.message!));
     }
   }
 }

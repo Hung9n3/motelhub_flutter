@@ -4,9 +4,8 @@ import 'package:motelhub_flutter/presentation/blocs/base/base_state.dart';
 abstract class RoomDetailState extends BaseState {
   final int? ownerId;
   final String? ownerName;
-  final List<UserEntity>? members;
   const RoomDetailState(
-      {this.ownerId, this.members, this.ownerName})
+      {this.ownerId, this.ownerName})
       : super();
 }
 
@@ -17,12 +16,10 @@ class RoomDetailLoadingFormState extends RoomDetailState {
 class RoomDetailLoadFormStateDone extends RoomDetailState {
   const RoomDetailLoadFormStateDone(
       int? ownerId,
-      String? ownerName,
-      List<UserEntity>? members)
+      String? ownerName)
       : super(
             ownerId: ownerId,
             ownerName: ownerName,
-            members: members,
             );
 }
 

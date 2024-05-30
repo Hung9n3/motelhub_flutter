@@ -20,7 +20,7 @@ class MyAppointmentBloc extends Bloc<MyAppointmentEvent, MyAppointmentState> {
       emit(MyAppointmentDoneState(dataState.data ?? []));
     }
     else {
-      emit(MyAppointmentErrorState(dataState.error!));
+      emit(MyAppointmentErrorState(dataState.message));
     }
 } on Exception catch (e) {
   print(e);

@@ -23,33 +23,14 @@ class RoomRepository extends IRoomRepository {
   Future<DataState<RoomEntity>> getById(int roomId) async {
     // TODO: implement getById api
     try {
-      String? areaName = '';
-      var data = RoomEntity.getFakeData()
-          .firstWhere((element) => element.id == roomId);
-      if (data.areaId != null) {
-         areaName = AreaEntity.getFakeData()
-            .where((element) => element.id == data.areaId)
-            .firstOrNull
-            ?.name;
+      var rooms = await Api.getRooms();
+      var result = rooms.where((element) => element.id == roomId).firstOrNull;
+      if(result == null) {
+        return const DataFailed('Not Found');
       }
-      var owner = UserEntity.getFakeData()
-          .where((element) => element.id == data.customerId)
-          .firstOrNull;
-      var contracts = ContractEntity.getFakeData().where((element) => element.roomId == data.id).toList();   
-      data = RoomEntity(
-          id: data.id,
-          name: data.name,
-          price: data.price,
-          photos: data.photos,
-          contracts: contracts,
-          acreage: data.acreage,
-          areaId: data.areaId,
-          ownerName: owner?.name,
-          customerId: owner?.id,
-          areaName: areaName);
-      return DataSuccess(data);
-    } on DioError catch (err) {
-      return DataFailed(err);
+      return DataSuccess(result);
+    } on Exception catch (err) {
+      return DataFailed(err.toString());
     }
   }
 
@@ -60,8 +41,8 @@ class RoomRepository extends IRoomRepository {
       var list = RoomEntity.getFakeData();
       var data = list.getRange(1, 20).toList();
       return DataSuccess(data);
-    } on DioError catch (err) {
-      return DataFailed(err);
+    } on Exception catch (err) {
+      return DataFailed(err.toString());
     }
   }
   

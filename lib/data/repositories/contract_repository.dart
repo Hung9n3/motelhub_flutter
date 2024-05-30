@@ -1,4 +1,5 @@
 import 'package:motelhub_flutter/core/resources/data_state.dart';
+import 'package:motelhub_flutter/data/api_service/api.dart';
 import 'package:motelhub_flutter/domain/entities/contract.dart';
 import 'package:motelhub_flutter/domain/entities/bill.dart';
 import 'package:motelhub_flutter/domain/repositories/contract_repository_interface.dart';
@@ -22,5 +23,15 @@ class ContractRepository implements IContractRepository {
         endDate: contract?.endDate,
         cancelDate: contract?.cancelDate);
     return DataSuccess(data);
+  }
+  
+  @override
+  Future<List<ContractEntity>> getAll() async {
+    try {
+      var result = await Api.getContracts();
+      return result;
+    } catch (e) {
+      rethrow;
+    }
   }
 }

@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
 class WorkOrderFormState {
-  final DioError? error;
+  final String? error;
   final bool? isCustomerPay;
   final bool? isOpen;
   const WorkOrderFormState({this.error, this.isCustomerPay, this.isOpen});
@@ -16,5 +16,5 @@ class WorkOrderFormDoneState extends WorkOrderFormState {
 }
 
 class WorkOrderFormErrorState extends WorkOrderFormState {
-  const WorkOrderFormErrorState(DioError? error) : super(error: error);
+  const WorkOrderFormErrorState(String? error) : super(error: error);
 }

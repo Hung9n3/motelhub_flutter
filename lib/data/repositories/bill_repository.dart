@@ -14,7 +14,7 @@ class BillRepository extends IBillRepository {
       }
       return const DataSuccess(null);
     } on DioError catch (e) {
-      return DataFailed(e);
+      return DataFailed(e.message);
     }
   }
 

@@ -27,7 +27,7 @@ class AuthRepository extends IAuthRepository {
         requestOptions: RequestOptions(path: '/api/endpoint'),
       );
 
-      return DataFailed(error);
+      return DataFailed(error.message);
     }
   }
 

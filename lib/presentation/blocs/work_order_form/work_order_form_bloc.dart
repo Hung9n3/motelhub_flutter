@@ -43,7 +43,7 @@ class WorkOrderFormBloc extends Bloc<WorkOrderFormEvent, WorkOrderFormState> {
         photos = dataState.data!.photos ?? [];
         emit(WorkOrderFormDoneState(isCustomerPay, isOpen));
       } else {
-        emit(WorkOrderFormErrorState(dataState.error));
+        emit(WorkOrderFormErrorState(dataState.message));
       }
     } on Error catch (e) {
       print(e);
@@ -67,7 +67,7 @@ class WorkOrderFormBloc extends Bloc<WorkOrderFormEvent, WorkOrderFormState> {
         emit(WorkOrderFormDoneState(isCustomerPay, isOpen));
       }
       else {
-        emit(WorkOrderFormErrorState(dataState.error));
+        emit(WorkOrderFormErrorState(dataState.message));
       }
     } on Error catch (e) {
       print(e);

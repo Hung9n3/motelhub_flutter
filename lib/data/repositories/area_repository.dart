@@ -16,7 +16,7 @@ class AreaRepository extends IAreaRepository {
       var result = areas.where((element) => element.hostId == userId).toList();
       return DataSuccess(result);
     } on Exception catch (e) {
-      return DataFailed.onEx(e.toString());
+      return DataFailed(e.toString());
     }
   }
 
@@ -53,7 +53,7 @@ class AreaRepository extends IAreaRepository {
           areas.where((element) => areaIds.contains(element.id)).toList();
       return DataSuccess(result);
     } on Exception catch (e) {
-      return DataFailed.onEx(e.toString());
+      return DataFailed(e.toString());
     }
   }
   
@@ -64,7 +64,7 @@ class AreaRepository extends IAreaRepository {
       var result = Api.getResult<bool>(response);
       return result;
     } on Exception catch (e) {
-      return DataFailed.onEx(e.toString());
+      return DataFailed(e.toString());
     }
   }
 }

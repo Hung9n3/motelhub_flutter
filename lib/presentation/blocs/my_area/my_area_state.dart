@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 abstract class MyAreaState extends Equatable{
   final List<AreaEntity>? data;
   final List<AreaEntity>? customerData;
-  final DioError? error;
+  final String? error;
 
   const MyAreaState({this.data, this.error, this.customerData});
 
@@ -22,5 +22,5 @@ class MyAreaDoneState extends MyAreaState{
 }
 
 class MyAreaError extends MyAreaState {
-  const MyAreaError(DioError error) : super(error: error);
+  const MyAreaError(String? error) : super(error: error);
 }

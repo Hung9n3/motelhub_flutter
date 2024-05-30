@@ -34,8 +34,16 @@ class AddRoomPage extends StatelessWidget {
                 )),
           BlocProvider<PhotoSectionBloc>(create: (context) => sl())
         ],
-        child: Builder(
-          builder: (BuildContext context) {
+        child: BlocConsumer<AddRoomBloc, AddRoomState>(
+          listener: (context, state) {
+            if (state is AddRoomSuccess) {
+              showAlertDialog(context, 'Save successfully');
+            }
+            if (state is AddRoomError) {
+              showAlertDialog(context, 'Save failed');
+            }
+          },
+          builder: (context, state) {
             return _buildBody(context);
           },
         ));
@@ -50,10 +58,10 @@ class AddRoomPage extends StatelessWidget {
           actions: [
             IconButton(
                 onPressed: () {
-                  var photos = context.read<PhotoSectionBloc>().state.photos ?? [];
-                  context
-                      .read<AddRoomBloc>()
-                      .add(AddRoomOnSubmitButtonPressed(priceController.text, photos));
+                  var photos =
+                      context.read<PhotoSectionBloc>().state.photos ?? [];
+                  context.read<AddRoomBloc>().add(AddRoomOnSubmitButtonPressed(
+                      priceController.text, photos));
                 },
                 icon: const Icon(Icons.check))
           ],
@@ -96,6 +104,14 @@ class AddRoomPage extends StatelessWidget {
                 onChanged: (value) {
                   context.read<AddRoomBloc>().add(ChangeAcreageEvent(value));
                 },
+              ),
+              TextField(
+                controller: priceController,
+                decoration: const InputDecoration(
+                  hintText: 'Price',
+                  prefixIcon: Icon(Icons.attach_money),
+                  suffixText: 'VND'
+                )
               ),
               const PhotoSection()
             ],

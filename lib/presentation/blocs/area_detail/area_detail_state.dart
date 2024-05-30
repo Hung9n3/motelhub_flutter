@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 
 abstract class AreaDetailState {
   final AreaEntity? area;
-  final DioError? error;
+  final String? error;
   const AreaDetailState({this.area, this.error});
 }
 
@@ -17,5 +17,5 @@ class AreaDetailDoneState extends AreaDetailState{
 }
 
 class AreaDetailErrorState extends AreaDetailState{
-  const AreaDetailErrorState(DioError error) : super(error: error);
+  const AreaDetailErrorState(String? error) : super(error: error);
 }

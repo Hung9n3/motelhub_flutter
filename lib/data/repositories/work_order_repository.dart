@@ -13,8 +13,8 @@ class WorkOrderRepository extends IWorkOrderRepository {
         return DataSuccess(data);
       }
       return const DataSuccess(null);
-    } on DioError catch (e) {
-      return DataFailed(e);
+    } on Exception catch (e) {
+      return DataFailed(e.toString());
     }
   }
 

@@ -76,7 +76,7 @@ class BillFormBloc extends Bloc<BaseBillFormEvent, BaseBillFormState> {
             [];
         emit(const BillFormDone());
       } else {
-        emit(BillFormError(dataState.error!.message));
+        emit(BillFormError(dataState.message));
       }
     } on DioError catch (e) {
       emit(BillFormError(e.message));

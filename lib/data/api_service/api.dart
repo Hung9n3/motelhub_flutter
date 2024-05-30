@@ -173,7 +173,7 @@ class Api {
         requestOptions: RequestOptions(path: '/api/endpoint'),
       );
 
-      return DataFailed.onEx(error.message);
+      return DataFailed(error.message);
     }
   }
 }

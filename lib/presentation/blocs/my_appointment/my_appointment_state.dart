@@ -4,7 +4,7 @@ import 'package:motelhub_flutter/presentation/blocs/base/base_state.dart';
 
 abstract class MyAppointmentState {
   final List<AppointmentEntity>? data;
-  final Exception? error;
+  final String? error;
 
   const MyAppointmentState({this.data, this.error});
 }
@@ -18,5 +18,5 @@ class MyAppointmentLoadingState extends MyAppointmentState {
 }
 
 class MyAppointmentErrorState extends MyAppointmentState {
-  const MyAppointmentErrorState(Exception error) : super(error: error);
+  const MyAppointmentErrorState(String? error) : super(error: error);
 } 

@@ -38,7 +38,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       _tokenHandler.write('userId', token['UserId']);
       emit(const LoginSuccessState());
     } else {
-      emit(LoginErrorState(dataState.error!));
+      emit(LoginErrorState(dataState.message));
     }
   }
 } on Exception catch (e) {

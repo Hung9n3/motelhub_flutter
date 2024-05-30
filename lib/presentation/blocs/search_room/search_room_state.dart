@@ -7,7 +7,7 @@ abstract class SearchRoomState {
   final SearchModel? searchModel;
   final bool? isAirConditioned;
   final List<RoomEntity>? data;
-  final DioError? error;
+  final String? error;
   const SearchRoomState(
       {this.searchModel = const SearchModel(),
       this.searchText,
@@ -25,5 +25,5 @@ class SearchRoomDoneState extends SearchRoomState {
 }
 
 class SearchRoomErrorState extends SearchRoomState {
-  const SearchRoomErrorState(DioError error) : super(error: error);
+  const SearchRoomErrorState(String? error) : super(error: error);
 }

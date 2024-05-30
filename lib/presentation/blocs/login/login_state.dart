@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 
 class LoginState extends Equatable{
-  final DioError? error;
+  final String? error;
   const LoginState({this.error});
   
   @override
@@ -14,7 +14,7 @@ class LoginInitialState extends LoginState {
 }
 
 class LoginErrorState extends LoginState {
-  const LoginErrorState(DioError error):super(error: error);
+  const LoginErrorState(String? error):super(error: error);
 }
 
 class LoginSuccessState extends LoginState {
