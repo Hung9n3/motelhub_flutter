@@ -85,33 +85,37 @@ class AddRoomPage extends StatelessWidget {
                   prefixIcon: Icon(Icons.holiday_village),
                 ),
               )),
-              TextField(
-                decoration: const InputDecoration(
-                  hintText: 'Room name',
-                  prefixIcon: Icon(Icons.meeting_room),
+              SectionWithBottomBorder(
+                child: TextField(
+                  decoration: const InputDecoration(
+                    hintText: 'Room name',
+                    prefixIcon: Icon(Icons.meeting_room),
+                  ),
+                  onChanged: (value) {
+                    context.read<AddRoomBloc>().add(ChangeRoomNameEvent(value));
+                  },
                 ),
-                onChanged: (value) {
-                  context.read<AddRoomBloc>().add(ChangeRoomNameEvent(value));
-                },
               ),
-              TextField(
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  hintText: 'Acreage',
-                  suffixText: 'm2',
-                  prefixIcon: Icon(Icons.square_foot),
+              SectionWithBottomBorder(
+                child: TextField(
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    hintText: 'Acreage',
+                    suffixText: 'm2',
+                    prefixIcon: Icon(Icons.square_foot),
+                  ),
+                  onChanged: (value) {
+                    context.read<AddRoomBloc>().add(ChangeAcreageEvent(value));
+                  },
                 ),
-                onChanged: (value) {
-                  context.read<AddRoomBloc>().add(ChangeAcreageEvent(value));
-                },
               ),
-              TextField(
-                controller: priceController,
-                decoration: const InputDecoration(
-                  hintText: 'Price',
-                  prefixIcon: Icon(Icons.attach_money),
-                  suffixText: 'VND'
-                )
+              SectionWithBottomBorder(
+                child: TextField(
+                    controller: priceController,
+                    decoration: const InputDecoration(
+                        hintText: 'Price',
+                        prefixIcon: Icon(Icons.attach_money),
+                        suffixText: 'VND')),
               ),
               const PhotoSection()
             ],

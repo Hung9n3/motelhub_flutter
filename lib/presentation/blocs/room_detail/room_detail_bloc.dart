@@ -11,6 +11,7 @@ import 'package:motelhub_flutter/domain/repositories/area_repository_interface.d
 import 'package:motelhub_flutter/domain/repositories/auth_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/contract_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/room_repository_interface.dart';
+import 'package:motelhub_flutter/domain/repositories/work_order_repository_interface.dart';
 import 'package:motelhub_flutter/domain/token/token_handler_interface.dart';
 import 'package:motelhub_flutter/presentation/blocs/base/base_state.dart';
 import 'package:motelhub_flutter/presentation/blocs/room_detail/room_detail_event.dart';
@@ -21,9 +22,11 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
   final IAreaRepository _areaRepository;
   final IAuthRepository _authRepository;
   final IContractRepository _contractRepository;
+  final IWorkOrderRepository _workOrderRepository;
   final ITokenHandler _tokenHandler;
 
-  RoomDetailBloc(this._roomRepository, this._tokenHandler, this._areaRepository, this._authRepository, this._contractRepository)
+  RoomDetailBloc(this._roomRepository, this._tokenHandler, this._areaRepository,
+      this._authRepository, this._contractRepository, this._workOrderRepository)
       : super(const RoomDetailLoadingFormState()) {
     on<LoadFormDataEvent>(_loadForm);
     on<SubmitFormEvent>(_submitForm);
@@ -33,7 +36,8 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
   }
 
   int? id;
-  int? ownerId;
+  int? hostId;
+  int? customerId;
   String? name;
   String? areaName;
   double? acreage;
@@ -53,19 +57,32 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
   _loadForm(LoadFormDataEvent event, Emitter<BaseState> emit) async {
     var dataState = await _roomRepository.getById(event.roomId!);
     if (dataState is DataSuccess) {
-      var currentUserId = int.tryParse(await _tokenHandler.getByKey(currentUserIdKey));
+      var currentUserId =
+          int.tryParse(await _tokenHandler.getByKey(currentUserIdKey));
       var room = dataState.data!;
       var area = (await _areaRepository.getById(room.areaId ?? 0)).data;
-      if(area != null) {
+      if (area != null) {
         isEditable = currentUserId == area.hostId;
         longitude = area.longitude;
         latitude = area.latitude;
         address = area.address;
         areaName = area.name ?? '';
       }
-      contracts = (await _contractRepository.getAll()).where((element) => element.roomId == room.id).toList() ?? [];
-      if(currentUserId != area?.hostId) {
-        contracts = contracts?.where((element) => element.customerId == currentUserId).toList() ?? [];
+      contracts = (await _contractRepository.getAll())
+          .where((element) => element.roomId == room.id)
+          .toList();
+      workOrders = (await _workOrderRepository.getAll())
+          .where((element) => element.roomId == room.id)
+          .toList();
+      if (currentUserId != area?.hostId) {
+        contracts = contracts
+                ?.where((element) => element.customerId == currentUserId)
+                .toList() ??
+            [];
+        workOrders = workOrders
+                ?.where((element) => element.customerId == currentUserId)
+                .toList() ??
+            [];
       }
       id = room.id;
       acreage = room.acreage ?? 0.0;
@@ -74,14 +91,12 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
       photos = room.photos ?? [];
       price = room.price ?? 0.0;
       name = room.name ?? '';
-      ownerId = room.customerId;
-      workOrders = room.workOrders;
+      customerId = room.customerId;
 
       users = await _authRepository.getAll();
       users.add(const UserEntity(id: 0, name: 'None'));
       users.sort((a, b) => a.id!.compareTo(b.id!));
-      emit(RoomDetailLoadFormStateDone(
-          ownerId, room.ownerName));
+      emit(RoomDetailLoadFormStateDone(hostId, room.ownerName));
     } else {
       emit(ErrorState(dataState.message));
     }
@@ -90,9 +105,8 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
   _changeOwner(ChangeOwnerEvent event, Emitter<BaseState> emit) async {
     var owner =
         users.where((element) => element.id == event.owner?.id).firstOrNull;
-    ownerId = owner?.id;
-    emit(RoomDetailLoadFormStateDone(
-        ownerId, owner?.name));
+    hostId = owner?.id;
+    emit(RoomDetailLoadFormStateDone(hostId, owner?.name));
   }
 
   _submitForm(SubmitFormEvent event, Emitter<BaseState> emit) async {
@@ -103,10 +117,15 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
           name: name,
           acreage: acreage,
           photos: event.photos,
-          customerId: ownerId,
-          isEmpty: isEmpty,
+          customerId: customerId,
+          isEmpty: customerId == 0 || customerId == null,
           areaId: areaId);
-      emit(const SubmitFormSuccess());
+      var result = await _roomRepository.save(room);
+      if (result is DataSuccess) {
+        emit(const SubmitFormSuccess());
+      } else {
+        emit(ErrorState(result.message));
+      }
     } on Exception catch (err) {
       emit(ErrorState(err.toString()));
     }

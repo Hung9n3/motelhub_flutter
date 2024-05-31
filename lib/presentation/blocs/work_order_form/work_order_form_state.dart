@@ -18,3 +18,7 @@ class WorkOrderFormDoneState extends WorkOrderFormState {
 class WorkOrderFormErrorState extends WorkOrderFormState {
   const WorkOrderFormErrorState(String? error) : super(error: error);
 }
+
+class WorkOrderSubmitDone extends WorkOrderFormState {
+  const WorkOrderSubmitDone() : super();
+}

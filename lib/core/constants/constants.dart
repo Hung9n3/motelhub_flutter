@@ -11,4 +11,6 @@ const String authApi = '$api/Authentication';
 const String areaApi = '$api/Area';
 const String roomApi = '$api/Room';
 const String userApi = '$api/User';
+const String saveSuccess = 'Save successfully';
+const String saveFailed = 'Save failed';
 

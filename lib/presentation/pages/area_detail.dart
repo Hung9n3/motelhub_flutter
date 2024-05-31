@@ -72,7 +72,7 @@ class AreaDetail extends StatelessWidget {
               children: [
                 SectionWithBottomBorder(
                   child: TextField(
-                    readOnly: bloc.isEditable,
+                    readOnly: !bloc.isEditable,
                     controller: nameController,
                     decoration: const InputDecoration(
                       hintText: 'Area name',
@@ -82,7 +82,7 @@ class AreaDetail extends StatelessWidget {
                 ),
                 SectionWithBottomBorder(
                   child: TextField(
-                    readOnly: bloc.isEditable,
+                    readOnly: !bloc.isEditable,
                     controller: addressController,
                     decoration: const InputDecoration(
                         hintText: 'Address',

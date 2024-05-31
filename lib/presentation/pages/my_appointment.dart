@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:motelhub_flutter/injection_container.dart';
 import 'package:motelhub_flutter/presentation/blocs/my_appointment/my_appointment_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/my_appointment/my_appointment_event.dart';
@@ -39,7 +40,20 @@ class MyAppointment extends StatelessWidget {
       body: ListView.builder(
           itemCount: state.data!.length,
           itemBuilder: (context, index) {
-            return Padding(
+            return Slidable(
+        endActionPane: ActionPane(
+            extentRatio: 0.2,
+            motion: const BehindMotion(),
+            children: [
+              SlidableAction(
+                onPressed: (context) {},
+                backgroundColor: const Color(0xFFFE4A49),
+                foregroundColor: Colors.white,
+                icon: Icons.delete,
+                label: 'Delete',
+              )
+            ]),
+        child: Padding(
               padding:
                   const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30),
               child: InkWell(
@@ -74,7 +88,7 @@ class MyAppointment extends StatelessWidget {
                       ]),
                 ),
               ),
-            );
+            ));
           }),
     );
   }

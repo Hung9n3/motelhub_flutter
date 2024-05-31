@@ -8,11 +8,13 @@ import 'package:motelhub_flutter/domain/entities/contract.dart';
 import 'package:motelhub_flutter/domain/entities/work_order.dart';
 import 'package:motelhub_flutter/injection_container.dart';
 import 'package:intl/intl.dart';
+import 'package:motelhub_flutter/presentation/blocs/base/base_state.dart';
 import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/photo_section_bloc/photo_section_event.dart';
 import 'package:motelhub_flutter/presentation/blocs/room_detail/room_detail_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/room_detail/room_detail_event.dart';
 import 'package:motelhub_flutter/presentation/blocs/room_detail/room_detail_state.dart';
+import 'package:motelhub_flutter/presentation/components/commons/alert_dialog.dart';
 import 'package:motelhub_flutter/presentation/components/commons/common_listview.dart';
 import 'package:motelhub_flutter/presentation/components/commons/form_container.dart';
 import 'package:motelhub_flutter/presentation/components/commons/item_expansion.dart';
@@ -35,30 +37,48 @@ class RoomDetailPage extends StatelessWidget {
               create: (context) => sl()..add(LoadFormDataEvent(roomId))),
           BlocProvider<PhotoSectionBloc>(create: (context) => sl()),
         ],
-        child: Builder(builder: (BuildContext context) {
+        child:
+            BlocConsumer<RoomDetailBloc, BaseState>(listener: (context, state) {
+          if (state is SubmitFormSuccess) {
+            showAlertDialog(context, 'Save successfully');
+          }
+          if (state is ErrorState) {
+            showAlertDialog(context, 'Save failed');
+          }
+        }, builder: (context, state) {
+          var priceController = TextEditingController(
+              text: context.read<RoomDetailBloc>().price?.toString() ?? '0');
           return Scaffold(
             appBar: AppBar(title: const Text('Room'), actions: [
-              IconButton(
-                  onPressed: () {
-                    var photos = context.read<PhotoSectionBloc>().state.photos;
-                    context.read<RoomDetailBloc>().add(SubmitFormEvent(photos));
-                  },
-                  icon: const Icon(Icons.check))
+              Visibility(
+                visible: context.read<RoomDetailBloc>().isEditable,
+                child: IconButton(
+                    onPressed: () {
+                      var photos =
+                          context.read<PhotoSectionBloc>().state.photos;
+                      context
+                          .read<RoomDetailBloc>()
+                          .add(SubmitFormEvent(photos));
+                    },
+                    icon: const Icon(Icons.check)),
+              )
             ]),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                context
-                    .read<PhotoSectionBloc>()
-                    .add(const AddPhotoEvent(ImageSource.camera));
-              },
-              child: const Icon(Icons.add_a_photo),
-            ),
-            body: _buildBody(context),
+            floatingActionButton: Visibility(
+                visible: context.read<RoomDetailBloc>().isEditable,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    context
+                        .read<PhotoSectionBloc>()
+                        .add(const AddPhotoEvent(ImageSource.camera));
+                  },
+                  child: const Icon(Icons.add_a_photo),
+                )),
+            body: _buildBody(context, priceController),
           );
         }));
   }
 
-  _buildBody(BuildContext context) {
+  _buildBody(BuildContext context, TextEditingController priceController) {
     var roomDetailBloc = context.read<RoomDetailBloc>();
     var photoSectionBloc = context.read<PhotoSectionBloc>();
     return BlocBuilder<RoomDetailBloc, RoomDetailState>(
@@ -74,13 +94,13 @@ class RoomDetailPage extends StatelessWidget {
             child: Column(
               children: [
                 DropdownMenu<UserEntity>(
+                    enabled: roomDetailBloc.isEditable,
                     width: MediaQuery.of(context).size.width >= 800
                         ? 740
                         : MediaQuery.of(context).size.width - 60,
                     leadingIcon: const Icon(Icons.person),
                     initialSelection: roomDetailBloc.users
-                        .where(
-                            (element) => element.id == roomDetailBloc.ownerId)
+                        .where((element) => element.id == roomDetailBloc.hostId)
                         .firstOrNull,
                     requestFocusOnTap: true,
                     label: const Text('Select owner'),
@@ -106,6 +126,7 @@ class RoomDetailPage extends StatelessWidget {
                 )),
                 SectionWithBottomBorder(
                     child: TextFormField(
+                  readOnly: !roomDetailBloc.isEditable,
                   initialValue: roomDetailBloc.name,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.meeting_room),
@@ -115,12 +136,22 @@ class RoomDetailPage extends StatelessWidget {
                 )),
                 SectionWithBottomBorder(
                     child: TextFormField(
+                  readOnly: !roomDetailBloc.isEditable,
                   initialValue: roomDetailBloc.acreage?.toString(),
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.meeting_room),
                   ),
                   onChanged: (value) =>
                       roomDetailBloc.add(ChangeAcreageEvent(value)),
+                )),
+                SectionWithBottomBorder(
+                    child: TextFormField(
+                  readOnly: !roomDetailBloc.isEditable,
+                  controller: priceController,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.attach_money),
+                    suffixText: 'VND'
+                  ),
                 )),
                 _workOrderSection(context, roomDetailBloc.workOrders),
                 _contractSection(context, roomDetailBloc.contracts),
@@ -138,22 +169,27 @@ class RoomDetailPage extends StatelessWidget {
     if (workOrders == null) {
       return const SizedBox();
     }
+    var bloc = context.read<RoomDetailBloc>();
     return ItemExpansion(
         title: 'Work Orders',
         icon: Icons.report_gmailerrorred,
         itemCount: workOrders.length,
         children: [
-          OutlinedButton(
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => WorkOrderForm(roomId: roomId))),
-              child: const Icon(Icons.add)),
+          Visibility(
+            visible: bloc.isEditable,
+            child: OutlinedButton(
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => WorkOrderForm(roomId: roomId))),
+                child: const Icon(Icons.add)),
+          ),
           CommonListView(
               items: workOrders,
               builder: (context, index) {
                 var workOrder = workOrders[index];
                 return Slidable(
+                    enabled: bloc.isEditable,
                     endActionPane: ActionPane(
                         extentRatio: 0.2,
                         motion: const BehindMotion(),
@@ -176,22 +212,27 @@ class RoomDetailPage extends StatelessWidget {
     if (contracts == null) {
       return const SizedBox();
     }
+    var bloc = context.read<RoomDetailBloc>();
     return ItemExpansion(
         title: 'Contracts',
         icon: Icons.description,
         itemCount: contracts.length,
         children: [
-          OutlinedButton(
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ContractForm(roomId: roomId))),
-              child: const Icon(Icons.add)),
+          Visibility(
+            visible: bloc.isEditable,
+            child: OutlinedButton(
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ContractForm(roomId: roomId))),
+                child: const Icon(Icons.add)),
+          ),
           CommonListView(
               items: contracts,
               builder: (context, index) {
                 var contract = contracts[index];
                 return Slidable(
+                    enabled: bloc.isEditable,
                     endActionPane: ActionPane(
                         extentRatio: 0.2,
                         motion: const BehindMotion(),

@@ -3,5 +3,6 @@ import 'package:motelhub_flutter/domain/entities/work_order.dart';
 
 abstract class IWorkOrderRepository {
   Future<DataState<WorkOrderEntity>> getById(int? workOrderId);
-  Future<DataState<WorkOrderEntity>> save(WorkOrderEntity workOrderEntity);
+  Future<List<WorkOrderEntity>> getAll();
+  Future<DataState> save(WorkOrderEntity workOrderEntity);
 }
