@@ -3,9 +3,8 @@ import 'package:dio/dio.dart';
 class AppointmentFormState {
   final bool? isCanceled;
   final bool? isAccepted;
-  final DioError? error;
   final String? alert;
-  const AppointmentFormState({this.error, this.isCanceled, this.alert, this.isAccepted});
+  const AppointmentFormState({ this.isCanceled, this.alert, this.isAccepted});
 }
 
 class AppointmentFormLoadingState extends AppointmentFormState{
@@ -17,7 +16,7 @@ class AppointmentFormDoneState extends AppointmentFormState{
 }
 
 class AppointmentFormErrorState extends AppointmentFormState{
-  const AppointmentFormErrorState(DioError? error) : super(error: error);
+  const AppointmentFormErrorState(String? alert) : super(alert: alert);
 }
 
 class AppointmentFormChangeDateDone extends AppointmentFormState {
@@ -26,4 +25,8 @@ class AppointmentFormChangeDateDone extends AppointmentFormState {
 
 class AppointmentFormValidateFail extends AppointmentFormState {
   const AppointmentFormValidateFail(String? alert) : super(alert: alert);
+}
+
+class AppointmentFormSubmitDone extends AppointmentFormState{
+  const AppointmentFormSubmitDone() : super();
 }

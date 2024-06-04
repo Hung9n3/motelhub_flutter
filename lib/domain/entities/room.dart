@@ -16,6 +16,8 @@ class RoomEntity extends Equatable {
   final String? ownerName;
   final String? ownerPhone;
   final String? ownerEmail;
+  final DateTime? contractFrom;
+  final DateTime? contractTo;
   final UserEntity? owner;
   final List<UserEntity>? members;
   final List<PhotoEntity>? photos;
@@ -40,7 +42,8 @@ class RoomEntity extends Equatable {
       this.customerId,
       this.ownerEmail,
       this.ownerName,
-      this.ownerPhone});
+      this.ownerPhone,
+      this.contractFrom, this.contractTo, });
 
   @override
   List<Object?> get props {

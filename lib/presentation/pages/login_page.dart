@@ -45,14 +45,14 @@ class LoginPage extends StatelessWidget {
               AspectRatio(
                   aspectRatio: 16 / 9,
                   child: Image.asset('assets/images/login_logo.png')),
-              const Text("Welcome back!", style: TextStyle(fontSize: 50)),
+              const Text("Boarding House Hub", style: TextStyle(fontSize: 50), textAlign: TextAlign.center,),
               const SizedBox(height: 50),
               TextField(
                 onChanged: (value) {
                   context.read<LoginBloc>().add(UsernameChangeEvent(value));
                 },
                 decoration: InputDecoration(
-                  label: const Text("Username"),
+                  label: const Text("Phone number"),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0)),
                 ),
@@ -118,7 +118,7 @@ class LoginPage extends StatelessWidget {
                       image: AssetImage(
                           'assets/images/facebook_icon.png'), // Replace with the desired Google icon
                     )),
-                    _squareIconButton(const Icon(Icons.phone))
+                    _squareIconButton(const Icon(Icons.email_outlined))
                   ],
                 ),
               ),

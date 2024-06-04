@@ -34,4 +34,10 @@ class ContractRepository implements IContractRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<DataState> save(ContractEntity entity) async{
+    var response = await Api.post(entity.toJson(), 'Contract');
+    return Api.getResult(response);
+  }
 }

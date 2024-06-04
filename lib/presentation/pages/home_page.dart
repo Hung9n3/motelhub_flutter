@@ -36,8 +36,8 @@ class HomePage extends StatelessWidget {
                     label: 'Appointments',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.person),
-                    label: 'Profile',
+                    icon: Icon(Icons.notifications),
+                    label: 'Notification',
                   ),
                 ],
                 onTap: (index) {
@@ -52,7 +52,7 @@ class HomePage extends StatelessWidget {
 
   Widget _buildBody(NavigationTab currentTab) {
     switch (currentTab) {
-      case NavigationTab.profile:
+      case NavigationTab.notification:
         return const ProfileComponent();
       case NavigationTab.search:
         return const SearchRoom();

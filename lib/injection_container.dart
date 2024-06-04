@@ -62,8 +62,8 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<PhotoSectionBloc>(() => PhotoSectionBloc());
   sl.registerFactory<SearchRoomBloc>(() => SearchRoomBloc(sl()));
   sl.registerFactory<MyAppointmentBloc>(() => MyAppointmentBloc(sl(),sl()));
-  sl.registerFactory<AppointmentFormBloc>(() => AppointmentFormBloc(sl(),sl()));
-  sl.registerFactory<WorkOrderFormBloc>(() => WorkOrderFormBloc(sl()));
+  sl.registerFactory<AppointmentFormBloc>(() => AppointmentFormBloc(sl(),sl(), sl(), sl()));
+  sl.registerFactory<WorkOrderFormBloc>(() => WorkOrderFormBloc(sl(), sl()));
   sl.registerFactory<BillFormBloc>(() => BillFormBloc(sl(), sl(), sl()));
   // sl.registerFactory<LocalArticleBloc>(
   //   ()=> LocalArticleBloc(sl(),sl(),sl())

@@ -90,21 +90,21 @@ class ContractForm extends StatelessWidget {
           }),
       SectionWithBottomBorder(
           child: TextFormField(
-            onTap: () async {
-              var selectedDate = await selectDate(
-                  context, DateTime.now(), DateTime(9999), bloc.startDate);
-              bloc.add(ContractFormChangeStartDateEvent(selectedDate));
-            },
-            readOnly: true,
-            enabled: contractId == null || bloc.startDate == null,
-            controller: startDateController,
-            decoration: InputDecoration(
-              suffixText: 'Start date',
-              prefixIcon: Container(
-                margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                child: const Icon(Icons.calendar_month),
-              ),
-            ),
+        onTap: () async {
+          var selectedDate = await selectDate(
+              context, DateTime.now(), DateTime(9999), bloc.startDate);
+          bloc.add(ContractFormChangeStartDateEvent(selectedDate));
+        },
+        readOnly: true,
+        enabled: contractId == null || bloc.startDate == null,
+        controller: startDateController,
+        decoration: InputDecoration(
+          suffixText: 'Start date',
+          prefixIcon: Container(
+            margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+            child: const Icon(Icons.calendar_month),
+          ),
+        ),
       )),
       SectionWithBottomBorder(
           child: TextFormField(
@@ -142,11 +142,13 @@ class ContractForm extends StatelessWidget {
           ),
         ),
       )),
-      _billSection(context, bloc.bills),
+      Visibility(
+          visible: contractId != null,
+          child: _billSection(context, bloc.bills)),
     ]));
   }
 
-  _billSection(BuildContext context, List<BillEntity>? bills) {
+  Widget _billSection(BuildContext context, List<BillEntity>? bills) {
     if (bills == null) {
       return const SizedBox();
     }

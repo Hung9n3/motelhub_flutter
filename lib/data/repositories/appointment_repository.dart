@@ -19,5 +19,11 @@ class AppointmentRepository extends IAppointmentRepository{
     var data = listData.where((element) => element.id == id).firstOrNull;
     return DataSuccess(data);
   }
+  
+  @override
+  Future<DataState> save(AppointmentEntity entity) async{
+    var response = await Api.post(entity.toJson(), 'Appointment');
+    return Api.getResult(response);
+  }
 
 }

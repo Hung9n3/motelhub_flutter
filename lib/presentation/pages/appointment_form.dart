@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:motelhub_flutter/core/constants/constants.dart';
 import 'package:motelhub_flutter/injection_container.dart';
 import 'package:motelhub_flutter/presentation/blocs/appointment_form/appointment_form_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/appointment_form/appointment_form_event.dart';
@@ -23,14 +24,20 @@ class AppointmentForm extends StatelessWidget {
             sl()..add(AppointmentFormInitEvent(appointmentId, roomId)),
         child: BlocConsumer<AppointmentFormBloc, AppointmentFormState>(
           listener: (context, state) {
-            if(state is AppointmentFormValidateFail) {
+            if (state is AppointmentFormValidateFail) {
               showAlertDialog(context, state.alert!);
+            }
+            if (state is AppointmentFormSubmitDone) {
+              showAlertDialog(context, saveSuccess);
+            }
+            if (state is AppointmentFormErrorState) {
+              showAlertDialog(context, '$saveFailed: ${state.alert!}');
             }
           },
           builder: (context, state) {
             if (state is AppointmentFormErrorState) {
               return Center(
-                child: Text("${state.error}"),
+                child: Text("${state.alert}"),
               );
             }
             if (state is AppointmentFormLoadingState) {
@@ -51,14 +58,22 @@ class AppointmentForm extends StatelessWidget {
         : DateFormat('dd, MMM y').format(bloc.startDate!);
     var startDateController = TextEditingController(text: startDate);
     var durationController = TextEditingController(text: '${bloc.duration}');
-    var startTimeController = TextEditingController(text: '${bloc.startTime?.hour.toString().padLeft(2, '0')}:${bloc.startTime?.minute.toString().padLeft(2, '0')}');
+    var startTimeController = TextEditingController(
+        text:
+            '${bloc.startTime?.hour.toString().padLeft(2, '0')}:${bloc.startTime?.minute.toString().padLeft(2, '0')}');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Appointment'),
         actions: [
-          IconButton(onPressed: (){
-            bloc.add(AppointmentFormSubmitEvent(appointmentId, int.tryParse(durationController.text)));
-          }, icon: const Icon(Icons.check))
+          Visibility(
+            visible: !bloc.isOver && !bloc.isCanceled,
+            child: IconButton(
+                onPressed: () {
+                  bloc.add(AppointmentFormSubmitEvent(
+                      appointmentId, int.tryParse(durationController.text)));
+                },
+                icon: const Icon(Icons.check)),
+          )
         ],
       ),
       body: FormContainer(
@@ -82,47 +97,47 @@ class AppointmentForm extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: 
-                SectionWithBottomBorder(
-                    child: TextFormField(
-                  onTap: () async {
-                    var selectedDate = await selectDate(
-                        context, DateTime.now(), DateTime(9999), bloc.startDate);
-                    bloc.add(AppointmentFormChangeStartDateEvent(selectedDate));
-                  },
-                  readOnly: true,
-                  enabled: bloc.isCanceled != true,
-                  controller: startDateController,
-                  decoration: const InputDecoration(
-                    suffixText: 'Start date',
-                    prefixIcon: Icon(Icons.calendar_month),
-                  ),
-                )),
+              child: SectionWithBottomBorder(
+                  child: TextFormField(
+                onTap: () async {
+                  var selectedDate = await selectDate(
+                      context, DateTime.now(), DateTime(9999), bloc.startDate);
+                  bloc.add(AppointmentFormChangeStartDateEvent(selectedDate));
+                },
+                readOnly: true,
+                enabled: !bloc.isOver && !bloc.isAccepted && !bloc.isCanceled && bloc.isCreator,
+                controller: startDateController,
+                decoration: const InputDecoration(
+                  suffixText: 'Start date',
+                  prefixIcon: Icon(Icons.calendar_month),
+                ),
+              )),
             ),
-            const SizedBox(width: 10,),
+            const SizedBox(
+              width: 10,
+            ),
             Expanded(
-              child: 
-                SectionWithBottomBorder(
-                    child: TextFormField(
-                  onTap: () async {
-                    var selectedTime = await selectTime(
-                        context, bloc.startTime ?? TimeOfDay.now());
-                    bloc.add(AppointmentFormChangeStartTimeEvent(selectedTime));
-                  },
-                  readOnly: true,
-                  enabled: appointmentId == null || bloc.isCanceled != true && bloc.currentUserId == bloc.creatorId,
-                  controller: startTimeController,
-                  decoration: const InputDecoration(
-                    suffixText: 'Start time',
-                    prefixIcon: Icon(Icons.access_time),
-                  ),
-                )),
+              child: SectionWithBottomBorder(
+                  child: TextFormField(
+                onTap: () async {
+                  var selectedTime = await selectTime(
+                      context, bloc.startTime ?? TimeOfDay.now());
+                  bloc.add(AppointmentFormChangeStartTimeEvent(selectedTime));
+                },
+                readOnly: true,
+                enabled: !bloc.isOver && !bloc.isAccepted && !bloc.isCanceled && bloc.isCreator,
+                controller: startTimeController,
+                decoration: const InputDecoration(
+                  suffixText: 'Start time',
+                  prefixIcon: Icon(Icons.access_time),
+                ),
+              )),
             ),
           ],
         ),
         SectionWithBottomBorder(
             child: TextField(
-          enabled: appointmentId == null || bloc.isCanceled != true && bloc.currentUserId == bloc.creatorId,
+          enabled: !bloc.isOver && !bloc.isAccepted && !bloc.isCanceled && bloc.isCreator,
           controller: durationController,
           decoration: const InputDecoration(
             suffixText: 'Minutes',
@@ -132,25 +147,35 @@ class AppointmentForm extends StatelessWidget {
         Row(
           children: [
             const Text('Canceled'),
-            const SizedBox(width: 10,),
+            const SizedBox(
+              width: 10,
+            ),
             Switch(
-                  value: bloc.isCanceled ?? false,
-                  onChanged: (value) {
-                    bloc
-                        .add(AppointmentFormIsCancelChangeEvent(value));
-                  }),
+                value: bloc.isCanceled,
+                onChanged: (value) {
+                  if(bloc.isOver) {
+                    showAlertDialog(context, 'Appointment is over');
+                    return;
+                  }
+                  bloc.add(AppointmentFormIsCancelChangeEvent(value));
+                }),
           ],
         ),
         Row(
           children: [
             const Text('Accepted'),
-            const SizedBox(width: 10,),
+            const SizedBox(
+              width: 10,
+            ),
             Switch(
-                  value: bloc.isAccepted ?? false,
-                  onChanged: (value) {
-                    bloc
-                        .add(AppointmentFormIsAcceptedChangeEvent(value));
-                  }),
+                value: bloc.isAccepted,
+                onChanged: (value) {
+                  if (!bloc.isOver && !bloc.isCanceled && !bloc.isCreator) {
+                    return;
+                  }
+
+                  bloc.add(AppointmentFormIsAcceptedChangeEvent(value));
+                }),
           ],
         ),
       ])),

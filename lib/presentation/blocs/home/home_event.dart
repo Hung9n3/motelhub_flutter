@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-enum NavigationTab {main, search, appointment, profile, }
+enum NavigationTab {main, search, appointment, notification, }
 
 abstract class HomeEvent extends Equatable{
   const HomeEvent();

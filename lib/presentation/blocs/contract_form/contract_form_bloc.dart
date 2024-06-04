@@ -24,7 +24,10 @@ class ContractFormBloc extends Bloc<ContractFormEvent, ContractFormState> {
   DateTime? startDate;
   DateTime? endDate;
   DateTime? cancelDate;
+  int? customerId;
+  int? isCustomerAccept;
   int? selectOwnerId;
+  bool isOver = false;
   List<UserEntity> users = [];
 
   _loadForm(ContractFormEvent event, Emitter<ContractFormState> emit) async {
