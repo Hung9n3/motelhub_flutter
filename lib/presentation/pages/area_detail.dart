@@ -140,11 +140,11 @@ class AreaDetail extends StatelessWidget {
                         const SizedBox(
                           height: 10,
                         ),
-                        Text('Acreage: ${rooms[index].acreage ?? 0}'),
+                        Text('Acreage: ${rooms[index].acreage ?? 0} m2'),
                         const SizedBox(
                           height: 10,
                         ),
-                        Text('Price: ${rooms[index].price ?? 0}'),
+                        Text('Price: ${rooms[index].price ?? 0} VND'),
                       ],
                     ),
                   ),
