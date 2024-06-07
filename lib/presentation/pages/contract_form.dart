@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,6 +17,7 @@ import 'package:motelhub_flutter/presentation/components/commons/item_expansion.
 import 'package:motelhub_flutter/presentation/components/commons/section_with_bottom_border.dart';
 import 'package:motelhub_flutter/presentation/components/commons/swipeable_with_delete_button.dart';
 import 'package:motelhub_flutter/presentation/pages/bill_form.dart';
+import 'package:signature/signature.dart';
 
 class ContractForm extends StatelessWidget {
   final int? contractId;
@@ -67,6 +70,7 @@ class ContractForm extends StatelessWidget {
     var startDateController = TextEditingController(text: startDate);
     var endDateController = TextEditingController(text: endDate);
     var cancelDateController = TextEditingController(text: cancelDate);
+    var priceController = TextEditingController(text: bloc.priceRoom?.toString());
     return FormContainer(
         child: Column(children: [
       DropdownMenu<UserEntity>(
@@ -88,6 +92,15 @@ class ContractForm extends StatelessWidget {
                 .read<ContractFormBloc>()
                 .add(ContractFormChangeOwnerEvent(value));
           }),
+      SectionWithBottomBorder(
+                    child: TextFormField(
+                  readOnly: bloc.signature != null,
+                  controller: priceController,
+                  decoration: const InputDecoration(
+                    prefixIcon: Icon(Icons.attach_money),
+                    suffixText: 'VND'
+                  ),
+                )),
       SectionWithBottomBorder(
           child: TextFormField(
         onTap: () async {
@@ -142,6 +155,50 @@ class ContractForm extends StatelessWidget {
           ),
         ),
       )),
+      TextButton(
+          onPressed: () async {
+            final SignatureController _controller = SignatureController(
+              penStrokeWidth: 5,
+              penColor: Colors.black,
+              exportBackgroundColor: Colors.transparent,
+            );
+            bloc.signature = await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    scrollable: true,
+                    contentPadding: const EdgeInsets.all(8.0),
+                    content: Container(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      child: Signature(
+                        height: MediaQuery.of(context).size.height,
+                        width: MediaQuery.of(context).size.width,
+                        controller: _controller,
+                        backgroundColor: Colors.white,
+                      ),
+                    ),
+                    actions: [
+                      ElevatedButton(
+                          onPressed: () {
+                            _controller.clear();
+                          },
+                          child: const Text('Delete')),
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Cancel')),
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context, _controller.toPngBytes());
+                          },
+                          child: const Text('Save')),
+                    ],
+                  );
+                });
+          },
+          child: const Text('Customer signature')),
       Visibility(
           visible: contractId != null,
           child: _billSection(context, bloc.bills)),

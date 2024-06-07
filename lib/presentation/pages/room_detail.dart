@@ -140,6 +140,7 @@ class RoomDetailPage extends StatelessWidget {
                   initialValue: roomDetailBloc.acreage?.toString(),
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.meeting_room),
+                    suffixText: 'M2'
                   ),
                   onChanged: (value) =>
                       roomDetailBloc.add(ChangeAcreageEvent(value)),

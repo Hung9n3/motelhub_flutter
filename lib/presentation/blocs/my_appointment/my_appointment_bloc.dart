@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motelhub_flutter/core/constants/constants.dart';
 import 'package:motelhub_flutter/core/resources/data_state.dart';
 import 'package:motelhub_flutter/domain/entities/appointment.dart';
+import 'package:motelhub_flutter/domain/entities/room.dart';
+import 'package:motelhub_flutter/domain/entities/user.dart';
 import 'package:motelhub_flutter/domain/repositories/appointment_repository_interface.dart';
 import 'package:motelhub_flutter/domain/token/token_handler_interface.dart';
 import 'package:motelhub_flutter/presentation/blocs/my_appointment/my_appointment_event.dart';
@@ -19,12 +21,30 @@ class MyAppointmentBloc extends Bloc<MyAppointmentEvent, MyAppointmentState> {
   getAppointments(
       MyAppointmentInitEvent event, Emitter<MyAppointmentState> emit) async {
     try {
-      var currentUserId =
-          int.tryParse(await _tokenHandler.getByKey(currentUserIdKey));
-      if (currentUserId == null) {
-        return;
-      }
-      var dataState = await _appointmentRepository.getByUser(currentUserId);
+      // var currentUserId =
+      //     int.tryParse(await _tokenHandler.getByKey(currentUserIdKey));
+      // if (currentUserId == null) {
+      //   return;
+      // }
+      // var dataState = await _appointmentRepository.getByUser(currentUserId);
+      List<AppointmentEntity> data = [
+        AppointmentEntity(
+          title: 'Đi coi phòng 4',
+          isAccepted: true,
+          startTime: DateTime(2024, 6, 1, 14, 30),
+          duration: 60,
+          creator: const UserEntity(
+            name: 'Trần Tiến Đạt'
+          ),
+          participant: const UserEntity(
+            name: 'Đỗ Quốc Hùng'
+          ),
+          room: const RoomEntity(
+            name: 'Phòng 4'
+          )
+        )
+      ];
+      var dataState = DataSuccess(data);
       if (dataState is DataSuccess) {
         emit(MyAppointmentDoneState(dataState.data ?? []));
       } else {

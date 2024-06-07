@@ -3,6 +3,7 @@ import 'package:motelhub_flutter/core/resources/data_state.dart';
 import 'package:motelhub_flutter/core/resources/search/search_model.dart';
 import 'package:motelhub_flutter/core/resources/search/search_range.dart';
 import 'package:motelhub_flutter/core/resources/search/search_single.dart';
+import 'package:motelhub_flutter/domain/entities/room.dart';
 import 'package:motelhub_flutter/domain/repositories/room_repository_interface.dart';
 import 'package:motelhub_flutter/domain/token/token_handler_interface.dart';
 import 'package:motelhub_flutter/presentation/blocs/search_room/search_room_event.dart';
@@ -27,9 +28,20 @@ class SearchRoomBloc extends Bloc<SearchRoomEvent, SearchRoomState> {
 
   getRooms(SearchRoomEvent event, Emitter<SearchRoomState> emit) async {
     if (event is SearchRoomInitEvent || event is SearchRoomSubmitEvent) {
-      var dataState =
-          await this._roomRepository.Search(super.state.searchModel!);
-      if (dataState is DataSuccess) {
+      // var dataState =
+      //     await this._roomRepository.Search(super.state.searchModel!);
+       List<RoomEntity> data = [
+          RoomEntity(id:1, name: 'Nhà trọ',
+          address: '2/3, Đường Nguyễn Sỹ Sách, Phường 15, Tân Bình, Hồ Chí Minh', acreage: 20, price: 2000000),
+          RoomEntity(id:1, name: 'Phòng 10 - nhà trọ Tân Bình',
+          address: '187, Đường Ni Sư Huỳnh Liên, Phường 10, Tân Bình, Hồ Chí Minh', acreage: 18, price: 1400000),
+          RoomEntity(id:1, name: 'Nhà trọ mới',
+          address: 'Hẻm 45, Đường Tân Trụ, Phường 15, Tân Bình, Hồ Chí Minh', acreage: 13, price: 2000000),
+          RoomEntity(id:1, name: 'phòng trọ Gia Định',
+          address: 'Đường Bạch Đằng, Phường 2, Tân Bình, Hồ Chí Minh', acreage: 18, price: 2000000),
+        ];
+        var dataState = DataSuccess(data);
+       if (dataState is DataSuccess) {
         emit(SearchRoomDoneState(dataState.data ?? []));
       } else {
         emit(SearchRoomErrorState(dataState.message!));
@@ -63,7 +75,18 @@ class SearchRoomBloc extends Bloc<SearchRoomEvent, SearchRoomState> {
     }
     var searchModel = SearchModel(searchRanges: searchRanges, searchSingles: searchSingles);
 
-    var dataState = await this._roomRepository.Search(searchModel);
+    //var dataState = await this._roomRepository.Search(searchModel);
+    List<RoomEntity> data = [
+          RoomEntity(id:1, name: 'Nhà trọ',
+          address: '2/3, Đường Nguyễn Sỹ Sách, Phường 15, Tân Bình, Hồ Chí Minh', acreage: 20, price: 2000000),
+          RoomEntity(id:1, name: 'Phòng 10 - nhà trọ Tân Bình',
+          address: '187, Đường Ni Sư Huỳnh Liên, Phường 10, Tân Bình, Hồ Chí Minh', acreage: 18, price: 1400000),
+          RoomEntity(id:1, name: 'Nhà trọ mới',
+          address: 'Hẻm 45, Đường Tân Trụ, Phường 15, Tân Bình, Hồ Chí Minh', acreage: 13, price: 2000000),
+          RoomEntity(id:1, name: 'phòng trọ Gia Định',
+          address: 'Đường Bạch Đằng, Phường 2, Tân Bình, Hồ Chí Minh', acreage: 18, price: 2000000),
+        ];
+        var dataState = DataSuccess(data);
     if (dataState is DataSuccess) {
       emit(SearchRoomDoneState(dataState.data ?? []));
     } else {

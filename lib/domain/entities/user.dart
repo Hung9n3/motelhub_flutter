@@ -53,7 +53,7 @@ class UserEntity extends Equatable {
           id: i,
           password: 'string',
           username: 'hung$i',
-          name: 'hung$i',
+          name: 'Trần Tiến Đạt',
           phoneNumber: '0987654321',
           roomId: i));
     }

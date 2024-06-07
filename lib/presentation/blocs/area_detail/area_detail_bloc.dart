@@ -31,7 +31,10 @@ class AreaDetailBloc extends Bloc<AreaDetailEvent, AreaDetailState> {
       return;
     }
     //var dataState = await _areaRepository.getById(event.areaId!);
-    var dataState = DataSuccess(AreaEntity(address: "16/3, khu phố Đông A, Đông Hòa, Dĩ An, Bình Dương", hostId: 1, name: "Nhà trọ Quốc Hùng", latitude: 10.8963602, longitude: 106.7879265));
+    var dataState = DataSuccess(
+      AreaEntity(address: "16/3, khu phố Đông A, Đông Hòa, Dĩ An, Bình Dương", 
+      hostId: 1, name: "Nhà trọ Quốc Hùng", latitude: 10.8963602, longitude: 106.7879265)
+      );
     if (dataState is DataSuccess) {
       //var user = await _authRepository.getById(dataState.data?.hostId ?? 0);
       //hostName = user?.name;
@@ -57,7 +60,16 @@ class AreaDetailBloc extends Bloc<AreaDetailEvent, AreaDetailState> {
           price: 1400000
         ));
       }
-      emptyRooms = [];
+
+      emptyRooms = [
+      ];
+      for(int i = 0; i < 5; i ++) {
+        emptyRooms.add(RoomEntity(
+          name: 'room ${i+1}',
+          acreage: 15,
+          price: 1400000
+        ));
+      }
       // emptyRooms = rooms
       //     .where((element) =>
       //         element.customerId == 0 || element.customerId == null)

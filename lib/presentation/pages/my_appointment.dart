@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 import 'package:motelhub_flutter/injection_container.dart';
 import 'package:motelhub_flutter/presentation/blocs/my_appointment/my_appointment_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/my_appointment/my_appointment_event.dart';
@@ -23,7 +24,7 @@ class MyAppointment extends StatelessWidget {
             return const Center(child: CupertinoActivityIndicator());
           }
           if (state is MyAppointmentDoneState) {
-            return _buildBody(state);
+            return _buildBody(context,state);
           }
           return const SizedBox();
         },
@@ -31,7 +32,8 @@ class MyAppointment extends StatelessWidget {
     );
   }
 
-  Widget _buildBody(MyAppointmentState state) {
+  Widget _buildBody(BuildContext context, MyAppointmentState state) {
+    var bloc = context.read<MyAppointmentBloc>();
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
@@ -40,55 +42,70 @@ class MyAppointment extends StatelessWidget {
       body: ListView.builder(
           itemCount: state.data!.length,
           itemBuilder: (context, index) {
-            return Slidable(
-        endActionPane: ActionPane(
-            extentRatio: 0.2,
-            motion: const BehindMotion(),
-            children: [
-              SlidableAction(
-                onPressed: (context) {},
-                backgroundColor: const Color(0xFFFE4A49),
-                foregroundColor: Colors.white,
-                icon: Icons.delete,
-                label: 'Delete',
-              )
-            ]),
-        child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 30),
-              child: InkWell(
-                onTap: () => Navigator.pushNamed(context, '/appointment-form',
-                    arguments: {'appointmentId': state.data![index].id, 'roomId': state.data![index].roomId}),
-                child: Card(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
-                          child: Text(
-                            "${(state.data![index].title)} - ${state.data![index].room?.name}",
-                            style: const TextStyle(fontSize: 20),
+            var data = state.data![index];
+            var isAccepted = data.isAccepted;
+            var time = data.startTime != null
+                ? '${DateFormat('hh:mm - dd, MMM yyyy').format(data.startTime!)} to ${DateFormat('hh:mm - dd, MMM yyyy').format(data.startTime!.add(Duration(minutes: data.duration ?? 0)))}'
+                : '';
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Slidable(
+                endActionPane: ActionPane(
+                    extentRatio: 0.5,
+                    motion: const BehindMotion(),
+                    children: [
+                      Visibility(
+                        visible: isAccepted == false,
+                        child: SlidableAction(
+                          onPressed: (context) {bloc.add(MyAppointmentAcceptEvent(data.id, data.roomId));},
+                          backgroundColor: Color.fromARGB(255, 139, 254, 73),
+                          foregroundColor: Colors.white,
+                          icon: Icons.check,
+                          label: 'Accept',
+                        ),
+                      ),
+                      SlidableAction(
+                        onPressed: (context) {},
+                        backgroundColor: const Color(0xFFFE4A49),
+                        foregroundColor: Colors.white,
+                        icon: Icons.close,
+                        label: 'Cancel',
+                      )
+                    ]),
+                child: InkWell(
+                  onTap: () => Navigator.pushNamed(context, '/appointment-form',
+                      arguments: {
+                        'appointmentId': data.id,
+                        'roomId': data.roomId
+                      }),
+                  child: Card(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 10, 0, 0),
+                            child: Text(
+                              "${(data.title)} - ${data.room?.name}",
+                              style: const TextStyle(fontSize: 20),
+                            ),
                           ),
-                        ),
-                        ListTile(
-                          leading: const Icon(Icons.person),
-                          title:
-                              Text(state.data![index].creator!.name.toString()),
-                        ),
-                        ListTile(
-                          leading: const Icon(Icons.person),
-                          title: Text(
-                              state.data![index].participant!.name.toString()),
-                        ),
-                        ListTile(
-                          leading: const Icon(Icons.timelapse),
-                          title: Text(
-                              "${state.data![index].startTime ?? ""} - ${state.data![index].endTime ?? ""}"),
-                        ),
-                      ]),
+                          ListTile(
+                            leading: const Icon(Icons.person),
+                            title: Text(data.creator!.name.toString()),
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.person),
+                            title: Text(data.participant!.name.toString()),
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.timelapse),
+                            title: Text(time),
+                          ),
+                        ]),
+                  ),
                 ),
               ),
-            ));
+            );
           }),
     );
   }

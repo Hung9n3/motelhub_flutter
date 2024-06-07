@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motelhub_flutter/core/resources/data_state.dart';
 import 'package:motelhub_flutter/domain/entities/bill.dart';
@@ -24,34 +27,37 @@ class ContractFormBloc extends Bloc<ContractFormEvent, ContractFormState> {
   DateTime? startDate;
   DateTime? endDate;
   DateTime? cancelDate;
+  double? priceRoom;
   int? customerId;
   int? isCustomerAccept;
   int? selectOwnerId;
   bool isOver = false;
   List<UserEntity> users = [];
+  ByteData? signature;
 
   _loadForm(ContractFormEvent event, Emitter<ContractFormState> emit) async {
     users = UserEntity.getFakeData() ?? users;
     if (event.contractId == null) {
       emit(ContractFormLoadDone(null));
     }
-    var dataState = await _contractRepository.getById(event.contractId);
+    //var dataState = await _contractRepository.getById(event.contractId);
+    var dataState = DataSuccess(null);
     if (dataState is DataSuccess) {
-      var data = dataState.data;
-      if (data != null) {
-        bills = data.bills ?? bills;
-        startDate = data.startDate;
-        endDate = data.endDate;
-        cancelDate = data.cancelDate;
-        selectOwnerId = data.customerId;
+      // var data = dataState.data;
+      // if (data != null) {
+      //   bills = data.bills ?? bills;
+      //   startDate = data.startDate;
+      //   endDate = data.endDate;
+      //   cancelDate = data.cancelDate;
+      //   selectOwnerId = data.customerId;
         var selectedOwner =
             users.where((element) => element.id == selectOwnerId).firstOrNull;
+      selectOwnerId = 1;
         emit(ContractFormLoadDone(selectedOwner));
       } else {
         emit(const ContractFormNotFound());
       }
     }
-  }
 
   _changeOwner(ContractFormChangeOwnerEvent event, Emitter<ContractFormState> emit) {
     selectOwnerId = event.owner?.id;

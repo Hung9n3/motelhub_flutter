@@ -111,6 +111,7 @@ class SearchRoom extends StatelessWidget {
       contentPadding: const EdgeInsets.all(10),
       content: Column(children: [
         TextField(
+          keyboardType: TextInputType.text,
           controller: nameTextEditingController,
           decoration: InputDecoration(
             label: const Text('Room name'),

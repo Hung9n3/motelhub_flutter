@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/home/home_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/home/home_event.dart';
 import 'package:motelhub_flutter/presentation/components/my_area_component.dart';
-import 'package:motelhub_flutter/presentation/components/profile_component.dart';
+import 'package:motelhub_flutter/presentation/pages/notification_page.dart';
 import 'package:motelhub_flutter/presentation/pages/my_appointment.dart';
 import 'package:motelhub_flutter/presentation/pages/search_room.dart';
 
@@ -53,7 +53,7 @@ class HomePage extends StatelessWidget {
   Widget _buildBody(NavigationTab currentTab) {
     switch (currentTab) {
       case NavigationTab.notification:
-        return const ProfileComponent();
+        return const NotificationPage();
       case NavigationTab.search:
         return const SearchRoom();
       case NavigationTab.appointment:
