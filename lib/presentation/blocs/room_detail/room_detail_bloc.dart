@@ -56,72 +56,52 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
   bool isEditable = false;
 
   _loadForm(LoadFormDataEvent event, Emitter<BaseState> emit) async {
-    // var dataState = await _roomRepository.getById(event.roomId!);
-    // if (dataState is DataSuccess) {
-    //   var currentUserId =
-    //       int.tryParse(await _tokenHandler.getByKey(currentUserIdKey));
-    //   var room = dataState.data!;
-    //   var area = (await _areaRepository.getById(room.areaId ?? 0)).data;
-    //   if (area != null) {
-    //     isEditable = currentUserId == area.hostId;
-    //     longitude = area.longitude;
-    //     latitude = area.latitude;
-    //     address = area.address;
-    //     areaName = area.name ?? '';
-    //   }
-    //   contracts = (await _contractRepository.getAll())
-    //       .where((element) => element.roomId == room.id)
-    //       .toList();
-    //   workOrders = (await _workOrderRepository.getAll())
-    //       .where((element) => element.roomId == room.id)
-    //       .toList();
-    //   if (currentUserId != area?.hostId) {
-    //     contracts = contracts
-    //             ?.where((element) => element.customerId == currentUserId)
-    //             .toList() ??
-    //         [];
-    //     workOrders = workOrders
-    //             ?.where((element) => element.customerId == currentUserId)
-    //             .toList() ??
-    //         [];
-    //   }
-    //   id = room.id;
-    //   acreage = room.acreage ?? 0.0;
-    //   areaId = room.areaId;
-    //   isEmpty = room.isEmpty;
-    //   photos = room.photos ?? [];
-    //   price = room.price ?? 0.0;
-    //   name = room.name ?? '';
-    //   customerId = room.customerId;
-
-    //   users = await _authRepository.getAll();
-    //   users.add(const UserEntity(id: 0, name: 'None'));
-    //   users.sort((a, b) => a.id!.compareTo(b.id!));
-    var room = const RoomEntity(
-        id: 1, name: 'Room 1', acreage: 15, price: 1400000, isEmpty: true);
-        id = room.id;
+    var dataState = await _roomRepository.getById(event.roomId!);
+    if (dataState is DataSuccess) {
+      var currentUserId =
+          int.tryParse(await _tokenHandler.getByKey(currentUserIdKey));
+      var room = dataState.data!;
+      var area = (await _areaRepository.getById(room.areaId ?? 0)).data;
+      if (area != null) {
+        isEditable = currentUserId == area.hostId;
+        longitude = area.longitude;
+        latitude = area.latitude;
+        address = area.address;
+        areaName = area.name ?? '';
+      }
+      contracts = (await _contractRepository.getAll())
+          .where((element) => element.roomId == room.id)
+          .toList();
+      workOrders = (await _workOrderRepository.getAll())
+          .where((element) => element.roomId == room.id)
+          .toList();
+      if (currentUserId != area?.hostId) {
+        contracts = contracts
+                ?.where((element) => element.customerId == currentUserId)
+                .toList() ??
+            [];
+        workOrders = workOrders
+                ?.where((element) => element.customerId == currentUserId)
+                .toList() ??
+            [];
+      }
+      id = room.id;
       acreage = room.acreage ?? 0.0;
       areaId = room.areaId;
       isEmpty = room.isEmpty;
       photos = room.photos ?? [];
       price = room.price ?? 0.0;
       name = room.name ?? '';
-    var area = AreaEntity(
-        address: "16/3, khu phố Đông A, Đông Hòa, Dĩ An, Bình Dương",
-        hostId: 1,
-        name: "Nhà trọ Quốc Hùng",
-        latitude: 10.8963602,
-        longitude: 106.7879265);
-    hostId = 1;
-    isEditable = true;
-    longitude = area.longitude;
-    latitude = area.latitude;
-    address = area.address;
-    areaName = area.name ?? '';
+      customerId = room.customerId;
+
+      users = await _authRepository.getAll();
+      users.add(const UserEntity(id: 0, name: 'None'));
+      users.sort((a, b) => a.id!.compareTo(b.id!));
+    
     emit(RoomDetailLoadFormStateDone(hostId, room.ownerName));
-    // } else {
-    //   emit(ErrorState(dataState.message));
-    // }
+    } else {
+      emit(ErrorState(dataState.message));
+    }
   }
 
   _changeOwner(ChangeOwnerEvent event, Emitter<BaseState> emit) async {

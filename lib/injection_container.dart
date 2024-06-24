@@ -54,7 +54,7 @@ Future<void> initializeDependencies() async {
 
   //Blocs
   sl.registerFactory<LoginBloc>(() => LoginBloc(sl(), sl()));
-  sl.registerFactory<MyAreaBloc>(() => MyAreaBloc(sl(), sl()));
+  sl.registerFactory<MyAreaBloc>(() => MyAreaBloc(sl(), sl(), sl()));
   sl.registerFactory<AreaDetailBloc>(() => AreaDetailBloc(sl(), sl(), sl(), sl()));
   sl.registerFactory<AddRoomBloc>(() => AddRoomBloc(sl(), sl(), sl()));
   sl.registerFactory<RoomDetailBloc>(() => RoomDetailBloc(sl(), sl(), sl(), sl(), sl(), sl()));

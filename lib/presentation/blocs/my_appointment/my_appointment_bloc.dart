@@ -21,30 +21,12 @@ class MyAppointmentBloc extends Bloc<MyAppointmentEvent, MyAppointmentState> {
   getAppointments(
       MyAppointmentInitEvent event, Emitter<MyAppointmentState> emit) async {
     try {
-      // var currentUserId =
-      //     int.tryParse(await _tokenHandler.getByKey(currentUserIdKey));
-      // if (currentUserId == null) {
-      //   return;
-      // }
-      // var dataState = await _appointmentRepository.getByUser(currentUserId);
-      List<AppointmentEntity> data = [
-        AppointmentEntity(
-          title: 'Đi coi phòng 4',
-          isAccepted: true,
-          startTime: DateTime(2024, 6, 1, 14, 30),
-          duration: 60,
-          creator: const UserEntity(
-            name: 'Trần Tiến Đạt'
-          ),
-          participant: const UserEntity(
-            name: 'Đỗ Quốc Hùng'
-          ),
-          room: const RoomEntity(
-            name: 'Phòng 4'
-          )
-        )
-      ];
-      var dataState = DataSuccess(data);
+      var currentUserId =
+          int.tryParse(await _tokenHandler.getByKey(currentUserIdKey));
+      if (currentUserId == null) {
+        return;
+      }
+      var dataState = await _appointmentRepository.getByUser(currentUserId);
       if (dataState is DataSuccess) {
         emit(MyAppointmentDoneState(dataState.data ?? []));
       } else {

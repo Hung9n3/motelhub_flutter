@@ -30,50 +30,24 @@ class AreaDetailBloc extends Bloc<AreaDetailEvent, AreaDetailState> {
     if (event.areaId == 0) {
       return;
     }
-    //var dataState = await _areaRepository.getById(event.areaId!);
-    var dataState = DataSuccess(
-      AreaEntity(address: "16/3, khu phố Đông A, Đông Hòa, Dĩ An, Bình Dương", 
-      hostId: 1, name: "Nhà trọ Quốc Hùng", latitude: 10.8963602, longitude: 106.7879265)
-      );
+    var dataState = await _areaRepository.getById(event.areaId!);
     if (dataState is DataSuccess) {
-      //var user = await _authRepository.getById(dataState.data?.hostId ?? 0);
-      //hostName = user?.name;
-      hostName = 'Đỗ Quốc Hùng';
-      //hostPhone = user?.phoneNumber;
-      hostPhone = '0393556841';
-      //var userId = int.tryParse(await _tokenHandler.getByKey(currentUserIdKey));
-      //dvar rooms = await _roomRepository.getByArea(event.areaId!);
-      // if (userId != dataState.data?.hostId) {
-      //   isEditable = false;
-      //   rentingRooms =
-      //       rooms.where((element) => element.customerId == userId).toList();
-      // } else {
-      //   isEditable = true;
-      // }
-      isEditable = true;
-      rentingRooms = [
-      ];
-      for(int i = 0; i < 20; i ++) {
-        rentingRooms.add(RoomEntity(
-          name: 'room ${i+1}',
-          acreage: 15,
-          price: 1400000
-        ));
+      var user = await _authRepository.getById(dataState.data?.hostId ?? 0);
+      hostName = user?.name;
+      hostPhone = user?.phoneNumber;
+      var userId = int.tryParse(await _tokenHandler.getByKey(currentUserIdKey));
+      var rooms = await _roomRepository.getByArea(event.areaId!);
+      if (userId != dataState.data?.hostId) {
+        isEditable = false;
+        rentingRooms =
+            rooms.where((element) => element.customerId == userId).toList();
+      } else {
+        isEditable = true;
       }
-
-      emptyRooms = [
-      ];
-      for(int i = 0; i < 5; i ++) {
-        emptyRooms.add(RoomEntity(
-          name: 'room ${i+1}',
-          acreage: 15,
-          price: 1400000
-        ));
-      }
-      // emptyRooms = rooms
-      //     .where((element) =>
-      //         element.customerId == 0 || element.customerId == null)
-      //     .toList();
+      emptyRooms = rooms
+          .where((element) =>
+              element.customerId == 0 || element.customerId == null)
+          .toList();
       emit(AreaDetailDoneState(dataState.data!));
     } else {
       emit(AreaDetailErrorState(dataState.message!));

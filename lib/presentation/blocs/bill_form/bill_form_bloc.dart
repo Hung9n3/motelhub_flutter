@@ -43,11 +43,11 @@ class BillFormBloc extends Bloc<BaseBillFormEvent, BaseBillFormState> {
 
   _getData(BaseBillFormEvent event, Emitter<BaseBillFormState> emit) async {
     try {
-      // var contract = await _contractRepository.getById(event.contractId);
-      // var room = await _roomRepository.getById(contract.data!.roomId!);
-      // contractId = event.contractId;
-      // roomName = room.data?.name;
-      // roomPrice = room.data?.price;
+      var contract = await _contractRepository.getById(event.contractId);
+      var room = await _roomRepository.getById(contract.data!.roomId!);
+      contractId = event.contractId;
+      roomName = room.data?.name;
+      roomPrice = room.data?.price;
 
       if (event.billId == null) {
         emit(const BillFormDone());

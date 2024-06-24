@@ -40,16 +40,16 @@ class ContractFormBloc extends Bloc<ContractFormEvent, ContractFormState> {
     if (event.contractId == null) {
       emit(ContractFormLoadDone(null));
     }
-    //var dataState = await _contractRepository.getById(event.contractId);
-    var dataState = DataSuccess(null);
+    var dataState = await _contractRepository.getById(event.contractId);
     if (dataState is DataSuccess) {
-      // var data = dataState.data;
-      // if (data != null) {
-      //   bills = data.bills ?? bills;
-      //   startDate = data.startDate;
-      //   endDate = data.endDate;
-      //   cancelDate = data.cancelDate;
-      //   selectOwnerId = data.customerId;
+      var data = dataState.data;
+      if (data != null) {
+        bills = data.bills ?? bills;
+        startDate = data.startDate;
+        endDate = data.endDate;
+        cancelDate = data.cancelDate;
+        selectOwnerId = data.customerId;
+        }
         var selectedOwner =
             users.where((element) => element.id == selectOwnerId).firstOrNull;
       selectOwnerId = 1;
