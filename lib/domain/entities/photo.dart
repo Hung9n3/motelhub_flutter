@@ -1,23 +1,27 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
+import 'dart:io' as Io;
 
 import 'package:equatable/equatable.dart';
 
-class PhotoEntity extends Equatable {
-  final int? id;
-  final String? name;
-  final int? roomId;
-  final int? areaId;
-  final int? userId;
-  final int? workOrderId;
-  final int? contractId;
-  final int? billId;
-  final String? url;
-  final File? data;
+class PhotoEntity {
+   int? id;
+   String? name;
+   int? roomId;
+   int? areaId;
+   int? userId;
+   int? workOrderId;
+   int? contractId;
+   int? billId;
+   String? url;
+   File? file;
+   String? photoData;
 
-  const PhotoEntity({
+  PhotoEntity({
     this.id,
     this.name,
-    this.data,
+    this.file,
     this.url,
     this.areaId,
     this.roomId,
@@ -25,6 +29,7 @@ class PhotoEntity extends Equatable {
     this.workOrderId,
     this.contractId,
     this.billId,
+    this.photoData
   });
 
   factory PhotoEntity.fromJson(Map<String, dynamic> map) {
@@ -32,22 +37,22 @@ class PhotoEntity extends Equatable {
       id: map['id'] ?? 0,
       roomId: map['roomId'] ?? 0,
       userId: map['userId'] ?? 0,
-      areaId: map['areaId'] ?? 0,
       billId: map['billId'] ?? 0,
-      contractId: map['contractId'] ?? 0,
+      photoData: map['data'],
+      workOrderId: map['workOrderId'] ?? 0,
     );
   }
 
   Map<String, dynamic> toJson() => {
         'id': id ?? '0',
-        'roomId': roomId ?? '0',
-        'userId': userId ?? '0',
-        'areaId': areaId ?? '0',
-        'billId': billId ?? '0',
-        'contractId': contractId ?? '0',
+        'roomId': roomId == 0 ? null : roomId,
+        'userId': userId == 0 ? null : userId,
+        'billId': billId == 0 ? null : billId,
+        'data': photoData,
+        'workOrderId': workOrderId == 0 ? null : workOrderId,
       };
 
   @override
   // TODO: implement props
-  List<Object?> get props => [id, name, data, url];
+  List<Object?> get props => [id, name, file, url];
 }

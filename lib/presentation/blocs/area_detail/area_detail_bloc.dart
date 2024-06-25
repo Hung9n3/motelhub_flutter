@@ -19,10 +19,12 @@ class AreaDetailBloc extends Bloc<AreaDetailEvent, AreaDetailState> {
       this._authRepository)
       : super(const AreaDetailLoadingState()) {
     on<GetAreaDetailEvent>(_getAreaDetail);
+    on<SubmitAreaEvent>(_submit);
   }
 
   List<RoomEntity> rentingRooms = [];
   List<RoomEntity> emptyRooms = [];
+  AreaEntity? entity;
   bool isEditable = false;
   String? hostName = '';
   String? hostPhone = '';
@@ -32,6 +34,7 @@ class AreaDetailBloc extends Bloc<AreaDetailEvent, AreaDetailState> {
     }
     var dataState = await _areaRepository.getById(event.areaId!);
     if (dataState is DataSuccess) {
+      entity = dataState.data;
       var user = await _authRepository.getById(dataState.data?.hostId ?? 0);
       hostName = user?.name;
       hostPhone = user?.phoneNumber;
@@ -52,5 +55,12 @@ class AreaDetailBloc extends Bloc<AreaDetailEvent, AreaDetailState> {
     } else {
       emit(AreaDetailErrorState(dataState.message!));
     }
+  }
+
+  _submit(SubmitAreaEvent event, Emitter<AreaDetailState> emit) async {
+    entity?.address = event.address;
+    entity?.name = event.name;
+    var result = await _areaRepository.save(entity!);
+    emit( AreaDetailSubmitDone(entity));
   }
 }

@@ -31,9 +31,9 @@ class UserEntity extends Equatable {
       username: map['username'] ?? "",
       password: map['password'] ?? "",
       email: map['email'] ?? "",
-      name: map['name'] ?? "",
+      name: map['fullname'] ?? "",
       phoneNumber: map['phoneNumber'] ?? "",
-      roomId: map['roomId'] ?? "",
+      roomId: map['roomId'] ?? 0,
     );
   }
 

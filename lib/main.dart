@@ -38,7 +38,6 @@ class MyApp extends StatelessWidget {
         home: const LoginPage(),
         routes: {
           '/home': (context) => const HomePage(),
-          '/add-area': (context) => const AddAreaPage(),
         },
         onGenerateRoute: (settings) {
           if (settings.name == '/area-detail') {

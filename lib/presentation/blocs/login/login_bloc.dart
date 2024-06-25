@@ -29,7 +29,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   void onLoginButtonPress(LoginEvent event, Emitter<LoginState> emit) async {
     try {
   if (event is LoginButtonEvent) {
-    var dataState = await _authRepository.login(username ?? 'user1', password ?? 'string');
+    var dataState = await _authRepository.login('user1', 'string');
     emit(const LoginLoadingState());
     if (dataState is DataSuccess) {
       var token = _tokenHandler.decodeToken(dataState.data.toString());

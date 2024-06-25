@@ -8,6 +8,7 @@ import 'package:motelhub_flutter/injection_container.dart';
 import 'package:motelhub_flutter/presentation/blocs/area_detail/area_detail_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/area_detail/area_detail_event.dart';
 import 'package:motelhub_flutter/presentation/blocs/area_detail/area_detail_state.dart';
+import 'package:motelhub_flutter/presentation/components/commons/alert_dialog.dart';
 import 'package:motelhub_flutter/presentation/components/commons/form_container.dart';
 import 'package:motelhub_flutter/presentation/components/commons/section_with_bottom_border.dart';
 
@@ -19,15 +20,17 @@ class AreaDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<AreaDetailBloc>(
       create: (context) => sl()..add(GetAreaDetailEvent(areaId)),
-      child: BlocBuilder<AreaDetailBloc, AreaDetailState>(
+      child: BlocConsumer<AreaDetailBloc, AreaDetailState>(
+        listener: (context, state) {
+          if(state is AreaDetailSubmitDone) {
+            showAlertDialog(context, 'Save successfully');
+          }
+        },
         builder: (context, state) {
           if (state is AreaDetailLoadingState) {
             return const Center(child: CupertinoActivityIndicator());
           }
-          if (state is AreaDetailDoneState) {
-            return _buildAreaDetail(state.area!, context);
-          }
-          return const SizedBox();
+          return _buildAreaDetail(state.area!, context);
         },
       ),
     );
@@ -60,7 +63,7 @@ class AreaDetail extends StatelessWidget {
           icon: const Icon(Icons.add),
           onPressed: () {
             Navigator.pushNamed(context, '/add-room',
-                arguments: {'mode': FormMode.add, 'selectedAreaId': data.id});
+                arguments: {'mode': FormMode.add, 'selectedAreaId': data.id}).then((value) => context.read<AreaDetailBloc>().add(GetAreaDetailEvent(areaId)));
           },
         ),
       ),
@@ -127,7 +130,7 @@ class AreaDetail extends StatelessWidget {
                     arguments: {
                       'mode': FormMode.update,
                       'roomId': rooms[index].id
-                    }),
+                    }).then((value) => context.read<AreaDetailBloc>().add(GetAreaDetailEvent(areaId))),
                 child: Card(
                   margin: const EdgeInsets.symmetric(vertical: 5),
                   child: Container(

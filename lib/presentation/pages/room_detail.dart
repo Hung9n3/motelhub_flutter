@@ -38,11 +38,11 @@ class RoomDetailPage extends StatelessWidget {
           BlocProvider<PhotoSectionBloc>(create: (context) => sl()),
         ],
         child:
-            BlocConsumer<RoomDetailBloc, BaseState>(listener: (context, state) {
+            BlocConsumer<RoomDetailBloc, RoomDetailState>(listener: (context, state) {
           if (state is SubmitFormSuccess) {
             showAlertDialog(context, 'Save successfully');
           }
-          if (state is ErrorState) {
+          if (state is RoomDetailErrorState) {
             showAlertDialog(context, 'Save failed');
           }
         }, builder: (context, state) {

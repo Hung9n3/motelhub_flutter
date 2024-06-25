@@ -129,7 +129,17 @@ class LoginPage extends StatelessWidget {
                   children: [
                     const Text("Don't have account?"),
                     TextButton(
-                        onPressed: () => {}, child: const Text('Register now'))
+                        onPressed: () async {
+                          await showDialog(context: context, builder: (context){
+                            return AlertDialog(
+                              scrollable: true,
+                              actions: [
+                                TextButton(onPressed: (){Navigator.of(context).pop();}, child: const Text('Cancel')),
+                                TextButton(onPressed: (){Navigator.of(context).pop();}, child: const Text('Save'))
+                              ],
+                            );
+                          });
+                        }, child: const Text('Register now'))
                   ],
                 ),
               )

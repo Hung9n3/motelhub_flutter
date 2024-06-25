@@ -19,7 +19,7 @@ var baseUrl = 'https://10.0.2.2:7128/api';
 
 class Api {
   static Uri createUrl(String endpoint) {
-    var url = Uri.parse('$base64Url/$endpoint');
+    var url = Uri.parse('$baseUrl/$endpoint');
     return url;
   }
 
@@ -61,12 +61,12 @@ class Api {
           'username': username ?? '',
           'password': password ?? ''
         }),
-        'Auth/login');
+        'Authentication/login');
     return response;
   }
 
   static Future register(Map<String, dynamic> jsonData) async {
-    final response = await post(jsonEncode(jsonData), 'Auth/register');
+    final response = await post(jsonEncode(jsonData), 'Authentication/register');
     return response;
   }
 
@@ -159,12 +159,12 @@ class Api {
   }
   
   static DataState<T> getResult<T>(dynamic httpResponse) {
-    if (httpResponse.response.statusCode == HttpStatus.ok) {
-      return DataSuccess(httpResponse.data);
+    if (httpResponse.statusCode == HttpStatus.ok) {
+      return DataSuccess(httpResponse.body);
     } else {
       final response = Response(
-        statusCode: httpResponse.response.statusCode,
-        data: {'message': httpResponse.data},
+        statusCode: httpResponse.statusCode,
+        data: {'message': httpResponse.body},
         requestOptions: RequestOptions(path: '/api/endpoint'),
       );
 

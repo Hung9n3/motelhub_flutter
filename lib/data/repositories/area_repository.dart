@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:motelhub_flutter/core/constants/constants.dart';
 import 'package:motelhub_flutter/core/resources/data_state.dart';
@@ -22,8 +23,8 @@ class AreaRepository extends IAreaRepository {
 
   @override
   Future<DataState<AreaEntity>> getById(int id) async {
-    var listData = AreaEntity.getFakeData();
-    var result = listData.where((element) => element.id == id).firstOrNull;
+    var areas = await Api.getAreas();
+      var result = areas.where((element) => element.id == id).firstOrNull;
     return DataSuccess(result);
   }
 
@@ -60,8 +61,8 @@ class AreaRepository extends IAreaRepository {
   @override
   Future<DataState> save(AreaEntity entity) async {
     try {
-      var response = await Api.post(entity.toJson(), 'Area');
-      var result = Api.getResult<bool>(response);
+      var response = await Api.post(jsonEncode(entity.toJson()), 'Area');
+      var result = Api.getResult(response);
       return result;
     } on Exception catch (e) {
       return DataFailed(e.toString());

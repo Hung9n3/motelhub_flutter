@@ -1,7 +1,7 @@
 import 'package:motelhub_flutter/domain/entities/user.dart';
 import 'package:motelhub_flutter/presentation/blocs/base/base_state.dart';
 
-abstract class RoomDetailState extends BaseState {
+abstract class RoomDetailState {
   final int? ownerId;
   final String? ownerName;
   const RoomDetailState(
@@ -25,4 +25,8 @@ class RoomDetailLoadFormStateDone extends RoomDetailState {
 
 class SubmitFormSuccess extends RoomDetailState {
   const SubmitFormSuccess();
+}
+
+class RoomDetailErrorState extends RoomDetailState {
+  const RoomDetailErrorState() : super();
 }

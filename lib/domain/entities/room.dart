@@ -4,28 +4,28 @@ import 'package:motelhub_flutter/domain/entities/user.dart';
 import 'package:motelhub_flutter/domain/entities/contract.dart';
 import 'package:motelhub_flutter/domain/entities/work_order.dart';
 
-class RoomEntity extends Equatable {
-  final int? id;
-  final int? areaId;
-  final int? customerId;
-  final String? name;
-  final double? acreage;
-  final bool isEmpty;
-  final String? address;
-  final String? areaName;
-  final String? ownerName;
-  final String? ownerPhone;
-  final String? ownerEmail;
-  final DateTime? contractFrom;
-  final DateTime? contractTo;
-  final UserEntity? owner;
-  final List<UserEntity>? members;
-  final List<PhotoEntity>? photos;
-  final List<ContractEntity>? contracts;
-  final List<WorkOrderEntity>? workOrders;
-  final double? price;
+class RoomEntity{
+   int? id;
+   int? areaId;
+   int? customerId;
+   String? name;
+   double? acreage;
+   bool isEmpty;
+   String? address;
+   String? areaName;
+   String? ownerName;
+   String? ownerPhone;
+   String? ownerEmail;
+   DateTime? contractFrom;
+   DateTime? contractTo;
+   UserEntity? owner;
+   List<UserEntity>? members;
+   List<PhotoEntity>? photos;
+   List<ContractEntity>? contracts;
+   List<WorkOrderEntity>? workOrders;
+   double? price;
 
-  const RoomEntity(
+  RoomEntity(
       {this.id,
       this.name,
       this.address,
@@ -45,39 +45,25 @@ class RoomEntity extends Equatable {
       this.ownerPhone,
       this.contractFrom, this.contractTo, });
 
-  @override
-  List<Object?> get props {
-    return [
-      id,
-      name,
-      areaId,
-      isEmpty,
-      acreage,
-      photos,
-      workOrders,
-      areaName,
-      members,
-      ownerName,
-      customerId
-    ];
-  }
-
   factory RoomEntity.fromJson(Map<String, dynamic> map) {
     return RoomEntity(
       id: map['id'] ?? 0,
       areaId: map['areaId'] ?? 0,
+      customerId: map['customerId'],
       name: map['name'] ?? 0,
-      acreage: map['acreage'] ?? 0.0,
+      acreage: double.tryParse(map['acreage'].toString()) ?? 0.0,
       price: map['price'] ?? 0.0,
     );
   }
 
   Map<String, dynamic> toJson() => {
         'id': id ?? '0',
-        'areaId': areaId ?? '0',
-        'name': name ?? '0',
-        'acreage': acreage ?? '0.0',
-        'price': price ?? '0.0',
+        'areaId': areaId == 0 ? null : areaId,
+        'customerId':customerId == 0 ? null : customerId,
+        'photos': photos ?? [],
+        'name': name ?? '',
+        'acreage': acreage ?? 0.0,
+        'price': price ?? 0.0,
       };
 
   static List<RoomEntity> getFakeData() {

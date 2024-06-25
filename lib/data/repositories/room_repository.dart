@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:motelhub_flutter/core/resources/data_state.dart';
 import 'package:motelhub_flutter/core/resources/search/search_model.dart';
 import 'package:motelhub_flutter/data/api_service/api.dart';
@@ -54,7 +56,7 @@ class RoomRepository extends IRoomRepository {
   
   @override
   Future<DataState> save(RoomEntity room) async {
-    var response = await Api.post(room.toJson(), 'Room');
+    var response = await Api.post(jsonEncode(room.toJson()), 'Room');
     var result = Api.getResult(response);
     return result;
   }

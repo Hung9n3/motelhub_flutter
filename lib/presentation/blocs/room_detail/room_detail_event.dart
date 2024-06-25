@@ -3,11 +3,11 @@ import 'package:motelhub_flutter/domain/entities/user.dart';
 
 abstract class RoomDetailEvent {
   final int? roomId;
-  final UserEntity? owner;
+  final UserEntity? customer;
   final String? name;
   final String? acreage;
   final List<PhotoEntity>? photos;
-  const RoomDetailEvent({this.roomId, this.name, this.acreage, this.photos, this.owner});
+  const RoomDetailEvent({this.roomId, this.name, this.acreage, this.photos, this.customer});
 }
 
 class LoadFormDataEvent extends RoomDetailEvent {
@@ -24,7 +24,7 @@ class ChangeNameEvent extends RoomDetailEvent {
 }
 
 class ChangeOwnerEvent extends RoomDetailEvent {
-  const ChangeOwnerEvent(UserEntity? owner) : super(owner: owner);
+  const ChangeOwnerEvent(UserEntity? owner) : super(customer: owner);
 }
 
 class SubmitFormEvent extends RoomDetailEvent {

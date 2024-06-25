@@ -19,3 +19,7 @@ class AreaDetailDoneState extends AreaDetailState{
 class AreaDetailErrorState extends AreaDetailState{
   const AreaDetailErrorState(String? error) : super(error: error);
 }
+
+class AreaDetailSubmitDone extends AreaDetailState {
+  const AreaDetailSubmitDone(AreaEntity? area) : super(area: area);
+}

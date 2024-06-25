@@ -24,7 +24,7 @@ class PhotoSection extends StatelessWidget {
           Wrap(
             direction: Axis.horizontal,
             children: state.photos!.map((photo) {
-              final data = photo.data;
+              final data = photo.file;
               final url = photo.url;
               if (data == null && url == null) {
                 return const SizedBox();

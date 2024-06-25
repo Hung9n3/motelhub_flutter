@@ -3,15 +3,12 @@ import 'package:motelhub_flutter/domain/entities/area.dart';
 import 'package:dio/dio.dart';
 import 'package:motelhub_flutter/domain/entities/room.dart';
 
-abstract class MyAreaState extends Equatable{
+abstract class MyAreaState {
   final List<AreaEntity>? data;
   final List<RoomEntity>? customerData;
   final String? error;
 
   const MyAreaState({this.data, this.error, this.customerData});
-
-  @override
-  List<Object> get props => [data!, error!];
 }
 
 class MyAreaLoadingState extends MyAreaState{

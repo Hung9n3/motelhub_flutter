@@ -13,12 +13,12 @@ class AuthRepository extends IAuthRepository {
   Future<DataState> login(String username, String password) async {
     final httpResponse = await Api.login(username, password);
 
-    if (httpResponse.response.statusCode == HttpStatus.ok) {
-      return DataSuccess(httpResponse.data);
+    if (httpResponse.statusCode == HttpStatus.ok) {
+      return DataSuccess(httpResponse.body);
     } else {
       final response = Response(
-        statusCode: httpResponse.response.statusCode,
-        data: {'message': httpResponse.data},
+        statusCode: httpResponse.statusCode,
+        data: {'message': httpResponse.body},
         requestOptions: RequestOptions(path: '/api/endpoint'),
       );
 

@@ -17,6 +17,7 @@ import 'package:motelhub_flutter/domain/repositories/contract_repository_interfa
 import 'package:motelhub_flutter/domain/repositories/room_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/work_order_repository_interface.dart';
 import 'package:motelhub_flutter/domain/token/token_handler_interface.dart';
+import 'package:motelhub_flutter/presentation/blocs/add_area/add_area_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/add_room/add_room_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/appointment_form/appointment_form_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/area_detail/area_detail_bloc.dart';
@@ -56,6 +57,7 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<LoginBloc>(() => LoginBloc(sl(), sl()));
   sl.registerFactory<MyAreaBloc>(() => MyAreaBloc(sl(), sl(), sl()));
   sl.registerFactory<AreaDetailBloc>(() => AreaDetailBloc(sl(), sl(), sl(), sl()));
+  sl.registerFactory<AddAreaBloc>(() => AddAreaBloc(sl(), sl()));
   sl.registerFactory<AddRoomBloc>(() => AddRoomBloc(sl(), sl(), sl()));
   sl.registerFactory<RoomDetailBloc>(() => RoomDetailBloc(sl(), sl(), sl(), sl(), sl(), sl()));
   sl.registerFactory<ContractFormBloc>(() => ContractFormBloc(sl(), sl()));

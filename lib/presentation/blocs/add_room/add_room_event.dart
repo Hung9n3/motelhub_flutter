@@ -25,5 +25,5 @@ class ChangeAcreageEvent extends AddRoomEvent{
 }
 
 class AddRoomOnSubmitButtonPressed extends AddRoomEvent{
-  AddRoomOnSubmitButtonPressed(String? price, List<PhotoEntity> photos) : super(price: price, photos: photos);
+  AddRoomOnSubmitButtonPressed(int? selectedAreaId, String? price, List<PhotoEntity> photos) : super(selectedAreaId: selectedAreaId,price: price, photos: photos);
 }

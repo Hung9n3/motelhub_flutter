@@ -61,7 +61,7 @@ class AddRoomPage extends StatelessWidget {
                   var photos =
                       context.read<PhotoSectionBloc>().state.photos ?? [];
                   context.read<AddRoomBloc>().add(AddRoomOnSubmitButtonPressed(
-                      priceController.text, photos));
+                      selectedAreaId, priceController.text, photos));
                 },
                 icon: const Icon(Icons.check))
           ],
@@ -78,13 +78,11 @@ class AddRoomPage extends StatelessWidget {
           child: Column(
             children: [
               SectionWithBottomBorder(
-                  child: TextFormField(
-                initialValue: context.read<AddRoomBloc>().areaName,
-                decoration: const InputDecoration(
-                  hintText: 'Area name',
-                  prefixIcon: Icon(Icons.holiday_village),
+                  child: ListTile(
+                    leading: const Icon(Icons.holiday_village),
+                    title: Text('${bloc.areaName}'),
+                  ),
                 ),
-              )),
               SectionWithBottomBorder(
                 child: TextField(
                   decoration: const InputDecoration(

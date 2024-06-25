@@ -10,6 +10,7 @@ import 'package:motelhub_flutter/presentation/blocs/my_area/my_area_event.dart';
 import 'package:motelhub_flutter/presentation/blocs/my_area/my_area_state.dart';
 import 'package:motelhub_flutter/presentation/components/commons/common_listview.dart';
 import 'package:motelhub_flutter/presentation/components/commons/item_expansion.dart';
+import 'package:motelhub_flutter/presentation/pages/add_area.dart';
 
 class MyAreaComponent extends StatelessWidget {
   const MyAreaComponent({super.key});
@@ -26,13 +27,22 @@ class MyAreaComponent extends StatelessWidget {
           return Scaffold(
               floatingActionButton: FloatingActionButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/add-area');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const AddAreaPage(),
+                    ),
+                  ).then((value) {context.read<MyAreaBloc>().add(const GetMyAreaEvent());});
                 },
                 child: const Icon(Icons.add),
               ),
               body: SafeArea(
                 child: Column(
-                  children: [owningSection(context, state.data ?? []), rentingSection(context, state.customerData ?? [])],
+                  children: [
+                    owningSection(context, state.data ?? []),
+                    rentingSection(context, state.customerData ?? [])
+                  ],
                 ),
               ));
         }
@@ -113,8 +123,7 @@ class MyAreaComponent extends StatelessWidget {
                     child: Card(
                       child: Column(children: [
                         ListTile(
-                          leading: const Icon(Icons.meeting_room
-                          ),
+                          leading: const Icon(Icons.meeting_room),
                           title: Text(room.name.toString()),
                         ),
                         ListTile(

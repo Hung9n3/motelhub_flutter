@@ -55,7 +55,7 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
   int? role;
   bool isEditable = false;
 
-  _loadForm(LoadFormDataEvent event, Emitter<BaseState> emit) async {
+  _loadForm(LoadFormDataEvent event, Emitter<RoomDetailState> emit) async {
     var dataState = await _roomRepository.getById(event.roomId!);
     if (dataState is DataSuccess) {
       var currentUserId =
@@ -100,18 +100,18 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
     
     emit(RoomDetailLoadFormStateDone(hostId, room.ownerName));
     } else {
-      emit(ErrorState(dataState.message));
+      emit(const RoomDetailErrorState());
     }
   }
 
-  _changeOwner(ChangeOwnerEvent event, Emitter<BaseState> emit) async {
-    var owner =
-        users.where((element) => element.id == event.owner?.id).firstOrNull;
-    hostId = owner?.id;
-    emit(RoomDetailLoadFormStateDone(hostId, owner?.name));
+  _changeOwner(ChangeOwnerEvent event, Emitter<RoomDetailState> emit) async {
+    var customer =
+        users.where((element) => element.id == event.customer?.id).firstOrNull;
+    customerId = customer?.id;
+    emit(RoomDetailLoadFormStateDone(hostId, customer?.name));
   }
 
-  _submitForm(SubmitFormEvent event, Emitter<BaseState> emit) async {
+  _submitForm(SubmitFormEvent event, Emitter<RoomDetailState> emit) async {
     //Todo: implement submit logic
     try {
       var room = RoomEntity(
@@ -126,18 +126,18 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
       if (result is DataSuccess) {
         emit(const SubmitFormSuccess());
       } else {
-        emit(ErrorState(result.message));
+        emit(const RoomDetailErrorState());
       }
     } on Exception catch (err) {
-      emit(ErrorState(err.toString()));
+      emit(const RoomDetailErrorState());
     }
   }
 
-  _changeName(ChangeNameEvent event, Emitter<BaseState> emit) async {
+  _changeName(ChangeNameEvent event, Emitter<RoomDetailState> emit) async {
     name = event.name;
   }
 
-  _changeAcreage(ChangeAcreageEvent event, Emitter<BaseState> emit) async {
+  _changeAcreage(ChangeAcreageEvent event, Emitter<RoomDetailState> emit) async {
     if (event.acreage != null) {
       var doubleValue = double.tryParse(event.acreage!) ?? 0;
       acreage = doubleValue;
