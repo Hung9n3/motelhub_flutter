@@ -4,29 +4,29 @@ import 'package:intl/intl.dart';
 import 'package:motelhub_flutter/domain/entities/photo.dart';
 import 'package:motelhub_flutter/domain/entities/room.dart';
 
-class BillEntity extends Equatable {
-  final int? id;
-  final int? contractId;
-  final double? total;
-  final String? title;
-  final double? oweing;
-  final DateTime? startDate;
-  final DateTime? endDate;
-  final double? rentPrice;
-  final double? waterPrice;
-  final double? electricPrice;
-  final double? electricLast;
-  final double? electricCurrent;
-  final double? waterLast;
-  final double? waterCurrent;
-  final DateTime? waterFrom;
-  final DateTime? waterTo;
-  final DateTime? electricFrom;
-  final DateTime? electricTo;
-  final RoomEntity? room;
-  final List<PhotoEntity>? photos;
+class BillEntity {
+   int? id;
+   int? contractId;
+   double? total;
+   String? title;
+   double? oweing;
+   DateTime? startDate;
+   DateTime? endDate;
+   double? rentPrice;
+   double? waterPrice;
+   double? electricPrice;
+   double? electricLast;
+   double? electricCurrent;
+   double? waterLast;
+   double? waterCurrent;
+   DateTime? waterFrom;
+   DateTime? waterTo;
+   DateTime? electricFrom;
+   DateTime? electricTo;
+   RoomEntity? room;
+   List<PhotoEntity>? photos;
 
-  const BillEntity(
+  BillEntity(
       {this.id,
       this.contractId,
       this.title,
@@ -48,20 +48,6 @@ class BillEntity extends Equatable {
       this.room,
       this.photos})
       : super();
-
-  @override
-  // TODO: implement props
-  List<Object?> get props => [
-        id,
-        contractId,
-        total,
-        title,
-        oweing,
-        startDate,
-        endDate,
-        rentPrice,
-        room,
-      ];
 
   BillEntity copyWith(
       {id,
@@ -95,25 +81,23 @@ class BillEntity extends Equatable {
       id: map['id'] ?? 0,
       contractId: map['contractId'] ?? 0,
       title: map['title'] ?? '',
-      startDate: map['startDate'],
-      endDate: map['endDate'],
       rentPrice: map['rentPrice'] ?? 0.0,
       electricPrice: map['electricPrice'] ?? 0.0,
       waterPrice: map['waterPrice'] ?? 0.0,
       electricCurrent: map['electricCurrent'] ?? 0,
       electricLast: map['electricLast'] ?? 0,
-      electricFrom: map['electricFrom'],
-      electricTo: map['electricTo'],
+      electricFrom: DateTime.parse(map['electricFrom']).toLocal(),
+      electricTo: DateTime.parse(map['electricTo']).toLocal(),
       waterCurrent: map['waterCurrent'] ?? 0,
       waterLast: map['waterLast'] ?? 0,
-      waterFrom: map['waterFrom'],
-      waterTo: map['waterTo'],
+      waterFrom: DateTime.parse(map['waterFrom']).toLocal(),
+      waterTo: DateTime.parse(map['waterTo']).toLocal(),
     );
   }
 
   Map<String, dynamic> toJson() => {
     'id': id ?? '0',
-      'contractId': contractId ?? '0',
+      'contractId': contractId,
       'title': title ?? '',
       'startDate': startDate?.toUtc(),
       'endDate': endDate?.toUtc(),
@@ -151,4 +135,5 @@ class BillEntity extends Equatable {
     }
     return result;
   }
+  static List<BillEntity> bills = [];
 }

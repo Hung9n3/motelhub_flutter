@@ -58,7 +58,7 @@ class RoomDetailPage extends StatelessWidget {
                           context.read<PhotoSectionBloc>().state.photos;
                       context
                           .read<RoomDetailBloc>()
-                          .add(SubmitFormEvent(photos));
+                          .add(SubmitFormEvent(photos, priceController.text));
                     },
                     icon: const Icon(Icons.check)),
               )
@@ -100,7 +100,7 @@ class RoomDetailPage extends StatelessWidget {
                         : MediaQuery.of(context).size.width - 60,
                     leadingIcon: const Icon(Icons.person),
                     initialSelection: roomDetailBloc.users
-                        .where((element) => element.id == roomDetailBloc.hostId)
+                        .where((element) => element.id == roomDetailBloc.customerId)
                         .firstOrNull,
                     requestFocusOnTap: true,
                     label: const Text('Select owner'),
@@ -179,10 +179,10 @@ class RoomDetailPage extends StatelessWidget {
           Visibility(
             visible: bloc.isEditable,
             child: OutlinedButton(
-                onPressed: () => Navigator.push(
+                onPressed: () => Navigator.pushNamed(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => WorkOrderForm(roomId: roomId))),
+                    '/work-order-form',
+                    arguments: {'roomId':roomId}).then((value) => context.read<RoomDetailBloc>().add(LoadFormDataEvent(roomId))),
                 child: const Icon(Icons.add)),
           ),
           CommonListView(
@@ -225,7 +225,7 @@ class RoomDetailPage extends StatelessWidget {
                 onPressed: () => Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ContractForm(roomId: roomId))),
+                        builder: (context) => ContractForm(roomId: roomId))).then((value) => context.read<RoomDetailBloc>().add(LoadFormDataEvent(roomId))),
                 child: const Icon(Icons.add)),
           ),
           CommonListView(
@@ -260,7 +260,7 @@ class RoomDetailPage extends StatelessWidget {
                 builder: (context) => WorkOrderForm(
                       roomId: roomId,
                       workOrderId: workOrder.id,
-                    )));
+                    ))).then((value) => context.read<RoomDetailBloc>().add(LoadFormDataEvent(roomId)));
       },
       child: Card(
         child: Container(
@@ -298,7 +298,7 @@ class RoomDetailPage extends StatelessWidget {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  ContractForm(roomId: roomId, contractId: contract.id))),
+                  ContractForm(roomId: roomId, contractId: contract.id))).then((value) => context.read<RoomDetailBloc>().add(LoadFormDataEvent(roomId))),
       child: Card(
         child: Container(
           width: MediaQuery.of(context).size.width >= 800
@@ -306,7 +306,7 @@ class RoomDetailPage extends StatelessWidget {
               : MediaQuery.of(context).size.width,
           padding: const EdgeInsets.all(8),
           child: ListTile(
-            title: Text('${contract.owner?.name}'),
+            title: Text('${contract.name}'),
             subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

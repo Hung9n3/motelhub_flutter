@@ -7,6 +7,7 @@ import 'package:motelhub_flutter/data/repositories/auth_repository.dart';
 import 'package:motelhub_flutter/data/repositories/area_repository.dart';
 import 'package:motelhub_flutter/data/repositories/bill_repository.dart';
 import 'package:motelhub_flutter/data/repositories/contract_repository.dart';
+import 'package:motelhub_flutter/data/repositories/photo_repository.dart';
 import 'package:motelhub_flutter/data/repositories/room_repository.dart';
 import 'package:motelhub_flutter/data/repositories/work_order_repository.dart';
 import 'package:motelhub_flutter/domain/repositories/appointment_repository_interface.dart';
@@ -14,6 +15,7 @@ import 'package:motelhub_flutter/domain/repositories/auth_repository_interface.d
 import 'package:motelhub_flutter/domain/repositories/area_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/bill_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/contract_repository_interface.dart';
+import 'package:motelhub_flutter/domain/repositories/photo_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/room_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/work_order_repository_interface.dart';
 import 'package:motelhub_flutter/domain/token/token_handler_interface.dart';
@@ -48,6 +50,7 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<IAuthRepository>(() => AuthRepository());
   sl.registerFactory<IAreaRepository>(() => AreaRepository());
   sl.registerFactory<IRoomRepository>(() => RoomRepository());
+  sl.registerFactory<IPhotoRepository>(() => PhotoRepository());
   sl.registerFactory<IAppointmentRepository>(() => AppointmentRepository());
   sl.registerFactory<IContractRepository>(() => ContractRepository());
   sl.registerFactory<IBillRepository>(() => BillRepository());
@@ -59,13 +62,13 @@ Future<void> initializeDependencies() async {
   sl.registerFactory<AreaDetailBloc>(() => AreaDetailBloc(sl(), sl(), sl(), sl()));
   sl.registerFactory<AddAreaBloc>(() => AddAreaBloc(sl(), sl()));
   sl.registerFactory<AddRoomBloc>(() => AddRoomBloc(sl(), sl(), sl()));
-  sl.registerFactory<RoomDetailBloc>(() => RoomDetailBloc(sl(), sl(), sl(), sl(), sl(), sl()));
-  sl.registerFactory<ContractFormBloc>(() => ContractFormBloc(sl(), sl()));
+  sl.registerFactory<RoomDetailBloc>(() => RoomDetailBloc(sl(), sl(), sl(), sl(), sl(), sl(), sl()));
+  sl.registerFactory<ContractFormBloc>(() => ContractFormBloc(sl(), sl(), sl(), sl()));
   sl.registerFactory<PhotoSectionBloc>(() => PhotoSectionBloc());
   sl.registerFactory<SearchRoomBloc>(() => SearchRoomBloc(sl()));
   sl.registerFactory<MyAppointmentBloc>(() => MyAppointmentBloc(sl(),sl()));
   sl.registerFactory<AppointmentFormBloc>(() => AppointmentFormBloc(sl(),sl(), sl(), sl()));
-  sl.registerFactory<WorkOrderFormBloc>(() => WorkOrderFormBloc(sl(), sl()));
+  sl.registerFactory<WorkOrderFormBloc>(() => WorkOrderFormBloc(sl(), sl(), sl()));
   sl.registerFactory<BillFormBloc>(() => BillFormBloc(sl(), sl(), sl()));
   // sl.registerFactory<LocalArticleBloc>(
   //   ()=> LocalArticleBloc(sl(),sl(),sl())

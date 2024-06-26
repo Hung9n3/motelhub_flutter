@@ -10,6 +10,7 @@ import 'package:motelhub_flutter/injection_container.dart';
 import 'package:motelhub_flutter/presentation/blocs/contract_form/contract_form_bloc.dart';
 import 'package:motelhub_flutter/presentation/blocs/contract_form/contract_form_event.dart';
 import 'package:motelhub_flutter/presentation/blocs/contract_form/contract_form_state.dart';
+import 'package:motelhub_flutter/presentation/components/commons/alert_dialog.dart';
 import 'package:motelhub_flutter/presentation/components/commons/common_date_picker.dart';
 import 'package:motelhub_flutter/presentation/components/commons/common_listview.dart';
 import 'package:motelhub_flutter/presentation/components/commons/form_container.dart';
@@ -30,33 +31,42 @@ class ContractForm extends StatelessWidget {
         providers: [
           BlocProvider<ContractFormBloc>(
               create: (context) =>
-                  sl()..add(ContractFormInitEvent(contractId))),
+                  sl()..add(ContractFormInitEvent(contractId, roomId))),
         ],
-        child: BlocBuilder<ContractFormBloc, ContractFormState>(
+        child: BlocConsumer<ContractFormBloc, ContractFormState>(
+            listener: (context, state) {
+              if(state is SubmitContractFormDone) {
+                showAlertDialog(context, "Save successfully");
+              }
+              if(state is SubmitContractFormFail) {
+                showAlertDialog(context, "Save failed");
+              }
+            },
             builder: (context, state) {
-          if (state is ContractFormLoading) {
-            return const Center(child: CupertinoActivityIndicator());
-          } else {
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text('Contract'),
-                actions: [
-                  IconButton(
-                      onPressed: () {
-                        context
-                            .read<ContractFormBloc>()
-                            .add(const SubmitContractFormEvent());
-                      },
-                      icon: const Icon(Icons.check))
-                ],
-              ),
-              body: _buildBody(context),
-            );
-          }
-        }));
+              var priceController = TextEditingController(
+                  text: context.read<ContractFormBloc>().priceRoom?.toString());
+              if (state is ContractFormLoading) {
+                return const Center(child: CupertinoActivityIndicator());
+              } else {
+                return Scaffold(
+                  appBar: AppBar(
+                    title: const Text('Contract'),
+                    actions: [
+                      IconButton(
+                          onPressed: () {
+                            context.read<ContractFormBloc>().add(
+                                SubmitContractFormEvent(priceController.text));
+                          },
+                          icon: const Icon(Icons.check))
+                    ],
+                  ),
+                  body: _buildBody(context, priceController),
+                );
+              }
+            }));
   }
 
-  _buildBody(BuildContext context) {
+  _buildBody(BuildContext context, TextEditingController priceController) {
     var bloc = context.read<ContractFormBloc>();
     var startDate = bloc.startDate == null
         ? ''
@@ -70,7 +80,6 @@ class ContractForm extends StatelessWidget {
     var startDateController = TextEditingController(text: startDate);
     var endDateController = TextEditingController(text: endDate);
     var cancelDateController = TextEditingController(text: cancelDate);
-    var priceController = TextEditingController(text: bloc.priceRoom?.toString());
     return FormContainer(
         child: Column(children: [
       DropdownMenu<UserEntity>(
@@ -93,14 +102,15 @@ class ContractForm extends StatelessWidget {
                 .add(ContractFormChangeOwnerEvent(value));
           }),
       SectionWithBottomBorder(
-                    child: TextFormField(
-                  readOnly: bloc.signature != null,
-                  controller: priceController,
-                  decoration: const InputDecoration(
-                    prefixIcon: Icon(Icons.attach_money),
-                    suffixText: 'VND'
-                  ),
-                )),
+          child: TextFormField(
+        readOnly: bloc.signature != null,
+        controller: priceController,
+        onChanged: (value) {
+          bloc.priceRoom = double.tryParse(value);
+        },
+        decoration: const InputDecoration(
+            prefixIcon: Icon(Icons.attach_money), suffixText: 'VND'),
+      )),
       SectionWithBottomBorder(
           child: TextFormField(
         onTap: () async {
@@ -162,41 +172,49 @@ class ContractForm extends StatelessWidget {
               penColor: Colors.black,
               exportBackgroundColor: Colors.transparent,
             );
-            bloc.signature = await showDialog(
+            var signature = await showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    scrollable: true,
+                    scrollable: false,
                     contentPadding: const EdgeInsets.all(8.0),
                     content: Container(
                       height: MediaQuery.of(context).size.height,
                       width: MediaQuery.of(context).size.width,
-                      child: Signature(
+                      child: bloc.signature == null ? Signature(
                         height: MediaQuery.of(context).size.height,
                         width: MediaQuery.of(context).size.width,
                         controller: _controller,
                         backgroundColor: Colors.white,
-                      ),
+                      ) : Image.memory(bloc.signature!),
                     ),
                     actions: [
-                      ElevatedButton(
-                          onPressed: () {
-                            _controller.clear();
-                          },
-                          child: const Text('Delete')),
+                      Visibility(
+                        visible: bloc.signature == null,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              //bloc.add(const DeleteSignatureEvent());
+                              _controller.clear();
+                            },
+                            child: const Text('Delete')),
+                      ),
                       ElevatedButton(
                           onPressed: () {
                             Navigator.pop(context);
                           },
                           child: const Text('Cancel')),
                       ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context, _controller.toPngBytes());
+                          onPressed: () async {
+                            Navigator.pop(context, await _controller.toPngBytes());
                           },
                           child: const Text('Save')),
                     ],
                   );
-                });
+                });   
+                if(signature != null) {
+                  bloc.signature = signature;
+                }     
+                print(bloc.signature == null);      
           },
           child: const Text('Customer signature')),
       Visibility(
@@ -220,7 +238,7 @@ class ContractForm extends StatelessWidget {
               onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => BillForm(contractId: contractId))),
+                      builder: (context) => BillForm(contractId: contractId))).then((value) => context.read<ContractFormBloc>().add(ContractFormInitEvent(contractId, roomId))),
               child: const Icon(Icons.add)),
           CommonListView(
               items: bills,
@@ -244,6 +262,14 @@ class ContractForm extends StatelessWidget {
     var endDate = bill.endDate == null
         ? ''
         : DateFormat('dd, MMM y').format(bill.endDate!);
+    var waterLast = bill.waterLast ?? 0.0;
+    var waterCurrent = bill.waterCurrent ?? 0.0;
+    var waterPrice = bill.waterPrice ?? 0.0;
+    var electricPrice = bill.electricPrice ?? 0.0;
+    var electricLast = bill.electricLast ?? 0.0;
+    var electricCurrent = bill.electricCurrent ?? 0.0;
+    var roomPrice = bill.rentPrice ?? 0.0;
+    var total = (waterCurrent - waterLast) * waterPrice + (electricCurrent - electricLast) * electricPrice + roomPrice;
     return GestureDetector(
       onTap: () => Navigator.push(
           context,
@@ -257,12 +283,10 @@ class ContractForm extends StatelessWidget {
               : MediaQuery.of(context).size.width,
           padding: const EdgeInsets.all(8),
           child: ListTile(
-            title: Text('${bill.title}'),
+            title: Text( bill.electricFrom != null ? 'Bill for ${DateFormat('MMM').format(bill.electricFrom!)}' : ''),
             subtitle:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('$startDate - $endDate'),
-              Text('Owneing: ${bill.oweing}'),
-              Text('Total: ${bill.total}')
+              Text('Total: $total')
             ]),
           ),
         ),

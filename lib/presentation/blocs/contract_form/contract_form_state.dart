@@ -29,3 +29,11 @@ class ContractFormChangeDateDone extends ContractFormState {
 class SubmitContractFormDone extends ContractFormState {
   const SubmitContractFormDone() : super();
 }
+
+class SubmitContractFormFail extends ContractFormState {
+  const SubmitContractFormFail() : super();
+}
+
+class DeleteSignatureDone extends ContractFormState {
+  const DeleteSignatureDone(UserEntity? selectedOwner ) : super(selectedCustomer: selectedOwner);
+}

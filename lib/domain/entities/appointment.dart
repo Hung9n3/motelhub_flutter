@@ -3,20 +3,20 @@ import 'package:motelhub_flutter/domain/entities/room.dart';
 import 'package:motelhub_flutter/domain/entities/user.dart';
 
 class AppointmentEntity extends BaseEntity {
-  final String? title;
-  final DateTime? startTime;
-  final DateTime? endTime;
-  final int? duration;
-  final bool? isCanceled;
-  final bool? isAccepted;
-  final int? creatorId;
-  final int? participantId;
-  final int? roomId;
-  final UserEntity? creator;
-  final UserEntity? participant;
-  final RoomEntity? room;
+   String? title;
+   DateTime? startTime;
+   DateTime? endTime;
+   int? duration;
+   bool? isCanceled;
+   bool? isAccepted;
+   int? creatorId;
+   int? participantId;
+   int? roomId;
+   UserEntity? creator;
+   UserEntity? participant;
+   RoomEntity? room;
 
-  const AppointmentEntity({
+  AppointmentEntity({
     super.id,
     super.createdAt,
     super.isActive,
@@ -34,35 +34,14 @@ class AppointmentEntity extends BaseEntity {
     this.participant,
     this.room,
   }) : super();
-  @override
-  // TODO: implement props
-  List<Object?> get props => [
-        id,
-        createdAt,
-        isActive,
-        modifiedAt,
-        title,
-        isCanceled,
-        startTime,
-        endTime,
-        duration,
-        creator,
-        participant,
-        creatorId,
-        participantId,
-        isAccepted,
-        room,
-        roomId
-      ];
-
+  
   factory AppointmentEntity.fromJson(Map<String, dynamic> map) {
     return AppointmentEntity(
       id: map['id'] ?? 0,
       roomId: map['roomId'] ?? 0,
       title: map['title'] ?? '',
       isCanceled: map['isCanceled'] ?? false,
-      startTime: map['startTime'],
-      endTime: map['endTime'],
+      startTime: DateTime.parse(map['startTime']).toLocal(),
       duration: map['duration'] ?? 0,
       creatorId: map['creatorId'] ?? 0,
       participantId: map['participantId'] ?? 0,
@@ -72,14 +51,13 @@ class AppointmentEntity extends BaseEntity {
 
   Map<String, dynamic> toJson() => {
         'id': id ?? '0',
-        'roomId': roomId ?? '0',
+        'roomId': roomId == 0 ? null : roomId,
         'title': title ?? '',
         'isCanceled': isCanceled ?? 'false',
-        'startTime': startTime,
-        'endTime': endTime,
+        'startTime': startTime?.toUtc(),
         'duration': duration ?? '0',
-        'creatorId': creatorId ?? '0',
-        'participantId': participantId ?? '0',
+        'creatorId': creatorId == 0 ? null : creatorId,
+        'participantId': participantId == 0 ? null : participantId,
         'isAccepted': isAccepted ?? 'false',
       };
 
@@ -108,4 +86,6 @@ class AppointmentEntity extends BaseEntity {
     }
     return result;
   }
+
+  static List<AppointmentEntity> appointments = [];
 }

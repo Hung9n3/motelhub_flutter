@@ -37,7 +37,7 @@ class WorkOrderForm extends StatelessWidget {
               showAlertDialog(context, saveSuccess);
             }
             if(state is WorkOrderFormErrorState) {
-              showAlertDialog(context, '$saveFailed: ${state.error!}');
+              showAlertDialog(context, 'Techinical Error');
             }
           },
           builder: (context, state) {
@@ -113,7 +113,7 @@ class WorkOrderForm extends StatelessWidget {
               const Text('Opening'),
               const SizedBox(width: 10,),
               Switch(
-                  value: workOrderFormBloc.isCustomerPay,
+                  value: workOrderFormBloc.isOpen,
                   onChanged: (value) {
                     workOrderFormBloc
                         .add(WorkOrderFormIsCustomerPayChangedEvent(value));

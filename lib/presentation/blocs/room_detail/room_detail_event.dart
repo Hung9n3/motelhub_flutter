@@ -6,8 +6,9 @@ abstract class RoomDetailEvent {
   final UserEntity? customer;
   final String? name;
   final String? acreage;
+  final String? price;
   final List<PhotoEntity>? photos;
-  const RoomDetailEvent({this.roomId, this.name, this.acreage, this.photos, this.customer});
+  const RoomDetailEvent({this.roomId, this.name, this.acreage, this.photos, this.customer, this.price});
 }
 
 class LoadFormDataEvent extends RoomDetailEvent {
@@ -28,6 +29,6 @@ class ChangeOwnerEvent extends RoomDetailEvent {
 }
 
 class SubmitFormEvent extends RoomDetailEvent {
-  const SubmitFormEvent(List<PhotoEntity>? photos) 
-  : super(photos: photos);
+  const SubmitFormEvent(List<PhotoEntity>? photos, String? price) 
+  : super(photos: photos, price: price);
 }

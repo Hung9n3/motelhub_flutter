@@ -3,18 +3,18 @@ import 'package:motelhub_flutter/domain/entities/photo.dart';
 import 'package:motelhub_flutter/domain/entities/room.dart';
 import 'package:motelhub_flutter/domain/entities/user.dart';
 
-class WorkOrderEntity extends Equatable {
-  final int? id;
-  final int? customerId;
-  final int? roomId;
-  final String? customerName;
-  final String? name;
-  final String? roomName;
-  final bool? isCustomerPay;
-  final double? price;
-  final bool? isOpen;
-  final DateTime? createdOn;
-  final List<PhotoEntity>? photos;
+class WorkOrderEntity {
+   int? id;
+   int? customerId;
+   int? roomId;
+   String? customerName;
+   String? name;
+   String? roomName;
+   bool? isCustomerPay;
+   double? price;
+   bool? isOpen;
+   DateTime? createdOn;
+   List<PhotoEntity>? photos;
 
   WorkOrderEntity(
       {this.id,
@@ -29,41 +29,28 @@ class WorkOrderEntity extends Equatable {
       this.createdOn,
       this.photos});
 
-  @override
-  List<Object?> get props => [
-        id,
-        roomId,
-        name,
-        roomName,
-        isCustomerPay,
-        isOpen,
-        price,
-        customerId,
-        customerName,
-        createdOn,
-        photos
-      ];
-
   factory WorkOrderEntity.fromJson(Map<String, dynamic> map) {
     return WorkOrderEntity(
       id: map['id'] ?? 0,
       roomId: map['roomId'] ?? 0,
       customerId: map['customerId'] ?? 0,
       isCustomerPay: map['isCustomerPay'] ?? false,
-      price: map['price'] ?? 0.0,
+      price: double.tryParse(map['price'].toString()) ?? 0.0,
       name: map['name'] ?? '',
+      isOpen: map['isOpen'] ?? false,
       createdOn: map['createdOn'],
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'id': id ?? '0',
-        'roomId': roomId ?? '0',
-        'customerId': customerId ?? '0',
-        'isCustomerPay': isCustomerPay ?? 'false',
-        'price': price ?? '0.0',
-        'name': name ?? '',
-        'createdOn': createdOn?.toUtc(),
+        'id': id ?? 0,
+        'roomId': roomId == 0 ? null : roomId,
+        'customerId': customerId == 0 ? null : customerId,
+        'isCustomerPay': isCustomerPay ?? false,
+        'price': price ?? 0.0,
+        'title': name ?? '',
+        'isOpen': isOpen ?? false,
+        'createdOn': createdOn?.toUtc().toString(),
       };
 
   static List<WorkOrderEntity> getFakeData() {
@@ -89,4 +76,5 @@ class WorkOrderEntity extends Equatable {
     }
     return workOrders;
   }
+  static List<WorkOrderEntity> contracs = [];
 }

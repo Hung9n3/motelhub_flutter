@@ -20,7 +20,7 @@ class WorkOrderFormEvent {
 
 class WorkOrderFormInitEvent extends WorkOrderFormEvent {
   const WorkOrderFormInitEvent(int? workOrderId, int? roomId)
-      : super(workOrderId: workOrderId);
+      : super(workOrderId: workOrderId, roomId: roomId);
 }
 
 class WorkOrderFormSubmitEvent extends WorkOrderFormEvent {

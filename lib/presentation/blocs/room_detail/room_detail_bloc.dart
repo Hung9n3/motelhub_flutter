@@ -11,6 +11,7 @@ import 'package:motelhub_flutter/domain/entities/work_order.dart';
 import 'package:motelhub_flutter/domain/repositories/area_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/auth_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/contract_repository_interface.dart';
+import 'package:motelhub_flutter/domain/repositories/photo_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/room_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/work_order_repository_interface.dart';
 import 'package:motelhub_flutter/domain/token/token_handler_interface.dart';
@@ -21,13 +22,14 @@ import 'package:motelhub_flutter/presentation/blocs/room_detail/room_detail_stat
 class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
   final IRoomRepository _roomRepository;
   final IAreaRepository _areaRepository;
+  final IPhotoRepository _photoRepository;
   final IAuthRepository _authRepository;
   final IContractRepository _contractRepository;
   final IWorkOrderRepository _workOrderRepository;
   final ITokenHandler _tokenHandler;
 
   RoomDetailBloc(this._roomRepository, this._tokenHandler, this._areaRepository,
-      this._authRepository, this._contractRepository, this._workOrderRepository)
+      this._authRepository, this._contractRepository, this._workOrderRepository, this._photoRepository)
       : super(const RoomDetailLoadingFormState()) {
     on<LoadFormDataEvent>(_loadForm);
     on<SubmitFormEvent>(_submitForm);
@@ -89,13 +91,14 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
       acreage = room.acreage ?? 0.0;
       areaId = room.areaId;
       isEmpty = room.isEmpty;
-      photos = room.photos ?? [];
+      photos = (await _photoRepository.getAll()).where((element) => element.roomId == id).toList();
       price = room.price ?? 0.0;
       name = room.name ?? '';
       customerId = room.customerId;
 
       users = await _authRepository.getAll();
-      users.add(const UserEntity(id: 0, name: 'None'));
+      users.add(UserEntity(id: 0, name: 'None'));
+      users.remove(users.where((element) => element.id == currentUserId).first);
       users.sort((a, b) => a.id!.compareTo(b.id!));
     
     emit(RoomDetailLoadFormStateDone(hostId, room.ownerName));
@@ -120,7 +123,7 @@ class RoomDetailBloc extends Bloc<RoomDetailEvent, RoomDetailState> {
           acreage: acreage,
           photos: event.photos,
           customerId: customerId,
-          isEmpty: customerId == 0 || customerId == null,
+          price: double.tryParse(event.price ?? '') ?? 0.0,
           areaId: areaId);
       var result = await _roomRepository.save(room);
       if (result is DataSuccess) {

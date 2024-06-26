@@ -118,8 +118,8 @@ class MyAreaComponent extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(
                       vertical: 10.0, horizontal: 30),
                   child: InkWell(
-                    onTap: () => Navigator.pushNamed(context, '/area-detail',
-                        arguments: {'areaId': state.data![index].id}),
+                    onTap: () => Navigator.pushNamed(context, '/room-detail',
+                        arguments: {'roomId': room.id}),
                     child: Card(
                       child: Column(children: [
                         ListTile(

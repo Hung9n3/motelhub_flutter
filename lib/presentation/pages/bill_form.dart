@@ -129,6 +129,9 @@ class BillForm extends StatelessWidget {
           SectionWithBottomBorder(
               child: TextField(
             controller: roomPriceController,
+            onChanged: (value) {
+              billBloc.roomPrice = double.tryParse(value) ?? 0.0;
+            },
             decoration: const InputDecoration(
                 label: Text("Room price"), suffixText: 'VND'),
           )),
@@ -303,7 +306,7 @@ class BillForm extends StatelessWidget {
                           billBloc.roomPrice?.toString(),
                           value,
                           billBloc.electricCurrent?.toString(),
-                          billBloc.electricTo?.toString(),
+                          billBloc.electricLast?.toString(),
                           billBloc.waterPrice?.toString(),
                           billBloc.waterCurrent?.toString(),
                           billBloc.waterLast?.toString()));
@@ -484,7 +487,7 @@ class BillForm extends StatelessWidget {
                           billBloc.roomPrice?.toString(),
                           billBloc.electricPrice?.toString(),
                           billBloc.electricCurrent?.toString(),
-                          billBloc.electricTo?.toString(),
+                          billBloc.waterLast?.toString(),
                           value,
                           billBloc.waterCurrent?.toString(),
                           billBloc.waterLast?.toString()));

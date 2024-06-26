@@ -45,6 +45,7 @@ class AreaDetailBloc extends Bloc<AreaDetailEvent, AreaDetailState> {
         rentingRooms =
             rooms.where((element) => element.customerId == userId).toList();
       } else {
+        rentingRooms = rooms.where((element) => element.customerId != null || element.customerId != 0).toList();
         isEditable = true;
       }
       emptyRooms = rooms

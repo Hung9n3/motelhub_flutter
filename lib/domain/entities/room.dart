@@ -60,7 +60,7 @@ class RoomEntity{
         'id': id ?? '0',
         'areaId': areaId == 0 ? null : areaId,
         'customerId':customerId == 0 ? null : customerId,
-        'photos': photos ?? [],
+        //'photos': photos ?? [],
         'name': name ?? '',
         'acreage': acreage ?? 0.0,
         'price': price ?? 0.0,

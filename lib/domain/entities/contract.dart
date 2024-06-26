@@ -1,23 +1,26 @@
+import 'dart:typed_data';
+
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 import 'package:motelhub_flutter/domain/entities/room.dart';
 import 'package:motelhub_flutter/domain/entities/bill.dart';
 import 'package:motelhub_flutter/domain/entities/user.dart';
 
-class ContractEntity extends Equatable {
-  final int? id;
-  final int? customerId;
-  final String? name;
-  final int? roomId;
-  final int? hostId;
-  final double? roomPrice;
-  final DateTime? startDate;
-  final DateTime? endDate;
-  final DateTime? cancelDate;
-  final UserEntity? owner;
-  final RoomEntity? roomEntity;
-  final List<BillEntity>? bills;
-
-  const ContractEntity(
+class ContractEntity  {
+   int? id;
+   int? customerId;
+   String? name;
+   int? roomId;
+   int? hostId;
+   double? roomPrice;
+   DateTime? startDate;
+   DateTime? endDate;
+   DateTime? cancelDate;
+   UserEntity? owner;
+   RoomEntity? roomEntity;
+   List<BillEntity>? bills;
+   Uint8List? signature;
+  ContractEntity(
       {this.id,
       this.hostId,
       this.customerId,
@@ -29,43 +32,31 @@ class ContractEntity extends Equatable {
       this.roomEntity,
       this.startDate,
       this.endDate,
-      this.cancelDate});
-  @override
-  // TODO: implement props
-  List<Object?> get props => [
-        id,
-        customerId,
-        roomId,
-        bills,
-        owner,
-        roomEntity,
-        startDate,
-        endDate,
-        cancelDate
-      ];
-
+      this.cancelDate,
+      this.signature});
+  
   factory ContractEntity.fromJson(Map<String, dynamic> map) {
     return ContractEntity(
       id: map['id'] ?? 0,
-      roomId: map['roomId'] ?? 0,
+      roomId: map['roomId'],
       customerId: map['customerId'] ?? 0,
-      roomPrice: map['roomPrice'] ?? 0.0,
-      name: map['name'] ?? '',
-      startDate: map['startDate'],
-      endDate: map['endDate'],
-      cancelDate: map['cancelDate'],
+      roomPrice: map['price'] ?? 0.0,
+      name: map['title'] ?? '',
+      startDate: DateTime.parse(map['startDate'] ?? '').toLocal(),
+      endDate: DateTime.parse(map['endDate'] ?? '').toLocal(),
+      cancelDate: map['cancelDate'] == null ? null : DateTime.parse(map['cancelDate']).toLocal(),
     );
   }
 
   Map<String, dynamic> toJson() => {
     'id': id ?? '0',
-      'roomId': roomId ?? '0',
-      'customerId': customerId ?? 0,
-      'roomPrice': roomPrice ?? '0.0',
-      'name': name ?? '',
-      'startDate': startDate?.toUtc(),
-      'endDate': endDate?.toUtc(),
-      'cancelDate': cancelDate?.toUtc(),
+      'roomId': roomId,
+      'customerId': customerId == 0 ? null : customerId,
+      'price': roomPrice ?? '0.0',
+      'title': name ?? '',
+      'startDate': startDate != null ? DateFormat("yyyy-MM-dd").format(startDate!.toUtc()).toString() : null,
+      'endDate': endDate != null ? DateFormat("yyyy-MM-dd").format(endDate!.toUtc()).toString() : null,
+      'cancelDate': cancelDate != null ? DateFormat("yyyy-MM-dd").format(cancelDate!.toUtc()).toString() : null,
   };
 
   static List<ContractEntity> getFakeData() {
@@ -85,4 +76,6 @@ class ContractEntity extends Equatable {
     }
     return result;
   }
+
+  static List<ContractEntity> contracts = [];
 }

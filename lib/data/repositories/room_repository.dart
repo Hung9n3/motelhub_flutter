@@ -4,6 +4,7 @@ import 'package:motelhub_flutter/core/resources/data_state.dart';
 import 'package:motelhub_flutter/core/resources/search/search_model.dart';
 import 'package:motelhub_flutter/data/api_service/api.dart';
 import 'package:motelhub_flutter/domain/entities/area.dart';
+import 'package:motelhub_flutter/domain/entities/photo.dart';
 import 'package:motelhub_flutter/domain/entities/room.dart';
 import 'package:dio/dio.dart';
 import 'package:motelhub_flutter/domain/entities/user.dart';
@@ -58,6 +59,13 @@ class RoomRepository extends IRoomRepository {
   Future<DataState> save(RoomEntity room) async {
     var response = await Api.post(jsonEncode(room.toJson()), 'Room');
     var result = Api.getResult(response);
+    for(var photo in room.photos ?? []) {
+      if(photo.roomId !=null || photo.roomId != 0) {
+        continue;
+      }
+      photo.roomId = int.parse(result.data);
+      PhotoEntity.photos.add(photo);
+    }
     return result;
   }
 }

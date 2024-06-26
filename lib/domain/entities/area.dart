@@ -18,14 +18,14 @@ class AreaEntity {
       id: map['id'] ?? 0,
       name: map['name'] ?? "",
       address: map['address'] ?? "",
-      hostId: map['hostId'] ?? "",
+      hostId: map['hostId'] ?? 0,
     );
   }
 
   Map<String, dynamic> toJson() => {
     'id' : id ?? '0',
     'name': name ?? '',
-    'hostId': hostId ?? '0',
+    'hostId': hostId,
     'address' : address ?? '',
   };
 

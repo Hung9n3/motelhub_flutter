@@ -2,13 +2,15 @@ import 'package:motelhub_flutter/domain/entities/user.dart';
 
 abstract class ContractFormEvent {
   final int? contractId;
+  final int? roomId;
   final UserEntity? owner;
   final DateTime? selectedDate;
-  const ContractFormEvent({this.contractId, this.owner, this.selectedDate});
+  final String? price;
+  const ContractFormEvent({this.contractId, this.owner, this.selectedDate, this.price, this.roomId});
 }
 
 class ContractFormInitEvent extends ContractFormEvent{
-  ContractFormInitEvent(int? contractId) : super(contractId: contractId);
+  ContractFormInitEvent(int? contractId, int? roomId) : super(contractId: contractId, roomId: roomId);
 }
 
 class ContractFormChangeOwnerEvent extends ContractFormEvent {
@@ -28,5 +30,9 @@ class ContractFormChangeCancelDateEvent extends ContractFormEvent {
 }
 
 class SubmitContractFormEvent extends ContractFormEvent {
-  const SubmitContractFormEvent() : super();
+  const SubmitContractFormEvent(String? price) : super(price: price);
+}
+
+class DeleteSignatureEvent extends ContractFormEvent {
+  const DeleteSignatureEvent(): super();
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/widgets.dart';
 import 'package:motelhub_flutter/core/resources/data_state.dart';
 import 'package:motelhub_flutter/data/api_service/api.dart';
@@ -19,7 +21,7 @@ class WorkOrderRepository extends IWorkOrderRepository {
 
   @override
   Future<DataState> save(WorkOrderEntity workOrderEntity) async {
-    var response = await Api.post(workOrderEntity.toJson(), 'WorkOrder');
+    var response = await Api.post(jsonEncode(workOrderEntity.toJson()), 'WorkOrder');
     var result = Api.getResult(response);
     return result;
   }

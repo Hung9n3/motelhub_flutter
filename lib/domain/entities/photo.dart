@@ -52,7 +52,5 @@ class PhotoEntity {
         'workOrderId': workOrderId == 0 ? null : workOrderId,
       };
 
-  @override
-  // TODO: implement props
-  List<Object?> get props => [id, name, file, url];
+  static List<PhotoEntity> photos = [];
 }

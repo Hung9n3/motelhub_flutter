@@ -3,6 +3,7 @@ import 'package:motelhub_flutter/core/constants/constants.dart';
 import 'package:motelhub_flutter/core/resources/data_state.dart';
 import 'package:motelhub_flutter/domain/entities/photo.dart';
 import 'package:motelhub_flutter/domain/entities/work_order.dart';
+import 'package:motelhub_flutter/domain/repositories/room_repository_interface.dart';
 import 'package:motelhub_flutter/domain/repositories/work_order_repository_interface.dart';
 import 'package:motelhub_flutter/domain/token/token_handler_interface.dart';
 import 'package:motelhub_flutter/presentation/blocs/work_order_form/work_order_form_event.dart';
@@ -10,8 +11,9 @@ import 'package:motelhub_flutter/presentation/blocs/work_order_form/work_order_f
 
 class WorkOrderFormBloc extends Bloc<WorkOrderFormEvent, WorkOrderFormState> {
   final IWorkOrderRepository _workOrderRepository;
+  final IRoomRepository _roomRepository;
   final ITokenHandler _tokenHandler;
-  WorkOrderFormBloc(this._workOrderRepository, this._tokenHandler)
+  WorkOrderFormBloc(this._workOrderRepository, this._tokenHandler, this._roomRepository)
       : super(const WorkOrderFormLoadingState()) {
     on<WorkOrderFormInitEvent>(getData);
     on<WorkOrderFormSubmitEvent>(submit);
@@ -33,16 +35,17 @@ class WorkOrderFormBloc extends Bloc<WorkOrderFormEvent, WorkOrderFormState> {
       WorkOrderFormInitEvent event, Emitter<WorkOrderFormState> emit) async {
     try {
       roomId = event.roomId!;
+      var room = await _roomRepository.getById(roomId);
+      roomName = room.data?.name ?? '';
       if (event.workOrderId == null || event.workOrderId == 0) {
         emit(const WorkOrderFormDoneState(false, true));
+        return;
       }
       var dataState = await _workOrderRepository.getById(event.workOrderId);
       if (dataState is DataSuccess && dataState.data != null) {
         workOrderId = dataState.data!.id ?? 0;
-        roomId = dataState.data!.roomId ?? 0;
         price = dataState.data!.price ?? 0;
         name = dataState.data!.name ?? '';
-        roomName = dataState.data!.roomName ?? '';
         isCustomerPay = dataState.data!.isCustomerPay ?? false;
         isOpen = dataState.data!.isOpen ?? false;
         photos = dataState.data!.photos ?? [];
@@ -67,6 +70,7 @@ class WorkOrderFormBloc extends Bloc<WorkOrderFormEvent, WorkOrderFormState> {
       var workOrderEntity = WorkOrderEntity(
           id: workOrderId,
           roomId: roomId,
+          customerId: int.tryParse(await _tokenHandler.getByKey(currentUserIdKey)),
           name: name,
           price: price,
           isCustomerPay: isCustomerPay,

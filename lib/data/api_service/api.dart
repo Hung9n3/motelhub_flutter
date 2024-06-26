@@ -24,6 +24,7 @@ class Api {
   }
 
   static Future post(Object body, String url) async {
+    print(body);
     var destination = createUrl(url);
     final response = await http.post(destination,
         headers: <String, String>{

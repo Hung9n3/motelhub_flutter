@@ -20,12 +20,12 @@ class PhotoSectionBloc extends Bloc<PhotoSectionEvent, PhotoSectionState> {
         emit(const InitState([]));
         return;
       }
-      for (var photo in event.photos!) {
-        if (photo.photoData != null) {
-          photo.file = await File("photo_${photo.id}")
-              .writeAsBytes(base64Decode(photo.photoData!));
-        }
-      }
+      // for (var photo in event.photos!) {
+      //   if (photo.photoData != null) {
+      //     photo.file = await File("photo_${photo.id}")
+      //         .writeAsBytes(base64Decode(photo.photoData!));
+      //   }
+      // }
       emit(InitState(event.photos!));
     } catch (err) {
       print(err);

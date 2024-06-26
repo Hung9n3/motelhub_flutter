@@ -1,17 +1,17 @@
 import 'package:equatable/equatable.dart';
 import 'package:motelhub_flutter/domain/entities/contract.dart';
 
-class UserEntity extends Equatable {
-  final int? id;
-  final String? username;
-  final String? password;
-  final String? email;
-  final String? name;
-  final String? phoneNumber;
-  final int? roomId;
-  final List<ContractEntity> contracts;
+class UserEntity {
+   int? id;
+   String? username;
+   String? password;
+   String? email;
+   String? name;
+   String? phoneNumber;
+   int? roomId;
+   List<ContractEntity> contracts;
 
-  const UserEntity(
+ UserEntity(
       {this.id,
       this.password,
       this.username,
@@ -20,10 +20,6 @@ class UserEntity extends Equatable {
       this.phoneNumber,
       this.roomId,
       this.contracts = const []});
-
-  @override
-  List<Object?> get props =>
-      [id, username, password, name, phoneNumber, roomId, contracts];
 
   factory UserEntity.fromJson(Map < String, dynamic > map) {
     return UserEntity(
